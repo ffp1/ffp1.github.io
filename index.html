@@ -10,7 +10,22 @@
 
 <body>
 
-    <header class="top_header">
+    <!-- ログイン画面 -->
+    <div id="login_overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg" style="width: 150px; margin-bottom: 30px; fill: #111;">
+            <path d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
+            <path d="M103.268 96C81.2697 96 65.7582 80.5161 65.7582 59.4018C65.7582 38.2874 81.2697 22.8035 103.268 22.8035C125.266 22.8035 140.777 38.2874 140.777 59.4018C140.777 80.5161 125.266 96 103.268 96ZM103.268 76.2933C112.857 76.2933 119.343 69.3959 119.343 59.4018C119.343 49.4076 112.857 42.5103 103.268 42.5103C93.6788 42.5103 87.1922 49.4076 87.1922 59.4018C87.1922 69.3959 93.6788 76.2933 103.268 76.2933Z" />
+            <path d="M186.443 96C164.445 96 148.934 80.5161 148.934 59.4018C148.934 38.2874 164.445 22.8035 186.443 22.8035C208.441 22.8035 223.953 38.2874 223.953 59.4018C223.953 80.5161 208.441 96 186.443 96ZM186.443 76.2933C196.032 76.2933 202.519 69.3959 202.519 59.4018C202.519 49.4076 196.032 42.5103 186.443 42.5103C176.854 42.5103 170.368 49.4076 170.368 59.4018C170.368 69.3959 176.854 76.2933 186.443 76.2933Z" />
+            <path d="M269.619 96C247.621 96 232.109 80.5161 232.109 59.4018C232.109 38.2874 247.621 22.8035 269.619 22.8035C288.937 22.8035 303.039 34.7683 306 51.9413H284.566C282.169 46.1701 276.669 42.5103 269.619 42.5103C260.03 42.5103 253.543 49.4076 253.543 59.4018C253.543 69.3959 260.03 76.2933 269.619 76.2933C276.669 76.2933 282.169 72.6334 284.566 66.8622H306C303.039 84.0352 288.937 96 269.619 96Z" />
+        </svg>
+        <button id="login_btn" style="padding: 12px 24px; font-size: 16px; border: none; border-radius: 24px; background: #06C755; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;"><path d="M17.788 5.108a9 9 0 1 0 3.212 6.892h-8v-4h11.9a11.95 11.95 0 0 1 -3.212 6.892a7.994 7.994 0 0 1 -11.688 -1.9l-3.3 2.5a11.986 11.986 0 0 0 18.064 -1.41l-3.664 -2.974z" /></svg>
+            Googleでログイン
+        </button>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main_app" style="display: none;">    <header class="top_header">
         <div class="logo">
             <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -56,20 +71,20 @@
         <div class="top_user">
             <div class="user_flexwrap">
                 <div class="usericon">
-                    <img src="img/icon(temp).jpg" alt="">
+                    <img id="my_icon" src="" alt="">
                 </div>
                 <div class="userinfo">
-                    <p class="username">れいじぃ</p>
-                    <p class="userbio">ぷにぷに無課金 受験生/スコアタ最高1.5兆正規5位/ダメラン最高5位/毎イベ攻略、たまに初日攻略</p>
+                    <p class="username" id="my_name">...</p>
+                    <p class="userbio">...</p>
                 </div>
             </div>
-            <button class="editprofile">
+            <button class="editprofile" id="logout_btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                    <path d="M13.5 6.5l4 4" />
-                    <path d="M16 19h6" />
+                    <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                    <path d="M9 12h12l-3 -3" />
+                    <path d="M18 15l3 -3" />
                 </svg>
-                <p>プロフィールを編集</p>
+                <p>ログアウト</p>
             </button>
         </div>
         <div class="top_friends">
@@ -81,43 +96,8 @@
                     </svg>
                 </div> -->
             </header>
-            <div class="friends_container">
-                <div class="friends_friend">
-                    <div class="friend_icons">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icons_more.png" alt="">
-                    </div>
-                    <div class="friend_info">
-                        <p class="ttl">友だち <span>96</span></p>
-                        <p class="ex">優実、mayu、aaa、ゆうと、優実、mayu、aaa、ゆうと、優実、mayu、aaa、ゆうと、</p>
-                    </div>
-                    <div class="friend_more">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6l-6 6" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="friends_group">
-                    <div class="group_icons">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icon(temp).jpg" alt="">
-                        <img src="img/icons_more.png" alt="">
-                    </div>
-                    <div class="group_info">
-                        <p class="ttl">グループ <span>6</span></p>
-                        <p class="ex">カラオケ隊、らーめんつけめん、七福神、イッピキオオカミ、カラオケ隊、らーめんつけめん、七福神、イッピキオオカミ、</p>
-                    </div>
-                    <div class="group_more">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6l-6 6" />
-                        </svg>
-                    </div>
-                </div>
+            <div class="friends_container" id="friends_container">
+                <!-- 友だちリストがここに動的に追加されます -->
             </div>
         </div>
         <div class="top_add-friend">
@@ -195,48 +175,8 @@
             <input type="text" id="talk_searchbox" placeholder="toocを検索">
         </label>
 
-        <div class="talk_container">
-
-            <div class="talk_talkroom">
-                <div class="talkroom_icon">
-                    <img src="img/icon(temp).jpg" alt="">
-                </div>
-                <div class="talkroom_info">
-                    <p class="talkroom_infoname">れいじぃ</p>
-                    <p class="talkroom_infomessage">path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" /</p>
-                </div>
-                <div class="talkroom_noti">
-                    <p class="talkroom_notitime">19:59</p>
-                    <p class="talkroom_noticount">2</p>
-                </div>
-            </div>
-            <div class="talk_talkroom">
-                <div class="talkroom_icon">
-                    <img src="img/icon(temp).jpg" alt="">
-                </div>
-                <div class="talkroom_info">
-                    <p class="talkroom_infoname">れいじぃ</p>
-                    <p class="talkroom_infomessage">path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" /</p>
-                </div>
-                <div class="talkroom_noti">
-                    <p class="talkroom_notitime">19:59</p>
-                    <p class="talkroom_noticount">2</p>
-                </div>
-            </div>
-            <div class="talk_talkroom">
-                <div class="talkroom_icon">
-                    <img src="img/icon(temp).jpg" alt="">
-                </div>
-                <div class="talkroom_info">
-                    <p class="talkroom_infoname">れいじぃ</p>
-                    <p class="talkroom_infomessage">path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" /</p>
-                </div>
-                <div class="talkroom_noti">
-                    <p class="talkroom_notitime">19:59</p>
-                    <p class="talkroom_noticount">2</p>
-                </div>
-            </div>
-
+        <div class="talk_container" id="talk_container">
+            <!-- トーク一覧がここに動的に追加されます -->
         </div>
 
     </section>
@@ -259,6 +199,36 @@
             <p>トーク</p>
         </div>
     </aside>
+    </div> <!-- /main_app -->
+
+    <!-- 動的に生成するためのテンプレート（非表示） -->
+    <template id="template_friend">
+        <div class="friends_friend">
+            <div class="friend_icons">
+                <img class="friend_icon_img" src="" alt="">
+            </div>
+            <div class="friend_info">
+                <p class="ttl friend_name"></p>
+                <p class="ex friend_bio">タップしてトークを開始</p>
+            </div>
+        </div>
+    </template>
+
+    <template id="template_talkroom">
+        <div class="talk_talkroom">
+            <div class="talkroom_icon">
+                <img class="room_icon_img" src="" alt="">
+            </div>
+            <div class="talkroom_info">
+                <p class="talkroom_infoname"></p>
+                <p class="talkroom_infomessage"></p>
+            </div>
+            <div class="talkroom_noti">
+                <p class="talkroom_notitime"></p>
+                <p class="talkroom_noticount" style="display: none;"></p>
+            </div>
+        </div>
+    </template>
 
     <script type="module" src="js/main.js"></script>
 </body>
