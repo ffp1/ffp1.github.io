@@ -32,6 +32,8 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
             talkroomPage.style.transform = 'translateX(0)';
             const inputArea = document.querySelector('section.inputarea');
             if (inputArea) inputArea.classList.add('room-open');
+            const header = document.querySelector('header.talkroom_header');
+            if (header) header.classList.add('room-open');
         });
     });
 
@@ -86,6 +88,8 @@ export const closeTalkRoom = () => {
     talkroomPage.style.transform = 'translateX(100%)';
     const inputArea = document.querySelector('section.inputarea');
     if (inputArea) inputArea.classList.remove('room-open');
+    const header = document.querySelector('header.talkroom_header');
+    if (header) header.classList.remove('room-open');
     setTimeout(() => {
         talkroomPage.style.display = 'none';
         document.getElementById('chat_main').innerHTML = '';

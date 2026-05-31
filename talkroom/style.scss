@@ -241,45 +241,6 @@ section.inputarea {
 
 #talkroom_page {
 
-
-    header {
-        position: fixed;
-        left: 0;
-        top: 0;
-        display: flex;
-        align-items: center;
-        width: 100vw;
-        height: 64px;
-        background-image: linear-gradient(to bottom, #fff, #fff0);
-        padding-inline: 8px;
-        box-sizing: border-box;
-
-        .header_vec {
-            display: grid;
-            place-items: center;
-            width: 44px;
-            height: 64px;
-
-            svg {
-                width: 24px;
-                fill: none;
-                stroke: #000;
-                stroke-width: 2;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-            }
-        }
-
-        .header_username {
-            display: block;
-            font-size: 1.1rem;
-            font-family: 'LINE Seed JP', sans-serif;
-            font-weight: 400;
-            color: #000;
-            margin-inline: 12px auto;
-        }
-    }
-
     main {
         display: flex;
         flex-direction: column;
@@ -404,5 +365,50 @@ section.inputarea {
                 font-size: 1rem;
             }
         }
+    }
+}
+
+header.talkroom_header {
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: 64px;
+    background-image: linear-gradient(to bottom, #fff, #fff0);
+    padding-inline: 8px;
+    box-sizing: border-box;
+    translate: 0 -100%;
+    transition: translate 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+
+    &.room-open {
+        translate: 0 0;
+    }
+
+    .header_vec {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 64px;
+
+        svg {
+            width: 24px;
+            fill: none;
+            stroke: #000;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    }
+
+    .header_username {
+        display: block;
+        font-size: 1.1rem;
+        font-family: 'LINE Seed JP', sans-serif;
+        font-weight: 400;
+        color: #000;
+        margin-inline: 12px auto;
     }
 }

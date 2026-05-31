@@ -324,27 +324,26 @@
 
     <!-- トークルーム画面（初期: 右に隠れる） -->
     <div id="talkroom_page" class="page_overlay" style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none;">
-        
-        <header class="talkroom_header">
-            <div class="header_backlist header_vec" id="header_back_btn" style="cursor: pointer;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6" /></svg>
-            </div>
-            <div class="header_username" id="header_username">...</div>
-            <div class="header_search header_vec wip">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-            </div>
-            <div class="header_calling header_vec wip">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
-            </div>
-            <div class="header_more header_vec wip">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
-            </div>
-        </header>
-
         <main id="chat_main">
             <!-- メッセージがここに動的に追加されます -->
         </main>
     </div>
+
+    <header class="talkroom_header">
+        <div class="header_backlist header_vec" id="header_back_btn" style="cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6" /></svg>
+        </div>
+        <div class="header_username" id="header_username">...</div>
+        <div class="header_search header_vec wip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+        </div>
+        <div class="header_calling header_vec wip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
+        </div>
+        <div class="header_more header_vec wip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
+        </div>
+    </header>
 
     <section class="inputarea">
         <div class="area_more area_vec wip">
