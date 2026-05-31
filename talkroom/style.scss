@@ -60,6 +60,7 @@ section.inputarea {
     box-shadow: 0 0 36px -16px #0007;
     border-radius: 32px 32px 0 0;
     padding-inline: 4px;
+    padding-top: 12px;
     box-sizing: border-box;
     translate: 0 var(--translate);
 
@@ -161,7 +162,7 @@ section.inputarea {
         min-height: 44px;
         border: 1.5px solid #f0f0f0;
         background-color: #f5f5f5;
-        padding-bottom: 14px;
+        padding-block: 8px;
         border-radius: 22px;
         box-sizing: border-box;
 

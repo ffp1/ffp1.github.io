@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUserInfo = {
                 uid: user.uid,
                 displayName: user.displayName || '名無し',
-                photoURL: user.photoURL || 'img/icon(temp).jpg',
+                photoURL: user.photoURL || 'img/default_icon.png',
                 bio: '',
                 toocId: ''
             };
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const node = document.importNode(templateFriend, true);
 
                 node.querySelector('.friend_name').textContent = userData.displayName;
-                node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/icon(temp).jpg';
+                node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/default_icon.png';
                 // ステータスメッセージを反映
                 node.querySelector('.friend_bio').textContent = userData.bio || 'ステータスメッセージはありません';
 
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const p = getUserCache(targetUid).then((targetUser) => {
                     let targetName = "不明なユーザー";
-                    let targetIcon = "img/icon(temp).jpg";
+                    let targetIcon = "img/default_icon.png";
                     if (targetUser) {
                         targetName = targetUser.displayName;
                         targetIcon = targetUser.photoURL;
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const item = document.createElement('div');
                     item.className = 'search_result_item';
                     item.innerHTML = `
-                        <img src="${foundUser.photoURL || 'img/icon(temp).jpg'}" alt="">
+                        <img src="${foundUser.photoURL || 'img/default_icon.png'}" alt="">
                         <div class="result_info">
                             <p>${foundUser.displayName}</p>
                             <p>@${searchId}</p>

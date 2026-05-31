@@ -3,8 +3,8 @@ import { db, auth, onAuthStateChanged, ref, push, onChildAdded, serverTimestamp 
 // URLのクエリパラメータからルーム情報を取得する
 const urlParams = new URLSearchParams(window.location.search);
 const ROOM_ID = urlParams.get('room');
-const targetName = urlParams.get('targetName') || 'トーク';
-const targetIcon = urlParams.get('targetIcon') || '../img/icon(temp).jpg';
+let targetName = urlParams.get('targetName') || 'トーク';
+let targetIcon = urlParams.get('targetIcon') || '../img/default_icon.png';
 
 if (!ROOM_ID) {
     window.location.href = '../index.html';
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (ROOM_ID === `memo_${user.uid}`) {
             targetName = 'Own';
-            targetIcon = user.photoURL || '../img/icon(temp).jpg';
+            targetIcon = user.photoURL || '../img/default_icon.png';
         } else {
             const uids = ROOM_ID.split('_');
             if (uids.length === 2) {
@@ -198,9 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (labelAreaInput) {
                 labelAreaInput.style.minHeight = (44 + extraHeight) + 'px';
-            }
-            if (inputAreaSection) {
-                inputAreaSection.style.setProperty('--height', extraHeight + 'px');
             }
             
             inputArea.style.height = 'auto';
