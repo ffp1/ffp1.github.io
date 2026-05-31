@@ -139,6 +139,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ===========================
+    // ユーザー情報のローカルキャッシュ取得
+    // ===========================
+    const getUserCache = async (uid) => {
+        const cacheKey = `tooc_user_${uid}`;
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+            return JSON.parse(cached);
+        }
+        try {
+            const snap = await get(ref(db, `users/${uid}`));
+            if (snap.exists()) {
+                const data = snap.val();
+                sessionStorage.setItem(cacheKey, JSON.stringify(data));
+                return data;
+            }
+        } catch (e) {
+            console.error('キャッシュ取得エラー:', e);
+        }
+        return null;
+    };
+
+    // ===========================
     // 友だちリストの読み込み
     // ===========================
     const loadFriends = () => {
@@ -153,31 +175,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const friendUids = Object.keys(friendsData);
-            friendUids.forEach(friendUid => {
-                get(ref(db, `users/${friendUid}`)).then((userSnap) => {
-                    if (!userSnap.exists()) return;
-                    const userData = userSnap.val();
-                    const node = document.importNode(templateFriend, true);
+            friendUids.forEach(async friendUid => {
+                const userData = await getUserCache(friendUid);
+                if (!userData) return;
+                
+                const node = document.importNode(templateFriend, true);
 
-                    node.querySelector('.friend_name').textContent = userData.displayName;
-                    node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/icon(temp).jpg';
-                    // ステータスメッセージを反映
-                    node.querySelector('.friend_bio').textContent = userData.bio || 'ステータスメッセージはありません';
+                node.querySelector('.friend_name').textContent = userData.displayName;
+                node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/icon(temp).jpg';
+                // ステータスメッセージを反映
+                node.querySelector('.friend_bio').textContent = userData.bio || 'ステータスメッセージはありません';
 
-                    const friendElement = node.querySelector('.friends_friend');
-                    friendElement.style.cursor = 'pointer';
-                    friendElement.addEventListener('click', () => {
-                        const roomId = getPrivateRoomId(currentUserInfo.uid, friendUid);
-                        const params = new URLSearchParams({
-                            room: roomId,
-                            targetName: userData.displayName,
-                            targetIcon: userData.photoURL || ''
-                        });
-                        window.location.href = `talkroom/index.html?${params.toString()}`;
+                const friendElement = node.querySelector('.friends_friend');
+                friendElement.style.cursor = 'pointer';
+                friendElement.addEventListener('click', () => {
+                    const roomId = getPrivateRoomId(currentUserInfo.uid, friendUid);
+                    const params = new URLSearchParams({
+                        room: roomId,
+                        targetName: userData.displayName,
+                        targetIcon: userData.photoURL || ''
                     });
+                    window.location.href = `talkroom/index.html?${params.toString()}`;
+                });
 
-                    friendsContainer.appendChild(node);
-                }).catch(err => console.error('友だち情報取得エラー:', err));
+                friendsContainer.appendChild(node);
             });
         }, (err) => {
             console.error('友だちリストの監視エラー:', err);
@@ -217,11 +238,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const uids = roomId.split('_');
                 const targetUid = uids[0] === currentUserInfo.uid ? uids[1] : uids[0];
 
-                const p = get(ref(db, `users/${targetUid}`)).then((userSnap) => {
+                const p = getUserCache(targetUid).then((targetUser) => {
                     let targetName = "不明なユーザー";
                     let targetIcon = "img/icon(temp).jpg";
-                    if (userSnap.exists()) {
-                        const targetUser = userSnap.val();
+                    if (targetUser) {
                         targetName = targetUser.displayName;
                         targetIcon = targetUser.photoURL;
                     }
@@ -394,15 +414,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     document.getElementById('btn_open_profile_edit').addEventListener('click', () => openProfileModal('profile'));
+    const btnProfileHeader = document.getElementById('btn_open_profile_edit_header');
+    if(btnProfileHeader) btnProfileHeader.addEventListener('click', () => openProfileModal('profile'));
     document.getElementById('btn_open_toocid_edit').addEventListener('click', () => openProfileModal('toocid'));
     document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
 
     // モーダル枠外タップで閉じる（スマホ対応のためtouchstart追加）
     const closeModalIfOutside = (e, modal) => {
-        if (e.target === modal) modal.style.display = 'none';
+        if (e.target === modal) {
+            e.preventDefault();
+            e.stopPropagation();
+            modal.style.display = 'none';
+        }
     };
     modalProfile.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalProfile));
-    modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile));
+    modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile), {passive: false});
 
     // アイコン画像変更 (MAX 300px, quality 0.8)
     editIconInput.addEventListener('change', (e) => {
@@ -519,6 +545,9 @@ document.addEventListener('DOMContentLoaded', () => {
         profileErrorMsg.style.display = 'none';
 
         update(ref(db, `users/${currentUserInfo.uid}`), updates).then(() => {
+            // キャッシュもクリアしておく
+            sessionStorage.removeItem(`tooc_user_${currentUserInfo.uid}`);
+            
             currentUserInfo.displayName = newName;
             currentUserInfo.bio = newBio;
             if (pendingIconBase64) {
@@ -551,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalAddFriend.style.display = 'none';
     });
     modalAddFriend.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalAddFriend));
-    modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend));
+    modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend), {passive: false});
 
     document.getElementById('btn_search_toocid').addEventListener('click', () => {
         const searchId = document.getElementById('search_toocid_input').value.trim();
