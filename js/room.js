@@ -235,15 +235,15 @@ const initializeUI = () => {
         
         inputArea.style.height = 'auto';
         inputArea.style.height = inputArea.scrollHeight + 'px';
-    });
 
-    inputArea.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-            setTimeout(() => {
-                inputArea.style.height = 'auto';
-            }, 0);
+        if (inputArea.value.trim().length > 0) {
+            actionBtn.classList.remove('area_voicemessage', 'wip');
+            actionBtn.classList.add('area_send');
+        } else {
+            actionBtn.classList.remove('area_send');
+            actionBtn.classList.add('area_voicemessage', 'wip');
         }
     });
+
+
 };
