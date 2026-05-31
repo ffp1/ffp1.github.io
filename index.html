@@ -78,23 +78,17 @@
         <section class="tab_top active" id="tab_top">
 
             <div class="top_user">
-                <div class="user_flexwrap">
-                    <div class="usericon">
-                        <img id="my_icon" src="" alt="">
-                    </div>
-                    <div class="userinfo">
-                        <p class="username" id="my_name">...</p>
-                        <p class="userbio" id="my_bio">...</p>
+                <div class="user_info">
+                    <img id="my_icon" src="img/icon(temp).jpg" alt="自分" class="user_icon">
+                    <div>
+                        <p class="user_name" id="my_name">読み込み中...</p>
+                        <p class="user_bio" id="my_bio">...</p>
                     </div>
                 </div>
-                <button class="editprofile" id="btn_edit_profile">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                        <path d="M13.5 6.5l4 4" />
-                        <path d="M16 19h6" />
-                    </svg>
-                    <p>プロフィールを編集</p>
-                </button>
+                <div class="user_actions" style="display: flex; gap: 8px;">
+                    <button id="btn_open_toocid_edit" class="edit_profile_btn" style="width: auto; padding: 0 12px; background: #f0f0f0; color: #333; border: none; border-radius: 18px; font-size: 0.8rem; font-weight: 700;">toocID設定</button>
+                    <button id="btn_open_profile_edit" class="edit_profile_btn">プロフィールを編集</button>
+                </div>
             </div>
             <div class="top_friends">
                 <header class="topsecs friends_header">
@@ -202,34 +196,49 @@
     <!-- ===== モーダル: プロフィール編集 ===== -->
     <div class="modal_overlay" id="modal_profile" style="display: none;">
         <div class="modal_box">
-            <div class="modal_header">
-                <p class="modal_title">プロフィールを編集</p>
-                <button class="modal_close" id="modal_profile_close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg></button>
+            <div class="modal_header" style="flex-direction: column; align-items: stretch; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p class="modal_title">設定</p>
+                    <button class="modal_close" id="modal_profile_close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg></button>
+                </div>
+                <div class="modal_tabs" style="display: flex; gap: 16px; border-bottom: 2px solid #f0f0f0;">
+                    <button id="tab_btn_profile" style="flex: 1; padding-bottom: 8px; border: none; background: none; font-weight: 700; color: #A855F7; border-bottom: 2px solid #A855F7; cursor: pointer;">プロフィール</button>
+                    <button id="tab_btn_toocid" style="flex: 1; padding-bottom: 8px; border: none; background: none; font-weight: 700; color: #999; border-bottom: 2px solid transparent; cursor: pointer;">toocID</button>
+                </div>
             </div>
-            <div class="modal_body">
-                <div class="profile_edit_icon">
-                    <img id="edit_icon_preview" src="" alt="">
-                    <label for="edit_icon_input" class="edit_icon_label">変更</label>
-                    <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
-                </div>
-                <div class="profile_edit_field">
-                    <label>名前</label>
-                    <input type="text" id="edit_name_input" placeholder="名前を入力">
-                </div>
-                <div class="profile_edit_field">
-                    <label>ステータスメッセージ</label>
-                    <input type="text" id="edit_bio_input" placeholder="ステータスメッセージ">
-                </div>
-                <div class="profile_edit_field">
-                    <label>toocID</label>
-                    <div class="toocid_row">
-                        <input type="text" id="edit_toocid_input" placeholder="好きなIDを入力">
-                        <button id="btn_set_toocid">設定</button>
+            <div class="modal_body" id="modal_body_swipe_area">
+                <!-- プロフィールタブ -->
+                <div id="tab_content_profile">
+                    <p id="profile_error_msg" style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;"></p>
+                    <div class="profile_edit_icon">
+                        <img id="edit_icon_preview" src="" alt="">
+                        <label for="edit_icon_input" class="edit_icon_label">変更</label>
+                        <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
                     </div>
-                    <p class="toocid_current" id="current_toocid">未設定</p>
+                    <div class="profile_edit_field">
+                        <label>名前</label>
+                        <input type="text" id="edit_name_input" placeholder="名前を入力">
+                    </div>
+                    <div class="profile_edit_field">
+                        <label>ステータスメッセージ</label>
+                        <input type="text" id="edit_bio_input" placeholder="ステータスメッセージ">
+                    </div>
+                    <button class="modal_save_btn" id="btn_save_profile">保存</button>
+                    <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
                 </div>
-                <button class="modal_save_btn" id="btn_save_profile">保存</button>
-                <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
+
+                <!-- toocIDタブ -->
+                <div id="tab_content_toocid" style="display: none;">
+                    <div class="profile_edit_field">
+                        <label>新しいtoocID</label>
+                        <div class="toocid_row">
+                            <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
+                            <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
+                        </div>
+                        <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">3〜20文字で入力してください</p>
+                        <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -259,12 +268,10 @@
     <!-- 動的に生成するためのテンプレート（非表示） -->
     <template id="template_friend">
         <div class="friends_friend">
-            <div class="friend_icons">
-                <img class="friend_icon_img" src="" alt="">
-            </div>
+            <img src="" alt="" class="friend_icon_img">
             <div class="friend_info">
-                <p class="ttl friend_name"></p>
-                <p class="ex friend_latest_msg">タップしてトークを開始</p>
+                <p class="friend_name"></p>
+                <p class="friend_bio">ステータスメッセージ</p>
             </div>
         </div>
     </template>

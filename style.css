@@ -253,6 +253,29 @@ section.tab_top .top_user .editprofile p {
 section.tab_top .top_user .editprofile:active {
   scale: 0.96;
 }
+section.tab_top .friends_friend img.friend_icon_img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+section.tab_top .friends_friend .friend_info {
+  flex: 1;
+}
+section.tab_top .friends_friend .friend_info .friend_name {
+  font-weight: 600;
+  color: #000;
+}
+section.tab_top .friends_friend .friend_info .friend_bio {
+  font-weight: 400;
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 section.tab_top .top_friends {
   display: block;
   width: 100vw;

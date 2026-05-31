@@ -2,6 +2,8 @@ import { db, auth, provider, signInWithPopup, onAuthStateChanged, signOut, ref, 
 
 let currentUserInfo = null;
 
+const imgSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><path d="M15 8h.01" /><path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /><path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" /></svg> 画像`;
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('login_overlay');
     const mainApp = document.getElementById('main_app');
@@ -64,16 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', () => {
         signInWithPopup(auth, provider).catch(error => {
             console.error("ログインエラー:", error);
-            alert("ログインに失敗しました: " + error.message);
+            // エラー表示は適宜処理
         });
     });
 
-    // ログアウト — モーダルを閉じてからサインアウト
     logoutBtn.addEventListener('click', () => {
         closeAllModals();
-        signOut(auth).catch(error => {
-            console.error("ログアウトエラー:", error);
-        });
+        signOut(auth).catch(error => console.error(error));
     });
 
     // ===========================
@@ -92,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 toocId: ''
             };
 
-            // DB からプロフィールを取得
             get(ref(db, `users/${user.uid}`)).then((snap) => {
                 if (snap.exists()) {
                     const saved = snap.val();
@@ -102,31 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentUserInfo.toocId = saved.toocId || '';
                 }
 
-                // UIに表示
                 myName.textContent = currentUserInfo.displayName;
                 myIcon.src = currentUserInfo.photoURL;
                 myBio.textContent = currentUserInfo.bio || '...';
 
-                // DBに基本情報を保存（既存データを壊さないようupdateで）
                 update(ref(db, `users/${user.uid}`), {
                     uid: user.uid,
                     displayName: currentUserInfo.displayName,
                     photoURL: currentUserInfo.photoURL
                 }).catch(err => console.error('ユーザー情報の保存に失敗:', err));
 
-                // データ取得開始
                 loadFriends();
                 loadTalkRooms();
             }).catch(err => {
                 console.error('ユーザー情報の取得に失敗:', err);
-                // 取得に失敗しても基本UIは表示
                 myName.textContent = currentUserInfo.displayName;
                 myIcon.src = currentUserInfo.photoURL;
                 loadFriends();
                 loadTalkRooms();
             });
         } else {
-            // ログアウト時: モーダルを閉じてからUI切替
             closeAllModals();
             loginOverlay.style.display = 'flex';
             mainApp.style.display = 'none';
@@ -156,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const friendUids = Object.keys(friendsData);
-
             friendUids.forEach(friendUid => {
                 get(ref(db, `users/${friendUid}`)).then((userSnap) => {
                     if (!userSnap.exists()) return;
@@ -165,22 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     node.querySelector('.friend_name').textContent = userData.displayName;
                     node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/icon(temp).jpg';
-
-                    // 最新メッセージを取得して表示
-                    const roomId = getPrivateRoomId(currentUserInfo.uid, friendUid);
-                    get(ref(db, `rooms/${roomId}/messages`)).then((msgSnap) => {
-                        const msgs = msgSnap.val();
-                        const latestMsgEl = node.querySelector('.friend_latest_msg');
-                        if (latestMsgEl && msgs) {
-                            const keys = Object.keys(msgs);
-                            const last = msgs[keys[keys.length - 1]];
-                            if (last.type === 'image') {
-                                latestMsgEl.textContent = '📷 画像';
-                            } else {
-                                latestMsgEl.textContent = last.text || '';
-                            }
-                        }
-                    }).catch(() => {});
+                    // ステータスメッセージを反映
+                    node.querySelector('.friend_bio').textContent = userData.bio || 'ステータスメッセージはありません';
 
                     const friendElement = node.querySelector('.friends_friend');
                     friendElement.style.cursor = 'pointer';
@@ -203,19 +181,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ===========================
-    // トークルーム一覧の読み込み
+    // トークルーム一覧の読み込み（重複防止のPromise.all制御）
     // ===========================
     const loadTalkRooms = () => {
         const roomsRef = ref(db, 'rooms');
-        onValue(roomsRef, (snapshot) => {
+        onValue(roomsRef, async (snapshot) => {
             const roomsData = snapshot.val();
-            talkContainer.innerHTML = '';
+            if (!roomsData) {
+                talkContainer.innerHTML = '';
+                appendMemoRoom(talkContainer);
+                return;
+            }
 
-            // 自分用メモルームを先頭に固定表示
-            appendMemoRoom();
+            // 新しいFragmentを作って最後に置き換える（重複描画防止）
+            const fragment = document.createDocumentFragment();
+            
+            // 先にKeepメモをフラグメントに追加
+            await appendMemoRoom(fragment);
 
-            if (!roomsData) return;
-
+            const promises = [];
             Object.keys(roomsData).forEach(roomId => {
                 if (!roomId.includes(currentUserInfo.uid)) return;
                 if (roomId === `memo_${currentUserInfo.uid}`) return;
@@ -229,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const uids = roomId.split('_');
                 const targetUid = uids[0] === currentUserInfo.uid ? uids[1] : uids[0];
 
-                get(ref(db, `users/${targetUid}`)).then((userSnap) => {
+                const p = get(ref(db, `users/${targetUid}`)).then((userSnap) => {
                     let targetName = "不明なユーザー";
                     let targetIcon = "img/icon(temp).jpg";
                     if (userSnap.exists()) {
@@ -240,8 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const node = document.importNode(templateTalkroom, true);
                     node.querySelector('.talkroom_infoname').textContent = targetName;
+                    
                     if (lastMessage.type === 'image') {
-                        node.querySelector('.talkroom_infomessage').textContent = '📷 画像';
+                        node.querySelector('.talkroom_infomessage').innerHTML = imgSvg;
                     } else {
                         node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
@@ -264,32 +249,50 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         window.location.href = `talkroom/index.html?${params.toString()}`;
                     });
-
-                    talkContainer.appendChild(node);
-                }).catch(err => console.error('ルーム情報取得エラー:', err));
+                    
+                    // 最新の投稿日時でソートするためのメタデータを持たせる
+                    talkElement.dataset.timestamp = lastMessage.timestamp || 0;
+                    return talkElement;
+                }).catch(err => {
+                    console.error('ルーム情報取得エラー:', err);
+                    return null;
+                });
+                promises.push(p);
             });
+
+            const elements = await Promise.all(promises);
+            // タイムスタンプ順（新しい順）にソート
+            elements.filter(el => el !== null).sort((a, b) => b.dataset.timestamp - a.dataset.timestamp).forEach(el => {
+                fragment.appendChild(el);
+            });
+
+            // 最後に一括でDOMを更新
+            talkContainer.innerHTML = '';
+            talkContainer.appendChild(fragment);
+
         }, (err) => {
             console.error('ルーム一覧の監視エラー:', err);
         });
     };
 
     // 自分用のメモルーム（Keep）
-    const appendMemoRoom = () => {
+    const appendMemoRoom = async (container) => {
         if (!currentUserInfo) return;
         const memoRoomId = `memo_${currentUserInfo.uid}`;
         const node = document.importNode(templateTalkroom, true);
-        node.querySelector('.talkroom_infoname').textContent = "Keep (自分用のメモ)";
+        node.querySelector('.talkroom_infoname').textContent = "Own";
         node.querySelector('.talkroom_infomessage').textContent = "タップしてメモを開く";
         node.querySelector('.room_icon_img').src = currentUserInfo.photoURL;
 
-        get(ref(db, `rooms/${memoRoomId}/messages`)).then((snapshot) => {
+        try {
+            const snapshot = await get(ref(db, `rooms/${memoRoomId}/messages`));
             const messages = snapshot.val();
             if (messages) {
                 const messageIds = Object.keys(messages);
                 if (messageIds.length > 0) {
                     const lastMessage = messages[messageIds[messageIds.length - 1]];
                     if (lastMessage.type === 'image') {
-                        node.querySelector('.talkroom_infomessage').textContent = '📷 画像';
+                        node.querySelector('.talkroom_infomessage').innerHTML = imgSvg;
                     } else {
                         node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
@@ -301,23 +304,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        }).catch(() => {});
+        } catch(e) {}
 
         const talkElement = node.querySelector('.talk_talkroom');
         talkElement.style.cursor = 'pointer';
         talkElement.addEventListener('click', () => {
             const params = new URLSearchParams({
                 room: memoRoomId,
-                targetName: "Keepメモ",
+                targetName: "Own",
                 targetIcon: currentUserInfo.photoURL
             });
             window.location.href = `talkroom/index.html?${params.toString()}`;
         });
-        talkContainer.appendChild(node);
+        container.appendChild(talkElement);
     };
 
     // ===========================
-    // プロフィール編集モーダル
+    // プロフィール編集モーダル / タブ操作
     // ===========================
     const editIconPreview = document.getElementById('edit_icon_preview');
     const editIconInput = document.getElementById('edit_icon_input');
@@ -325,9 +328,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const editBioInput = document.getElementById('edit_bio_input');
     const editToocidInput = document.getElementById('edit_toocid_input');
     const currentToocid = document.getElementById('current_toocid');
+    const profileErrorMsg = document.getElementById('profile_error_msg');
     let pendingIconBase64 = null;
 
-    const openProfileModal = () => {
+    // タブ切替関連
+    const tabBtnProfile = document.getElementById('tab_btn_profile');
+    const tabBtnToocid = document.getElementById('tab_btn_toocid');
+    const tabContentProfile = document.getElementById('tab_content_profile');
+    const tabContentToocid = document.getElementById('tab_content_toocid');
+    const swipeArea = document.getElementById('modal_body_swipe_area');
+
+    const activateProfileTab = () => {
+        tabBtnProfile.style.color = '#A855F7';
+        tabBtnProfile.style.borderBottomColor = '#A855F7';
+        tabBtnToocid.style.color = '#999';
+        tabBtnToocid.style.borderBottomColor = 'transparent';
+        tabContentProfile.style.display = 'block';
+        tabContentToocid.style.display = 'none';
+        profileErrorMsg.style.display = 'none';
+    };
+
+    const activateToocidTab = () => {
+        tabBtnProfile.style.color = '#999';
+        tabBtnProfile.style.borderBottomColor = 'transparent';
+        tabBtnToocid.style.color = '#A855F7';
+        tabBtnToocid.style.borderBottomColor = '#A855F7';
+        tabContentProfile.style.display = 'none';
+        tabContentToocid.style.display = 'block';
+        document.getElementById('toocid_validation_msg').textContent = '3〜20文字で入力してください';
+        document.getElementById('toocid_validation_msg').style.color = '#999';
+        document.getElementById('btn_set_toocid').disabled = true;
+        document.getElementById('btn_set_toocid').style.background = '#ccc';
+    };
+
+    tabBtnProfile.addEventListener('click', activateProfileTab);
+    tabBtnToocid.addEventListener('click', activateToocidTab);
+
+    // スワイプ処理
+    let touchStartX = 0;
+    swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    swipeArea.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) activateToocidTab(); // 左スワイプ -> toocID
+        if (touchEndX > touchStartX + 50) activateProfileTab(); // 右スワイプ -> Profile
+    });
+
+    const openProfileModal = (tab = 'profile') => {
         if (!currentUserInfo) return;
         editIconPreview.src = currentUserInfo.photoURL;
         editNameInput.value = currentUserInfo.displayName;
@@ -336,18 +382,16 @@ document.addEventListener('DOMContentLoaded', () => {
         currentToocid.textContent = currentUserInfo.toocId ? `現在のtoocID: @${currentUserInfo.toocId}` : '未設定';
         pendingIconBase64 = null;
         modalProfile.style.display = 'flex';
+        
+        if(tab === 'toocid') activateToocidTab();
+        else activateProfileTab();
     };
 
-    document.getElementById('btn_edit_profile').addEventListener('click', openProfileModal);
-    document.getElementById('btn_open_profile_edit').addEventListener('click', openProfileModal);
-    document.getElementById('modal_profile_close').addEventListener('click', () => {
-        modalProfile.style.display = 'none';
-    });
-    modalProfile.addEventListener('click', (e) => {
-        if (e.target === modalProfile) modalProfile.style.display = 'none';
-    });
+    document.getElementById('btn_open_profile_edit').addEventListener('click', () => openProfileModal('profile'));
+    document.getElementById('btn_open_toocid_edit').addEventListener('click', () => openProfileModal('toocid'));
+    document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
 
-    // アイコン画像変更
+    // アイコン画像変更 (MAX 300px, quality 0.8)
     editIconInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -356,14 +400,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const MAX = 80;
+                const MAX = 300;
                 let w = img.width, h = img.height;
                 if (w > h) { h = (MAX * h) / w; w = MAX; }
                 else { w = (MAX * w) / h; h = MAX; }
                 canvas.width = w;
                 canvas.height = h;
                 canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                pendingIconBase64 = canvas.toDataURL('image/jpeg', 0.5);
+                pendingIconBase64 = canvas.toDataURL('image/jpeg', 0.8);
                 editIconPreview.src = pendingIconBase64;
             };
             img.src = ev.target.result;
@@ -371,43 +415,79 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsDataURL(file);
     });
 
-    // toocID設定
-    document.getElementById('btn_set_toocid').addEventListener('click', () => {
+    // toocIDリアルタイムバリデーション
+    let toocidCheckTimer = null;
+    editToocidInput.addEventListener('input', () => {
         const newId = editToocidInput.value.trim();
-        if (!newId) { alert('IDを入力してください'); return; }
-        if (!/^[a-zA-Z0-9_.\-]{3,20}$/.test(newId)) {
-            alert('toocIDは半角英数字とアンダースコア、ドット、ハイフンのみ（3～20文字）で入力してください');
+        const msgEl = document.getElementById('toocid_validation_msg');
+        const btn = document.getElementById('btn_set_toocid');
+        
+        clearTimeout(toocidCheckTimer);
+
+        if (!newId) {
+            msgEl.textContent = '3〜20文字で入力してください';
+            msgEl.style.color = '#999';
+            btn.disabled = true;
+            btn.style.background = '#ccc';
             return;
         }
 
-        // 重複チェック → 保存
-        get(ref(db, `toocIds/${newId}`)).then((existing) => {
-            if (existing.exists() && existing.val() !== currentUserInfo.uid) {
-                alert('このIDは既に使用されています');
-                return;
-            }
+        if (!/^[a-zA-Z0-9_.\-]{3,20}$/.test(newId)) {
+            msgEl.textContent = '❌ 半角英数字と _ . - のみ（3～20文字）';
+            msgEl.style.color = '#ef4444';
+            btn.disabled = true;
+            btn.style.background = '#ccc';
+            return;
+        }
 
-            // 旧IDの削除 → 新IDの設定をPromiseチェーンで
-            const promises = [];
+        msgEl.textContent = '確認中...';
+        msgEl.style.color = '#999';
 
-            if (currentUserInfo.toocId) {
-                promises.push(set(ref(db, `toocIds/${currentUserInfo.toocId}`), null));
-            }
-            promises.push(set(ref(db, `toocIds/${newId}`), currentUserInfo.uid));
-            promises.push(update(ref(db, `users/${currentUserInfo.uid}`), { toocId: newId }));
-
-            Promise.all(promises).then(() => {
-                currentUserInfo.toocId = newId;
-                currentToocid.textContent = `現在のtoocID: @${newId}`;
-                editToocidInput.value = '';
-                alert('toocIDを設定しました！');
-            }).catch((err) => {
-                console.error('toocID設定エラー:', err);
-                alert('toocIDの設定に失敗しました: ' + err.message);
+        toocidCheckTimer = setTimeout(() => {
+            get(ref(db, `toocIds/${newId}`)).then((existing) => {
+                if (existing.exists() && existing.val() !== currentUserInfo.uid) {
+                    msgEl.textContent = '❌ このIDは既に使用されています';
+                    msgEl.style.color = '#ef4444';
+                    btn.disabled = true;
+                    btn.style.background = '#ccc';
+                } else {
+                    msgEl.textContent = '✅ 使用可能です！';
+                    msgEl.style.color = '#22c55e';
+                    btn.disabled = false;
+                    btn.style.background = '#A855F7';
+                }
+            }).catch(() => {
+                msgEl.textContent = '❌ 確認エラー';
+                msgEl.style.color = '#ef4444';
             });
+        }, 500); // 500msのデバウンス
+    });
+
+    // toocID保存
+    document.getElementById('btn_set_toocid').addEventListener('click', () => {
+        const newId = editToocidInput.value.trim();
+        const msgEl = document.getElementById('toocid_validation_msg');
+        const btn = document.getElementById('btn_set_toocid');
+        
+        btn.disabled = true;
+        msgEl.textContent = '保存中...';
+        
+        const promises = [];
+        if (currentUserInfo.toocId) {
+            promises.push(set(ref(db, `toocIds/${currentUserInfo.toocId}`), null));
+        }
+        promises.push(set(ref(db, `toocIds/${newId}`), currentUserInfo.uid));
+        promises.push(update(ref(db, `users/${currentUserInfo.uid}`), { toocId: newId }));
+
+        Promise.all(promises).then(() => {
+            currentUserInfo.toocId = newId;
+            currentToocid.textContent = `現在のtoocID: @${newId}`;
+            editToocidInput.value = '';
+            msgEl.textContent = '🎉 保存完了しました！';
+            msgEl.style.color = '#A855F7';
         }).catch((err) => {
-            console.error('toocID重複チェックエラー:', err);
-            alert('エラーが発生しました: ' + err.message);
+            msgEl.textContent = '❌ 保存エラー: ' + err.message;
+            msgEl.style.color = '#ef4444';
         });
     });
 
@@ -423,6 +503,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updates.photoURL = pendingIconBase64;
         }
 
+        profileErrorMsg.style.display = 'none';
+
         update(ref(db, `users/${currentUserInfo.uid}`), updates).then(() => {
             currentUserInfo.displayName = newName;
             currentUserInfo.bio = newBio;
@@ -435,10 +517,9 @@ document.addEventListener('DOMContentLoaded', () => {
             myIcon.src = currentUserInfo.photoURL;
 
             modalProfile.style.display = 'none';
-            alert('プロフィールを保存しました！');
         }).catch((err) => {
-            console.error('プロフィール保存エラー:', err);
-            alert('保存に失敗しました: ' + err.message);
+            profileErrorMsg.textContent = '保存に失敗しました: ' + err.message;
+            profileErrorMsg.style.display = 'block';
         });
     });
 
@@ -465,9 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultDiv = document.getElementById('search_result');
         resultDiv.innerHTML = '';
 
-        if (!searchId) { alert('IDを入力してください'); return; }
+        if (!searchId) return;
 
-        // toocIds/{id} → uid を取得
         get(ref(db, `toocIds/${searchId}`)).then((snap) => {
             if (!snap.exists()) {
                 resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center; padding: 16px;">ユーザーが見つかりません</p>';
@@ -480,19 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // ユーザー情報を取得
             get(ref(db, `users/${foundUid}`)).then((userSnap) => {
-                if (!userSnap.exists()) {
-                    resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center; padding: 16px;">ユーザーが見つかりません</p>';
-                    return;
-                }
-
+                if (!userSnap.exists()) return;
                 const foundUser = userSnap.val();
 
-                // 既に友だちか確認
                 get(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`)).then((friendSnap) => {
                     const isAlreadyFriend = friendSnap.exists();
-
                     const item = document.createElement('div');
                     item.className = 'search_result_item';
                     item.innerHTML = `
@@ -506,7 +579,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (!isAlreadyFriend) {
                         item.querySelector('.btn_do_add_friend').addEventListener('click', () => {
-                            // 双方のfriendsに追加
                             Promise.all([
                                 set(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`), true),
                                 set(ref(db, `users/${foundUid}/friends/${currentUserInfo.uid}`), true)
@@ -514,11 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 item.querySelector('.btn_do_add_friend').textContent = '追加済み';
                                 item.querySelector('.btn_do_add_friend').disabled = true;
                                 item.querySelector('.btn_do_add_friend').style.background = '#ccc';
-                                alert(`${foundUser.displayName} を友だちに追加しました！`);
-                            }).catch((err) => {
-                                console.error('友だち追加エラー:', err);
-                                alert('友だち追加に失敗しました: ' + err.message);
-                            });
+                            }).catch(err => console.error(err));
                         });
                     } else {
                         item.querySelector('.btn_do_add_friend').disabled = true;
@@ -527,14 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     resultDiv.appendChild(item);
                 }).catch(err => console.error(err));
-            }).catch(err => {
-                console.error('ユーザー検索エラー:', err);
-                resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #f00; text-align: center; padding: 16px;">エラーが発生しました</p>';
-            });
-        }).catch((err) => {
-            console.error('toocID検索エラー:', err);
-            alert('検索に失敗しました: ' + err.message);
-        });
+            }).catch(err => console.error(err));
+        }).catch(err => console.error(err));
     });
-
 });

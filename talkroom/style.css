@@ -142,10 +142,8 @@ section.inputarea label.area_input {
   border-radius: 22px;
   box-sizing: border-box;
 }
-section.inputarea label.area_input input {
-  display: block;
+section.inputarea label.area_input textarea {
   width: 100%;
-  height: 100%;
   border: none;
   outline: none;
   border-radius: 22px;
@@ -155,12 +153,18 @@ section.inputarea label.area_input input {
   font-weight: 400;
   color: #000;
   padding-inline: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-sizing: border-box;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.4;
+  max-height: 120px;
 }
-section.inputarea label.area_input input::-moz-placeholder {
+section.inputarea label.area_input textarea::-moz-placeholder {
   color: #ccc;
 }
-section.inputarea label.area_input input::placeholder {
+section.inputarea label.area_input textarea::placeholder {
   color: #ccc;
 }
 section.inputarea .area_morecontainer {

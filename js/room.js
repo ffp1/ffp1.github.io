@@ -128,9 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 reader.onload = (ev) => {
                     const img = new Image();
                     img.onload = () => {
-                        // リサイズ（最大幅320px）
+                        // リサイズ（最大幅800px）
                         const canvas = document.createElement('canvas');
-                        const MAX_W = 320;
+                        const MAX_W = 800;
                         let w = img.width, h = img.height;
                         if (w > MAX_W) {
                             h = (MAX_W * h) / w;
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         canvas.width = w;
                         canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        const base64 = canvas.toDataURL('image/jpeg', 0.5);
+                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
 
                         push(messagesRef, {
                             type: 'image',
@@ -168,11 +168,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Enterキーで送信
-        inputArea.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+        // textareaの自動リサイズ
+        inputArea.addEventListener('input', () => {
+            inputArea.style.height = 'auto';
+            inputArea.style.height = inputArea.scrollHeight + 'px';
+        });
+
+        // Enterキーで送信 (Shift+Enterで改行)
+        inputArea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
+                // 送信後に高さをリセット
+                setTimeout(() => {
+                    inputArea.style.height = 'auto';
+                }, 0);
             }
         });
     });
