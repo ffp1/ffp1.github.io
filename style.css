@@ -1226,7 +1226,6 @@ section.inputarea .area_send .send_icon svg {
 section.inputarea label.area_input {
   display: block;
   width: calc(100% - 136px);
-  min-height: 44px;
   border: 1.5px solid #f0f0f0;
   background-color: #f5f5f5;
   padding-block: 8px;
@@ -1296,40 +1295,6 @@ section.inputarea .area_morecontainer .more_item p {
   section.inputarea.moreactive {
     --height: 72px;
   }
-}
-#talkroom_page header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: flex;
-  align-items: center;
-  width: 100vw;
-  height: 64px;
-  background-image: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0));
-  padding-inline: 8px;
-  box-sizing: border-box;
-}
-#talkroom_page header .header_vec {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 64px;
-}
-#talkroom_page header .header_vec svg {
-  width: 24px;
-  fill: none;
-  stroke: #000;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-#talkroom_page header .header_username {
-  display: block;
-  font-size: 1.1rem;
-  font-family: "LINE Seed JP", sans-serif;
-  font-weight: 400;
-  color: #000;
-  margin-inline: 12px auto;
 }
 #talkroom_page main {
   display: flex;
@@ -1445,4 +1410,45 @@ section.inputarea .area_morecontainer .more_item p {
   font-weight: 400;
   color: #000;
   font-size: 1rem;
-}/*# sourceMappingURL=style.css.map */
+}
+
+header.talkroom_header {
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 64px;
+  background-image: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0));
+  padding-inline: 8px;
+  box-sizing: border-box;
+  translate: 0 -100%;
+  transition: translate 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+header.talkroom_header.room-open {
+  translate: 0 0;
+}
+header.talkroom_header .header_vec {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 64px;
+}
+header.talkroom_header .header_vec svg {
+  width: 24px;
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+header.talkroom_header .header_username {
+  display: block;
+  font-size: 1.1rem;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: #000;
+  margin-inline: 12px auto;
+}

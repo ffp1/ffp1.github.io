@@ -135,7 +135,6 @@ section.inputarea .area_send .send_icon svg {
 section.inputarea label.area_input {
   display: block;
   width: calc(100% - 136px);
-  min-height: 44px;
   border: 1.5px solid #f0f0f0;
   background-color: #f5f5f5;
   padding-block: 8px;
@@ -361,4 +360,4 @@ header.talkroom_header .header_username {
   font-weight: 400;
   color: #000;
   margin-inline: 12px auto;
-}/*# sourceMappingURL=style.css.map */
+}

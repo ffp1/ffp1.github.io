@@ -226,13 +226,6 @@ const initializeUI = () => {
     });
 
     inputArea.addEventListener('input', () => {
-        const lines = (inputArea.value.match(/\n/g) || []).length + 1;
-        const extraHeight = (lines - 1) * 20;
-        
-        if (labelAreaInput) {
-            labelAreaInput.style.minHeight = (44 + extraHeight) + 'px';
-        }
-        
         inputArea.style.height = 'auto';
         inputArea.style.height = inputArea.scrollHeight + 'px';
 
