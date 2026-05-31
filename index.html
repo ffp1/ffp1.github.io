@@ -78,16 +78,27 @@
         <section class="tab_top active" id="tab_top">
 
             <div class="top_user">
-                <div class="user_info">
-                    <img id="my_icon" src="img/icon(temp).jpg" alt="自分" class="user_icon">
-                    <div>
-                        <p class="user_name" id="my_name">読み込み中...</p>
-                        <p class="user_bio" id="my_bio">...</p>
+                <div class="user_flexwrap">
+                    <div class="usericon">
+                        <img id="my_icon" src="img/icon(temp).jpg" alt="自分">
+                    </div>
+                    <div class="userinfo">
+                        <p class="username" id="my_name">読み込み中...</p>
+                        <p class="userbio" id="my_bio">...</p>
                     </div>
                 </div>
-                <div class="user_actions" style="display: flex; gap: 8px;">
-                    <button id="btn_open_toocid_edit" class="edit_profile_btn" style="width: auto; padding: 0 12px; background: #f0f0f0; color: #333; border: none; border-radius: 18px; font-size: 0.8rem; font-weight: 700;">toocID設定</button>
-                    <button id="btn_open_profile_edit" class="edit_profile_btn">プロフィールを編集</button>
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-right: 12px; margin-top: 4px; position: relative; z-index: 1;">
+                    <button id="btn_open_toocid_edit" class="editprofile" style="margin: 0; width: auto; padding: 0 16px; background: rgba(0,0,0,0.05); color: #333;">
+                        <p style="color: #333;">toocID設定</p>
+                    </button>
+                    <button id="btn_open_profile_edit" class="editprofile" style="margin: 0; width: auto; padding: 0 16px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                            <path d="M13.5 6.5l4 4" />
+                            <path d="M16 19h6" />
+                        </svg>
+                        <p>プロフィールを編集</p>
+                    </button>
                 </div>
             </div>
             <div class="top_friends">
