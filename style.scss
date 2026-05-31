@@ -8,6 +8,7 @@
     border-radius: 0;
     user-select: none;
     color: #fff;
+    font-family: 'LINE Seed JP', sans-serif;
 }
 
 html {
@@ -16,15 +17,10 @@ html {
 }
 
 body {
-    // display: block;
-    display: flex;
-    align-items: start;
-    justify-content: start;
-    scroll-snap-type: x mandatory;
+    display: block;
     width: 100vw;
     min-height: 100lvh;
     background-color: #fff;
-    overflow: auto;
     padding-top: 68px;
 
     &::-webkit-scrollbar {
@@ -159,13 +155,16 @@ header.top_header {
 }
 
 section.tab_top {
-    display: block;
+    display: none;
+
+    &.active {
+        display: block;
+    }
+
     width: 100vw;
     min-height: 100lvh;
     overflow: auto;
     padding-bottom: 64px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
 
     .top_user {
         position: relative;
@@ -344,9 +343,16 @@ section.tab_top {
                 align-items: center;
                 justify-content: start;
                 width: 100%;
-                height: 64px;
+                height: 72px;
                 padding-inline: 1rem;
                 box-sizing: border-box;
+
+                img.friend_icon_img {
+                    width: 64px;
+                    aspect-ratio: 1;
+                    object-fit: cover;
+                    margin-right: 12px;
+                }
 
                 .friend_icons,
                 .group_icons {
@@ -378,7 +384,8 @@ section.tab_top {
                     gap: 4px;
                     width: calc(100% - 152px);
 
-                    p.ttl {
+                    p.ttl,
+                    p.friend_name {
                         display: block;
                         font-family: 'LINE Seed JP', sans-serif;
                         font-weight: 700;
@@ -391,7 +398,8 @@ section.tab_top {
                         }
                     }
 
-                    p.ex {
+                    p.ex,
+                    p.friend_bio {
                         display: block;
                         width: 100%;
                         text-overflow: ellipsis;
@@ -609,13 +617,16 @@ section.tab_top {
 }
 
 section.tab_talk {
-    display: block;
+    display: none;
+
+    &.active {
+        display: block;
+    }
+
     width: 100vw;
     min-height: 100lvh;
     overflow: auto;
     padding-bottom: 64px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
 
     label {
         display: flex;

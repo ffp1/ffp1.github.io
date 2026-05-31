@@ -19,14 +19,10 @@ html {
 }
 
 body {
-  display: flex;
-  align-items: start;
-  justify-content: start;
-  scroll-snap-type: x mandatory;
+  display: block;
   width: 100vw;
   min-height: 100lvh;
   background-color: #fff;
-  overflow: auto;
   padding-top: 68px;
 }
 body::-webkit-scrollbar {
@@ -147,13 +143,16 @@ header.top_header nav button:active svg {
 }
 
 section.tab_top {
+  display: none;
+}
+section.tab_top.active {
   display: block;
+}
+section.tab_top {
   width: 100vw;
   min-height: 100lvh;
   overflow: auto;
   padding-bottom: 64px;
-  flex-shrink: 0;
-  scroll-snap-align: start;
 }
 section.tab_top .top_user {
   position: relative;
@@ -315,9 +314,17 @@ section.tab_top .top_friends .friends_container .friends_group {
   align-items: center;
   justify-content: start;
   width: 100%;
-  height: 64px;
+  height: 72px;
   padding-inline: 1rem;
   box-sizing: border-box;
+}
+section.tab_top .top_friends .friends_container .friends_friend img.friend_icon_img,
+section.tab_top .top_friends .friends_container .friends_group img.friend_icon_img {
+  width: 64px;
+  aspect-ratio: 1;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-right: 12px;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_icons,
 section.tab_top .top_friends .friends_container .friends_friend .group_icons,
@@ -358,9 +365,13 @@ section.tab_top .top_friends .friends_container .friends_group .group_info {
   width: calc(100% - 152px);
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ttl,
+section.tab_top .top_friends .friends_container .friends_friend .friend_info p.friend_name,
 section.tab_top .top_friends .friends_container .friends_friend .group_info p.ttl,
+section.tab_top .top_friends .friends_container .friends_friend .group_info p.friend_name,
 section.tab_top .top_friends .friends_container .friends_group .friend_info p.ttl,
-section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl {
+section.tab_top .top_friends .friends_container .friends_group .friend_info p.friend_name,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.friend_name {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
@@ -368,16 +379,24 @@ section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl
   z-index: 1.2rem;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ttl span,
+section.tab_top .top_friends .friends_container .friends_friend .friend_info p.friend_name span,
 section.tab_top .top_friends .friends_container .friends_friend .group_info p.ttl span,
+section.tab_top .top_friends .friends_container .friends_friend .group_info p.friend_name span,
 section.tab_top .top_friends .friends_container .friends_group .friend_info p.ttl span,
-section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl span {
+section.tab_top .top_friends .friends_container .friends_group .friend_info p.friend_name span,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl span,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.friend_name span {
   color: rgba(168, 85, 247, 0.6666666667);
   font-size: 0.9rem;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ex,
+section.tab_top .top_friends .friends_container .friends_friend .friend_info p.friend_bio,
 section.tab_top .top_friends .friends_container .friends_friend .group_info p.ex,
+section.tab_top .top_friends .friends_container .friends_friend .group_info p.friend_bio,
 section.tab_top .top_friends .friends_container .friends_group .friend_info p.ex,
-section.tab_top .top_friends .friends_container .friends_group .group_info p.ex {
+section.tab_top .top_friends .friends_container .friends_group .friend_info p.friend_bio,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.ex,
+section.tab_top .top_friends .friends_container .friends_group .group_info p.friend_bio {
   display: block;
   width: 100%;
   text-overflow: ellipsis;
@@ -573,13 +592,16 @@ section.tab_top .top_shop .container .boxitem:active {
 }
 
 section.tab_talk {
+  display: none;
+}
+section.tab_talk.active {
   display: block;
+}
+section.tab_talk {
   width: 100vw;
   min-height: 100lvh;
   overflow: auto;
   padding-bottom: 64px;
-  flex-shrink: 0;
-  scroll-snap-align: start;
 }
 section.tab_talk label {
   display: flex;
@@ -1042,4 +1064,4 @@ aside.navbar::after {
 .search_result_item button:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
+}/*# sourceMappingURL=style.css.map */
