@@ -7,7 +7,6 @@ const targetName = urlParams.get('targetName') || 'トーク';
 const targetIcon = urlParams.get('targetIcon') || '../img/icon(temp).jpg';
 
 if (!ROOM_ID) {
-    // ルームIDがない場合はホームに戻る
     window.location.href = '../index.html';
 }
 
@@ -17,13 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContainer = document.getElementById('chat_main');
     const inputArea = document.getElementById('area_input');
     const actionBtn = document.getElementById('area_action_btn');
-    
+    const imageInput = document.getElementById('area_add-image');
+
     // ヘッダー情報の更新
     const headerUsername = document.getElementById('header_username');
     if (headerUsername) {
         headerUsername.textContent = targetName;
     }
-    
+
     // 戻るボタンの処理
     const backBtn = document.getElementById('header_back_btn');
     if (backBtn) {
@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 認証状態の監視
     onAuthStateChanged(auth, (user) => {
         if (!user) {
-            // 未ログインの場合はホームにリダイレクト
             window.location.href = '../index.html';
             return;
         }
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             name: user.displayName || '名無し'
         };
 
-        // 画面の一番下へスクロールする関数
         const scrollToBottom = () => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
@@ -58,42 +56,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let innerHTML = '';
             if (!isMe) {
-                // 自分以外のメッセージの場合はアイコンを表示
-                // ※自分用メモ(Keep)の場合は自分からのメッセージなので isMe が true になりアイコンは表示されない
                 innerHTML += `
                     <div class="content_icon">
                         <img src="${targetIcon}" alt="${data.senderName}">
                     </div>`;
             }
-            
-            // XSS対策としてテキストをエスケープ
-            const escapedText = data.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
-            innerHTML += `<p class="content_message">${escapedText}</p>`;
-            
+
+            if (data.type === 'image' && data.imageData) {
+                // 画像メッセージ
+                innerHTML += `<img class="content_image" src="${data.imageData}" alt="画像" style="max-width: 200px; border-radius: 12px; cursor: pointer;">`;
+            } else {
+                // テキストメッセージ
+                const escapedText = (data.text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+                innerHTML += `<p class="content_message">${escapedText}</p>`;
+            }
+
             msgDiv.innerHTML = innerHTML;
+
+            // 画像クリックで拡大表示
+            const img = msgDiv.querySelector('.content_image');
+            if (img) {
+                img.addEventListener('click', () => {
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:grid;place-items:center;cursor:pointer;';
+                    const fullImg = document.createElement('img');
+                    fullImg.src = img.src;
+                    fullImg.style.cssText = 'max-width:90vw;max-height:90vh;border-radius:8px;';
+                    overlay.appendChild(fullImg);
+                    overlay.addEventListener('click', () => overlay.remove());
+                    document.body.appendChild(overlay);
+                });
+            }
+
             mainContainer.appendChild(msgDiv);
             scrollToBottom();
         };
 
-        // Firebaseのメッセージ追加をリッスン (リアルタイム受信)
+        // Firebaseのメッセージ追加をリッスン
         onChildAdded(messagesRef, (snapshot) => {
             const data = snapshot.val();
             appendMessage(data);
         });
 
-        // メッセージを送信する関数
+        // テキストメッセージを送信する関数
         const sendMessage = () => {
             const text = inputArea.value.trim();
             if (text.length > 0) {
-                // Firebaseにデータを保存
                 push(messagesRef, {
                     text: text,
+                    type: 'text',
                     senderId: currentUser.id,
                     senderName: currentUser.name,
                     timestamp: serverTimestamp()
                 }).then(() => {
-                    inputArea.value = ''; // 入力欄をクリア
-                    // 既存のUIロジック（送信ボタンからマイクアイコンに戻す）を発火させる
+                    inputArea.value = '';
                     inputArea.dispatchEvent(new Event('input'));
                 }).catch((error) => {
                     console.error("メッセージ送信エラー:", error);
@@ -102,6 +118,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        // 画像送信処理
+        if (imageInput) {
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        // リサイズ（最大幅480px）
+                        const canvas = document.createElement('canvas');
+                        const MAX_W = 480;
+                        let w = img.width, h = img.height;
+                        if (w > MAX_W) {
+                            h = (MAX_W * h) / w;
+                            w = MAX_W;
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        const base64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                        push(messagesRef, {
+                            type: 'image',
+                            imageData: base64,
+                            text: '',
+                            senderId: currentUser.id,
+                            senderName: currentUser.name,
+                            timestamp: serverTimestamp()
+                        }).catch((error) => {
+                            console.error("画像送信エラー:", error);
+                            alert("画像の送信に失敗しました。");
+                        });
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+                // ファイル入力をリセット
+                imageInput.value = '';
+            });
+        }
+
         // 送信ボタンが押された時の処理
         actionBtn.addEventListener('click', () => {
             if (actionBtn.classList.contains('area_send')) {
@@ -109,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Enterキーで送信 (Shift+Enterで改行できるようにする場合は調整)
+        // Enterキーで送信
         inputArea.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();

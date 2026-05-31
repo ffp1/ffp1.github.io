@@ -8,6 +8,7 @@
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  color: #fff;
 }
 
 html {
@@ -40,6 +41,48 @@ body::-webkit-scrollbar-thumb:hover {
 }
 body::-webkit-scrollbar-track {
   background-color: #fff;
+}
+
+#login_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 99;
+}
+#login_overlay svg {
+  fill: #A855F7;
+  width: 172px;
+  margin-bottom: 48px;
+}
+#login_overlay #login_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(280px, 100% - 2rem);
+  height: 48px;
+  margin-inline: auto;
+  border: none;
+  border-radius: 24px;
+  background-color: #A855F7;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#login_overlay #login_btn svg {
+  display: block;
+  width: 28px;
+  fill: #fff;
+  margin-bottom: 0;
 }
 
 header.top_header {
@@ -102,13 +145,15 @@ header.top_header nav button:active svg {
 }
 
 section.tab_top {
-  display: block;
+  display: none;
   width: 100vw;
   min-height: 100lvh;
   overflow: auto;
-  padding-bottom: 64px;
+  padding-bottom: 100px;
   flex-shrink: 0;
-  scroll-snap-align: start;
+}
+section.tab_top.active {
+  display: block;
 }
 section.tab_top .top_user {
   position: relative;
@@ -514,13 +559,15 @@ section.tab_top .top_shop .container .boxitem:active {
 }
 
 section.tab_talk {
-  display: block;
+  display: none;
   width: 100vw;
   min-height: 100lvh;
   overflow: auto;
-  padding-bottom: 64px;
+  padding-bottom: 100px;
   flex-shrink: 0;
-  scroll-snap-align: start;
+}
+section.tab_talk.active {
+  display: block;
 }
 section.tab_talk label {
   display: flex;
@@ -680,6 +727,9 @@ aside.navbar .nav {
   gap: 8px;
   flex: 1;
   height: 100%;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
 aside.navbar .nav svg {
   width: 28px;
@@ -688,6 +738,10 @@ aside.navbar .nav svg {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: stroke 0.2s ease;
+}
+aside.navbar .nav.active svg {
+  stroke: #A855F7;
 }
 aside.navbar .nav p {
   display: block;
@@ -695,6 +749,11 @@ aside.navbar .nav p {
   font-weight: 400;
   color: #000;
   font-size: 0.92rem;
+  transition: color 0.2s ease;
+}
+aside.navbar .nav.active p {
+  color: #A855F7;
+  font-weight: 700;
 }
 aside.navbar::after {
   content: "";
@@ -703,7 +762,221 @@ aside.navbar::after {
   margin: auto;
   width: calc(50% - 12px);
   height: 44px;
-  background-color: rgba(0, 0, 0, 0.0666666667);
+  background-color: rgba(168, 85, 247, 0.1);
   border-radius: 22px;
+  transition: translate 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+aside.navbar.nav-home::after {
   translate: calc(-50% - 6px);
-}/*# sourceMappingURL=style.css.map */
+}
+aside.navbar.nav-talk::after {
+  translate: calc(50% + 6px);
+}
+
+/* ===== モーダル ===== */
+.modal_overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: modalFadeIn 0.2s ease;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal_box {
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  background-color: #fff;
+  border-radius: 24px 24px 0 0;
+  overflow-y: auto;
+  animation: modalSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid #eee;
+}
+.modal_title {
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  color: #000;
+  font-size: 1.2rem;
+}
+.modal_close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.modal_body {
+  padding: 20px;
+}
+.profile_edit_icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.profile_edit_icon img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.edit_icon_label {
+  font-family: "LINE Seed JP", sans-serif;
+  font-size: 0.85rem;
+  color: #A855F7;
+  cursor: pointer;
+}
+.profile_edit_field {
+  margin-bottom: 16px;
+}
+.profile_edit_field label {
+  display: block;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  color: #333;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+.profile_edit_field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-family: "LINE Seed JP", sans-serif;
+  font-size: 1rem;
+  color: #000;
+  box-sizing: border-box;
+  outline: none;
+  background: #fafafa;
+}
+.profile_edit_field input:focus {
+  border-color: #A855F7;
+}
+.toocid_row {
+  display: flex;
+  gap: 8px;
+}
+.toocid_row input {
+  flex: 1;
+}
+.toocid_row button {
+  height: 44px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 12px;
+  background: #A855F7;
+  color: #fff;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toocid_current {
+  font-family: "LINE Seed JP", sans-serif;
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 4px;
+}
+.modal_save_btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 15%), #A855F7);
+  color: #fff;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: scale 0.1s ease;
+}
+.modal_save_btn:active {
+  scale: 0.97;
+}
+.modal_logout_btn {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #ddd;
+  border-radius: 22px;
+  background: transparent;
+  color: #999;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* 検索結果 */
+.search_result {
+  margin-top: 16px;
+}
+.search_result_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 16px;
+}
+.search_result_item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.search_result_item .result_info {
+  flex: 1;
+}
+.search_result_item .result_info p {
+  font-family: "LINE Seed JP", sans-serif;
+  color: #000;
+}
+.search_result_item .result_info p:first-child {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.search_result_item .result_info p:last-child {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #999;
+}
+.search_result_item button {
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 18px;
+  background: #A855F7;
+  color: #fff;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
