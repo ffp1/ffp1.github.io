@@ -10,6 +10,7 @@
      -moz-user-select: none;
           user-select: none;
   color: #fff;
+  font-family: "LINE Seed JP", sans-serif;
 }
 
 html {
@@ -1041,4 +1042,4 @@ aside.navbar::after {
 .search_result_item button:disabled {
   background: #ccc;
   cursor: not-allowed;
-}/*# sourceMappingURL=style.css.map */
+}
