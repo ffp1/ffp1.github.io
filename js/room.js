@@ -128,9 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 reader.onload = (ev) => {
                     const img = new Image();
                     img.onload = () => {
-                        // リサイズ（最大幅480px）
+                        // リサイズ（最大幅320px）
                         const canvas = document.createElement('canvas');
-                        const MAX_W = 480;
+                        const MAX_W = 320;
                         let w = img.width, h = img.height;
                         if (w > MAX_W) {
                             h = (MAX_W * h) / w;
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         canvas.width = w;
                         canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                        const base64 = canvas.toDataURL('image/jpeg', 0.5);
 
                         push(messagesRef, {
                             type: 'image',

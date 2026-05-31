@@ -356,14 +356,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const MAX = 120;
+                const MAX = 80;
                 let w = img.width, h = img.height;
                 if (w > h) { h = (MAX * h) / w; w = MAX; }
                 else { w = (MAX * w) / h; h = MAX; }
                 canvas.width = w;
                 canvas.height = h;
                 canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                pendingIconBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                pendingIconBase64 = canvas.toDataURL('image/jpeg', 0.5);
                 editIconPreview.src = pendingIconBase64;
             };
             img.src = ev.target.result;
