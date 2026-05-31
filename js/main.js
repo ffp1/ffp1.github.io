@@ -203,8 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const roomId = getPrivateRoomId(currentUserInfo.uid, friendUid);
                     const params = new URLSearchParams({
                         room: roomId,
-                        targetName: userData.displayName,
-                        targetIcon: userData.photoURL || ''
+                        targetName: userData.displayName
                     });
                     window.location.href = `talkroom/index.html?${params.toString()}`;
                 });
@@ -280,8 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     talkElement.addEventListener('click', () => {
                         const params = new URLSearchParams({
                             room: roomId,
-                            targetName: targetName,
-                            targetIcon: targetIcon
+                            targetName: targetName
                         });
                         window.location.href = `talkroom/index.html?${params.toString()}`;
                     });
@@ -348,8 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         talkElement.addEventListener('click', () => {
             const params = new URLSearchParams({
                 room: memoRoomId,
-                targetName: "Own",
-                targetIcon: currentUserInfo.photoURL
+                targetName: "Own"
             });
             window.location.href = `talkroom/index.html?${params.toString()}`;
         });
@@ -424,9 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
         else activateProfileTab();
     };
 
-    document.getElementById('btn_open_profile_edit').addEventListener('click', () => openProfileModal('profile'));
-    const btnProfileHeader = document.getElementById('btn_open_profile_edit_header');
-    if(btnProfileHeader) btnProfileHeader.addEventListener('click', () => openProfileModal('profile'));
+    document.querySelectorAll('#btn_open_profile_edit').forEach(btn => {
+        btn.addEventListener('click', () => openProfileModal('profile'));
+    });
     document.getElementById('btn_open_toocid_edit').addEventListener('click', () => openProfileModal('toocid'));
     document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
 

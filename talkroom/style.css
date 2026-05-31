@@ -47,7 +47,7 @@ section.inputarea {
   left: 0;
   bottom: 0;
   display: flex;
-  align-items: center;
+  align-items: end;
   flex-wrap: wrap;
   width: 100vw;
   min-height: calc(72px + var(--height));
@@ -136,14 +136,14 @@ section.inputarea .area_send .send_icon svg {
 section.inputarea label.area_input {
   display: block;
   width: calc(100% - 136px);
-  height: 44px;
+  min-height: 44px;
   border: 1.5px solid #f0f0f0;
   background-color: #f5f5f5;
-  margin-block: 14px;
+  padding-bottom: 14px;
   border-radius: 22px;
   box-sizing: border-box;
 }
-section.inputarea label.area_input input {
+section.inputarea label.area_input textarea {
   display: block;
   width: 100%;
   height: 100%;
@@ -157,11 +157,12 @@ section.inputarea label.area_input input {
   color: #000;
   padding-inline: 12px;
   box-sizing: border-box;
+  resize: none;
 }
-section.inputarea label.area_input input::-moz-placeholder {
+section.inputarea label.area_input textarea::-moz-placeholder {
   color: #ccc;
 }
-section.inputarea label.area_input input::placeholder {
+section.inputarea label.area_input textarea::placeholder {
   color: #ccc;
 }
 section.inputarea .area_morecontainer {
@@ -356,4 +357,4 @@ main .content.me p.content_message {
   font-weight: 400;
   color: #000;
   font-size: 1rem;
-}
+}/*# sourceMappingURL=style.css.map */

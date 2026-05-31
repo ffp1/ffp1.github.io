@@ -203,6 +203,7 @@ section.tab_top .top_user .user_flexwrap .userinfo p.username {
   font-weight: 700;
   color: #000;
   font-size: 1.6rem;
+  overflow: visible;
 }
 section.tab_top .top_user .user_flexwrap .userinfo p.userbio {
   display: -webkit-box;
@@ -377,7 +378,8 @@ section.tab_top .top_friends .friends_container .friends_group .group_info p.fri
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
   color: #000;
-  z-index: 1.2rem;
+  font-size: 1rem;
+  overflow: visible;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ttl span,
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.friend_name span,
@@ -694,6 +696,7 @@ section.tab_talk .talk_container .talk_talkroom .talkroom_info p.talkroom_infona
   font-weight: 700;
   color: #000;
   font-size: 1.1rem;
+  overflow: visible;
 }
 section.tab_talk .talk_container .talk_talkroom .talkroom_info p.talkroom_infomessage {
   display: -webkit-box;
@@ -1083,4 +1086,4 @@ aside.navbar.nav-talk::after {
 .search_result_item button:disabled {
   background: #ccc;
   cursor: not-allowed;
-}/*# sourceMappingURL=style.css.map */
+}

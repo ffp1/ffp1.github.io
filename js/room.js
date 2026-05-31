@@ -44,6 +44,26 @@ document.addEventListener('DOMContentLoaded', () => {
             name: user.displayName || '名無し'
         };
 
+        if (ROOM_ID === `memo_${user.uid}`) {
+            targetName = 'Own';
+            targetIcon = user.photoURL || '../img/icon(temp).jpg';
+        } else {
+            const uids = ROOM_ID.split('_');
+            if (uids.length === 2) {
+                const targetUid = uids[0] === user.uid ? uids[1] : uids[0];
+                const cached = sessionStorage.getItem(`tooc_user_${targetUid}`);
+                if (cached) {
+                    try {
+                        const data = JSON.parse(cached);
+                        if (data.displayName) targetName = data.displayName;
+                        if (data.photoURL) targetIcon = data.photoURL;
+                    } catch(e) {}
+                }
+            }
+        }
+
+        if (headerUsername) headerUsername.textContent = targetName;
+
         const scrollToBottom = () => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
@@ -168,8 +188,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        const labelAreaInput = document.querySelector('label.area_input');
+        const inputAreaSection = document.querySelector('section.inputarea');
+
         // textareaの自動リサイズ
         inputArea.addEventListener('input', () => {
+            const lines = (inputArea.value.match(/\n/g) || []).length + 1;
+            const extraHeight = (lines - 1) * 20;
+            
+            if (labelAreaInput) {
+                labelAreaInput.style.minHeight = (44 + extraHeight) + 'px';
+            }
+            if (inputAreaSection) {
+                inputAreaSection.style.setProperty('--height', extraHeight + 'px');
+            }
+            
             inputArea.style.height = 'auto';
             inputArea.style.height = inputArea.scrollHeight + 'px';
         });
