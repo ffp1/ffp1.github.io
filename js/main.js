@@ -218,6 +218,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===========================
     // トークルーム一覧の読み込み（重複防止のPromise.all制御）
     // ===========================
+    const formatNotiTime = (timestamp) => {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        const today = new Date();
+        
+        const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        
+        const diffTime = todayOnly - dateOnly;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        } else if (diffDays === 1) {
+            return '昨日';
+        } else if (diffDays === 2) {
+            return '一昨日';
+        } else {
+            const y = date.getFullYear();
+            const m = (date.getMonth() + 1).toString().padStart(2, '0');
+            const d = date.getDate().toString().padStart(2, '0');
+            return `${y}/${m}/${d}`;
+        }
+    };
+
     const loadTalkRooms = () => {
         const roomsRef = ref(db, 'rooms');
         onValue(roomsRef, async (snapshot) => {
@@ -268,10 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     node.querySelector('.room_icon_img').src = targetIcon;
 
                     if (lastMessage.timestamp) {
-                        const date = new Date(lastMessage.timestamp);
-                        const hours = date.getHours().toString().padStart(2, '0');
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
-                        node.querySelector('.talkroom_notitime').textContent = `${hours}:${minutes}`;
+                        node.querySelector('.talkroom_notitime').textContent = formatNotiTime(lastMessage.timestamp);
                     }
 
                     const talkElement = node.querySelector('.talk_talkroom');
@@ -332,10 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
                     if (lastMessage.timestamp) {
-                        const date = new Date(lastMessage.timestamp);
-                        const hours = date.getHours().toString().padStart(2, '0');
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
-                        node.querySelector('.talkroom_notitime').textContent = `${hours}:${minutes}`;
+                        node.querySelector('.talkroom_notitime').textContent = formatNotiTime(lastMessage.timestamp);
                     }
                 }
             }
