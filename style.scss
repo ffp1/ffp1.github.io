@@ -282,8 +282,11 @@ section.tab_top {
                 }
 
                 &.btn_toocid {
-                    background: rgba(0,0,0,0.05);
-                    p { color: #333; }
+                    background: rgba(0, 0, 0, 0.05);
+
+                    p {
+                        color: #333;
+                    }
                 }
             }
         }

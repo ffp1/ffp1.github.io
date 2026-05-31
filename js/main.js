@@ -104,6 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentUserInfo.toocId = saved.toocId || '';
                 }
 
+                if (!currentUserInfo.toocId) {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-';
+                    let randomId = '';
+                    for (let i = 0; i < 16; i++) {
+                        randomId += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    currentUserInfo.toocId = randomId;
+                    set(ref(db, `toocIds/${randomId}`), user.uid).catch(err => console.error('toocID生成エラー:', err));
+                }
+
                 myName.textContent = currentUserInfo.displayName;
                 myIcon.src = currentUserInfo.photoURL;
                 myBio.textContent = currentUserInfo.bio || '...';
@@ -111,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 update(ref(db, `users/${user.uid}`), {
                     uid: user.uid,
                     displayName: currentUserInfo.displayName,
-                    photoURL: currentUserInfo.photoURL
+                    photoURL: currentUserInfo.photoURL,
+                    toocId: currentUserInfo.toocId
                 }).catch(err => console.error('ユーザー情報の保存に失敗:', err));
 
                 loadFriends();
