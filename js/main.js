@@ -1,4 +1,5 @@
 import { db, auth, provider, signInWithPopup, onAuthStateChanged, signOut, ref, onValue, set, get, update, serverTimestamp } from './firebase-config.js';
+import { openTalkRoom } from './room.js';
 
 let currentUserInfo = null;
 
@@ -171,6 +172,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     };
 
+    let isFriendsLoaded = false;
+    let isRoomsLoaded = false;
+    const checkInitialLoad = () => {
+        if (isFriendsLoaded && isRoomsLoaded) {
+            const splash = document.getElementById('splash_screen');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                setTimeout(() => { splash.style.display = 'none'; }, 300);
+            }
+        }
+    };
+
     // ===========================
     // 友だちリストの読み込み
     // ===========================
@@ -201,15 +214,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 friendElement.style.cursor = 'pointer';
                 friendElement.addEventListener('click', () => {
                     const roomId = getPrivateRoomId(currentUserInfo.uid, friendUid);
-                    const params = new URLSearchParams({
-                        room: roomId,
-                        targetName: userData.displayName
-                    });
-                    window.location.href = `talkroom/index.html?${params.toString()}`;
+                    openTalkRoom(roomId, userData.displayName);
                 });
 
                 friendsContainer.appendChild(node);
             });
+            
+            isFriendsLoaded = true;
+            checkInitialLoad();
         }, (err) => {
             console.error('友だちリストの監視エラー:', err);
         });
@@ -301,11 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const talkElement = node.querySelector('.talk_talkroom');
                     talkElement.style.cursor = 'pointer';
                     talkElement.addEventListener('click', () => {
-                        const params = new URLSearchParams({
-                            room: roomId,
-                            targetName: targetName
-                        });
-                        window.location.href = `talkroom/index.html?${params.toString()}`;
+                        openTalkRoom(roomId, targetName);
                     });
                     
                     // 最新の投稿日時でソートするためのメタデータを持たせる
@@ -327,6 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // 最後に一括でDOMを更新
             talkContainer.innerHTML = '';
             talkContainer.appendChild(fragment);
+            
+            isRoomsLoaded = true;
+            checkInitialLoad();
 
         }, (err) => {
             console.error('ルーム一覧の監視エラー:', err);
@@ -365,11 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const talkElement = node.querySelector('.talk_talkroom');
         talkElement.style.cursor = 'pointer';
         talkElement.addEventListener('click', () => {
-            const params = new URLSearchParams({
-                room: memoRoomId,
-                targetName: "Own"
-            });
-            window.location.href = `talkroom/index.html?${params.toString()}`;
+            openTalkRoom(memoRoomId, "Own");
         });
         container.appendChild(talkElement);
     };
