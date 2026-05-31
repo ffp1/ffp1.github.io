@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navHome.addEventListener('click', () => switchTab('home'));
     navTalk.addEventListener('click', () => switchTab('talk'));
-    
+
     // 初期タブ復元（トークルームから戻った時など）
     const initialTab = sessionStorage.getItem('activeTab') || 'home';
     switchTab(initialTab);
@@ -172,18 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     };
 
-    let isFriendsLoaded = false;
-    let isRoomsLoaded = false;
-    const checkInitialLoad = () => {
-        if (isFriendsLoaded && isRoomsLoaded) {
-            const splash = document.getElementById('splash_screen');
-            if (splash && splash.style.display !== 'none') {
-                splash.style.opacity = '0';
-                setTimeout(() => { splash.style.display = 'none'; }, 300);
-            }
-        }
-    };
-
     // ===========================
     // 友だちリストの読み込み
     // ===========================
@@ -195,8 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!friendsData) {
                 friendsContainer.innerHTML = '<p style="padding: 1rem; font-family: \'LINE Seed JP\', sans-serif; color: #999; font-size: 0.9rem;">友だちがまだいません。toocIDで友だちを追加しましょう。</p>';
-                isFriendsLoaded = true;
-                checkInitialLoad();
                 return;
             }
 
@@ -204,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             friendUids.forEach(async friendUid => {
                 const userData = await getUserCache(friendUid);
                 if (!userData) return;
-                
+
                 const node = document.importNode(templateFriend, true);
 
                 node.querySelector('.friend_name').textContent = userData.displayName;
@@ -221,9 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 friendsContainer.appendChild(node);
             });
-            
-            isFriendsLoaded = true;
-            checkInitialLoad();
         }, (err) => {
             console.error('友だちリストの監視エラー:', err);
         });
@@ -236,13 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!timestamp) return '';
         const date = new Date(timestamp);
         const today = new Date();
-        
+
         const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        
+
         const diffTime = todayOnly - dateOnly;
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays === 0) {
             const hours = date.getHours().toString().padStart(2, '0');
             const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -266,14 +249,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!roomsData) {
                 talkContainer.innerHTML = '';
                 appendMemoRoom(talkContainer);
-                isRoomsLoaded = true;
-                checkInitialLoad();
                 return;
             }
 
             // 新しいFragmentを作って最後に置き換える（重複描画防止）
             const fragment = document.createDocumentFragment();
-            
+
             // 先にKeepメモをフラグメントに追加
             await appendMemoRoom(fragment);
 
@@ -301,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const node = document.importNode(templateTalkroom, true);
                     node.querySelector('.talkroom_infoname').textContent = targetName;
-                    
+
                     if (lastMessage.type === 'image') {
                         const isMe = lastMessage.senderId === currentUserInfo.uid;
                         node.querySelector('.talkroom_infomessage').textContent = isMe ? '画像を送信しました' : '画像を送信されました';
@@ -319,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     talkElement.addEventListener('click', () => {
                         openTalkRoom(roomId, targetName);
                     });
-                    
+
                     // 最新の投稿日時でソートするためのメタデータを持たせる
                     talkElement.dataset.timestamp = lastMessage.timestamp || 0;
                     return talkElement;
@@ -339,9 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // 最後に一括でDOMを更新
             talkContainer.innerHTML = '';
             talkContainer.appendChild(fragment);
-            
-            isRoomsLoaded = true;
-            checkInitialLoad();
 
         }, (err) => {
             console.error('ルーム一覧の監視エラー:', err);
@@ -375,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        } catch(e) {}
+        } catch (e) { }
 
         const talkElement = node.querySelector('.talk_talkroom');
         talkElement.style.cursor = 'pointer';
@@ -448,8 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentToocid.textContent = currentUserInfo.toocId ? `現在のtoocID: @${currentUserInfo.toocId}` : '未設定';
         pendingIconBase64 = null;
         modalProfile.style.display = 'flex';
-        
-        if(tab === 'toocid') activateToocidTab();
+
+        if (tab === 'toocid') activateToocidTab();
         else activateProfileTab();
     };
 
@@ -468,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     modalProfile.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalProfile));
-    modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile), {passive: false});
+    modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile), { passive: false });
 
     // アイコン画像変更 (MAX 300px, quality 0.8)
     editIconInput.addEventListener('change', (e) => {
@@ -500,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newId = editToocidInput.value.trim();
         const msgEl = document.getElementById('toocid_validation_msg');
         const btn = document.getElementById('btn_set_toocid');
-        
+
         clearTimeout(toocidCheckTimer);
 
         if (!newId) {
@@ -547,10 +525,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const newId = editToocidInput.value.trim();
         const msgEl = document.getElementById('toocid_validation_msg');
         const btn = document.getElementById('btn_set_toocid');
-        
+
         btn.disabled = true;
         msgEl.textContent = '保存中...';
-        
+
         const promises = [];
         if (currentUserInfo.toocId) {
             promises.push(set(ref(db, `toocIds/${currentUserInfo.toocId}`), null));
@@ -587,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         update(ref(db, `users/${currentUserInfo.uid}`), updates).then(() => {
             // キャッシュもクリアしておく
             sessionStorage.removeItem(`tooc_user_${currentUserInfo.uid}`);
-            
+
             currentUserInfo.displayName = newName;
             currentUserInfo.bio = newBio;
             if (pendingIconBase64) {
@@ -620,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalAddFriend.style.display = 'none';
     });
     modalAddFriend.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalAddFriend));
-    modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend), {passive: false});
+    modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend), { passive: false });
 
     document.getElementById('btn_search_toocid').addEventListener('click', () => {
         const searchId = document.getElementById('search_toocid_input').value.trim();
