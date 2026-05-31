@@ -917,7 +917,8 @@ aside.navbar.nav-talk::after {
 .modal_body {
   padding: 20px;
   overflow-y: auto;
-  min-height: 440px; /* 固定高にしてタブ切替で高さが変わらないように */
+  min-height: 440px;
+  /* 固定高にしてタブ切替で高さが変わらないように */
 }
 
 .profile_edit_icon {
@@ -1088,16 +1089,19 @@ aside.navbar.nav-talk::after {
   cursor: not-allowed;
 }
 
+body {
+  --height: 0px;
+  --translate: 88px;
+}
+body:has(section.inputarea.moreactive) {
+  --height: 72px;
+  --translate: 0px;
+}
+
 #talkroom_page {
   width: 100vw;
   min-height: 100dvh;
   background-color: #fff;
-  --height: 0px;
-  --translate: 88px;
-}
-#talkroom_page:has(section.inputarea.moreactive) {
-  --height: 72px;
-  --translate: 0px;
 }
 #talkroom_page * {
   margin: 0;
@@ -1121,8 +1125,10 @@ aside.navbar.nav-talk::after {
 #talkroom_page::-webkit-scrollbar-track {
   background-color: #fff;
 }
-#talkroom_page section.inputarea {
+
+section.inputarea {
   position: fixed;
+  z-index: 1001;
   left: 0;
   bottom: 0;
   display: flex;
@@ -1137,18 +1143,22 @@ aside.navbar.nav-talk::after {
   padding-inline: 4px;
   padding-top: 12px;
   box-sizing: border-box;
+  translate: 0 100%;
+  transition: translate 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+section.inputarea.room-open {
   translate: 0 var(--translate);
 }
-#talkroom_page section.inputarea.moreactive .area_morecontainer {
+section.inputarea.moreactive .area_morecontainer {
   margin-top: 0;
 }
-#talkroom_page section.inputarea .area_vec {
+section.inputarea .area_vec {
   display: grid;
   place-items: center;
   width: 40px;
   height: 44px;
 }
-#talkroom_page section.inputarea .area_vec svg {
+section.inputarea .area_vec svg {
   display: block;
   width: 24px;
   fill: none;
@@ -1157,16 +1167,16 @@ aside.navbar.nav-talk::after {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-#talkroom_page section.inputarea .area_voicemessage,
-#talkroom_page section.inputarea .area_send {
+section.inputarea .area_voicemessage,
+section.inputarea .area_send {
   position: relative;
   cursor: pointer;
   width: 44px;
   height: 44px;
   margin-left: 4px;
 }
-#talkroom_page section.inputarea .area_voicemessage .icon_wrapper,
-#talkroom_page section.inputarea .area_send .icon_wrapper {
+section.inputarea .area_voicemessage .icon_wrapper,
+section.inputarea .area_send .icon_wrapper {
   position: absolute;
   inset: 0;
   margin: auto;
@@ -1176,17 +1186,17 @@ aside.navbar.nav-talk::after {
   height: 40px;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, filter 0.3s ease;
 }
-#talkroom_page section.inputarea .area_voicemessage .icon_wrapper svg,
-#talkroom_page section.inputarea .area_send .icon_wrapper svg {
+section.inputarea .area_voicemessage .icon_wrapper svg,
+section.inputarea .area_send .icon_wrapper svg {
   width: 24px;
   height: 24px;
 }
-#talkroom_page section.inputarea .area_voicemessage .mic_icon {
+section.inputarea .area_voicemessage .mic_icon {
   opacity: 1;
   filter: blur(0);
   transform: scale(1) rotate(0deg);
 }
-#talkroom_page section.inputarea .area_voicemessage .send_icon {
+section.inputarea .area_voicemessage .send_icon {
   opacity: 0;
   filter: blur(8px);
   transform: scale(0.5) rotate(-90deg);
@@ -1194,26 +1204,26 @@ aside.navbar.nav-talk::after {
   background-color: #a855f7;
   border-radius: 50%;
 }
-#talkroom_page section.inputarea .area_voicemessage .send_icon svg {
+section.inputarea .area_voicemessage .send_icon svg {
   stroke: #fff;
 }
-#talkroom_page section.inputarea .area_send .mic_icon {
+section.inputarea .area_send .mic_icon {
   opacity: 0;
   filter: blur(8px);
   transform: scale(0.5) rotate(90deg);
   pointer-events: none;
 }
-#talkroom_page section.inputarea .area_send .send_icon {
+section.inputarea .area_send .send_icon {
   opacity: 1;
   filter: blur(0);
   transform: scale(1) rotate(0deg);
   background-color: #a855f7;
   border-radius: 50%;
 }
-#talkroom_page section.inputarea .area_send .send_icon svg {
+section.inputarea .area_send .send_icon svg {
   stroke: #fff;
 }
-#talkroom_page section.inputarea label.area_input {
+section.inputarea label.area_input {
   display: block;
   width: calc(100% - 136px);
   min-height: 44px;
@@ -1223,7 +1233,7 @@ aside.navbar.nav-talk::after {
   border-radius: 22px;
   box-sizing: border-box;
 }
-#talkroom_page section.inputarea label.area_input textarea {
+section.inputarea label.area_input textarea {
   display: block;
   width: 100%;
   height: 100%;
@@ -1239,13 +1249,13 @@ aside.navbar.nav-talk::after {
   box-sizing: border-box;
   resize: none;
 }
-#talkroom_page section.inputarea label.area_input textarea::-moz-placeholder {
+section.inputarea label.area_input textarea::-moz-placeholder {
   color: #ccc;
 }
-#talkroom_page section.inputarea label.area_input textarea::placeholder {
+section.inputarea label.area_input textarea::placeholder {
   color: #ccc;
 }
-#talkroom_page section.inputarea .area_morecontainer {
+section.inputarea .area_morecontainer {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -1253,7 +1263,7 @@ aside.navbar.nav-talk::after {
   min-height: 72px;
   margin-top: 36px;
 }
-#talkroom_page section.inputarea .area_morecontainer .more_item {
+section.inputarea .area_morecontainer .more_item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1263,7 +1273,7 @@ aside.navbar.nav-talk::after {
   height: 72px;
   flex-shrink: 0;
 }
-#talkroom_page section.inputarea .area_morecontainer .more_item svg {
+section.inputarea .area_morecontainer .more_item svg {
   width: 32px;
   fill: none;
   stroke: #a855f7;
@@ -1271,18 +1281,19 @@ aside.navbar.nav-talk::after {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-#talkroom_page section.inputarea .area_morecontainer .more_item p {
+section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
   color: rgba(168, 85, 247, 0.6666666667);
   font-size: 0.8rem;
 }
+
 @media (display-mode: standalone) {
-  #talkroom_page section.inputarea {
+  section.inputarea {
     --height: 36px;
   }
-  #talkroom_page section.inputarea.moreactive {
+  section.inputarea.moreactive {
     --height: 72px;
   }
 }

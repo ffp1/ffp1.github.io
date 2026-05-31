@@ -2,17 +2,24 @@
 .modal_overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(0,0,0,0.45);
+    background-color: rgba(0, 0, 0, 0.45);
     z-index: 1000;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     animation: modalFadeIn 0.2s ease;
 }
+
 @keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
+
 .modal_box {
     width: 100%;
     max-width: 480px;
@@ -24,10 +31,17 @@
     display: flex;
     flex-direction: column;
 }
+
 @keyframes modalSlideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }
+
 .modal_header {
     display: flex;
     flex-direction: column;
@@ -35,17 +49,20 @@
     gap: 12px;
     padding: 20px 20px 0;
 }
+
 .modal_header_top {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .modal_title {
     font-family: "LINE Seed JP", sans-serif;
     font-weight: 700;
     color: #000;
     font-size: 1.2rem;
 }
+
 .modal_close {
     width: 36px;
     height: 36px;
@@ -65,6 +82,7 @@
         stroke: none;
     }
 }
+
 .modal_tabs {
     display: flex;
     gap: 16px;
@@ -89,11 +107,14 @@
         }
     }
 }
+
 .modal_body {
     padding: 20px;
     overflow-y: auto;
-    min-height: 440px; /* 固定高にしてタブ切替で高さが変わらないように */
+    min-height: 440px;
+    /* 固定高にしてタブ切替で高さが変わらないように */
 }
+
 .profile_edit_icon {
     display: flex;
     flex-direction: column;
@@ -108,12 +129,14 @@
         object-fit: cover;
     }
 }
+
 .edit_icon_label {
     font-family: "LINE Seed JP", sans-serif;
     font-size: 0.85rem;
     color: #A855F7;
     cursor: pointer;
 }
+
 .profile_edit_field {
     margin-bottom: 16px;
 
@@ -125,6 +148,7 @@
         font-size: 0.85rem;
         margin-bottom: 6px;
     }
+
     input {
         width: 100%;
         height: 44px;
@@ -143,6 +167,7 @@
         }
     }
 }
+
 .toocid_row {
     display: flex;
     gap: 8px;
@@ -150,6 +175,7 @@
     input {
         flex: 1;
     }
+
     button {
         height: 44px;
         padding: 0 16px;
@@ -169,12 +195,14 @@
         }
     }
 }
+
 .toocid_current {
     font-family: "LINE Seed JP", sans-serif;
     font-size: 0.8rem;
     color: #999;
     margin-top: 4px;
 }
+
 .modal_save_btn {
     width: 100%;
     height: 48px;
@@ -193,6 +221,7 @@
         scale: 0.97;
     }
 }
+
 .modal_logout_btn {
     width: 100%;
     height: 44px;
@@ -206,9 +235,11 @@
     cursor: pointer;
     margin-top: 12px;
 }
+
 .search_result {
     margin-top: 16px;
 }
+
 .search_result_item {
     display: flex;
     align-items: center;
@@ -224,6 +255,7 @@
         object-fit: cover;
         flex-shrink: 0;
     }
+
     .result_info {
         flex: 1;
 
@@ -235,6 +267,7 @@
                 font-weight: 700;
                 font-size: 1rem;
             }
+
             &:last-child {
                 font-weight: 400;
                 font-size: 0.8rem;
@@ -242,6 +275,7 @@
             }
         }
     }
+
     button {
         height: 36px;
         padding: 0 16px;
