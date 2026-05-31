@@ -233,44 +233,58 @@ section.tab_top {
             }
         }
 
-        .editprofile {
-            position: relative;
+        .user_actions_wrap {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            width: 50%;
-            height: 28px;
-            background-image: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 25%), #A855F7);
-            border: none;
-            border-radius: 14px;
-            margin-inline: auto 12px;
-            box-sizing: border-box;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-right: 12px;
             margin-top: 4px;
+            position: relative;
             z-index: 1;
-            cursor: pointer;
-            transition: scale .1s ease;
-            will-change: scale;
 
-            svg {
-                fill: none;
-                stroke: #fff;
-                stroke-width: 1.5;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-                width: 22px;
-            }
+            .editprofile {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                height: 28px;
+                background-image: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 25%), #A855F7);
+                border: none;
+                border-radius: 14px;
+                box-sizing: border-box;
+                cursor: pointer;
+                transition: scale .1s ease;
+                will-change: scale;
+                margin: 0;
+                width: auto;
+                padding: 0 16px;
 
-            p {
-                display: block;
-                font-family: 'LINE Seed JP', sans-serif;
-                font-weight: 400;
-                color: #fff;
-                font-size: .85rem;
-            }
+                svg {
+                    fill: none;
+                    stroke: #fff;
+                    stroke-width: 1.5;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    width: 22px;
+                }
 
-            &:active {
-                scale: .96;
+                p {
+                    display: block;
+                    font-family: 'LINE Seed JP', sans-serif;
+                    font-weight: 400;
+                    color: #fff;
+                    font-size: .85rem;
+                }
+
+                &:active {
+                    scale: .96;
+                }
+
+                &.btn_toocid {
+                    background: rgba(0,0,0,0.05);
+                    p { color: #333; }
+                }
             }
         }
     }
@@ -800,3 +814,5 @@ aside.navbar {
         translate: calc(-50% - 6px);
     }
 }
+
+@import 'modal_styles';

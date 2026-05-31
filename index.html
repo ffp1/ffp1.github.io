@@ -87,11 +87,11 @@
                         <p class="userbio" id="my_bio">...</p>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-right: 12px; margin-top: 4px; position: relative; z-index: 1;">
-                    <button id="btn_open_toocid_edit" class="editprofile" style="margin: 0; width: auto; padding: 0 16px; background: rgba(0,0,0,0.05); color: #333;">
-                        <p style="color: #333;">toocID設定</p>
+                <div class="user_actions_wrap">
+                    <button id="btn_open_toocid_edit" class="editprofile btn_toocid">
+                        <p>toocID設定</p>
                     </button>
-                    <button id="btn_open_profile_edit" class="editprofile" style="margin: 0; width: auto; padding: 0 16px;">
+                    <button id="btn_open_profile_edit" class="editprofile btn_profile">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
                             <path d="M13.5 6.5l4 4" />
@@ -207,14 +207,14 @@
     <!-- ===== モーダル: プロフィール編集 ===== -->
     <div class="modal_overlay" id="modal_profile" style="display: none;">
         <div class="modal_box">
-            <div class="modal_header" style="flex-direction: column; align-items: stretch; gap: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="modal_header">
+                <div class="modal_header_top">
                     <p class="modal_title">設定</p>
                     <button class="modal_close" id="modal_profile_close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg></button>
                 </div>
-                <div class="modal_tabs" style="display: flex; gap: 16px; border-bottom: 2px solid #f0f0f0;">
-                    <button id="tab_btn_profile" style="flex: 1; padding-bottom: 8px; border: none; background: none; font-weight: 700; color: #A855F7; border-bottom: 2px solid #A855F7; cursor: pointer;">プロフィール</button>
-                    <button id="tab_btn_toocid" style="flex: 1; padding-bottom: 8px; border: none; background: none; font-weight: 700; color: #999; border-bottom: 2px solid transparent; cursor: pointer;">toocID</button>
+                <div class="modal_tabs">
+                    <button id="tab_btn_profile">プロフィール</button>
+                    <button id="tab_btn_toocid">toocID</button>
                 </div>
             </div>
             <div class="modal_body" id="modal_body_swipe_area">

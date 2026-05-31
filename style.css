@@ -258,6 +258,7 @@ section.tab_top .friends_friend img.friend_icon_img {
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
+  margin-right: 12px;
 }
 section.tab_top .friends_friend .friend_info {
   flex: 1;
@@ -265,12 +266,13 @@ section.tab_top .friends_friend .friend_info {
 section.tab_top .friends_friend .friend_info .friend_name {
   font-weight: 600;
   color: #000;
+  font-family: 'LINE Seed JP', sans-serif;
 }
 section.tab_top .friends_friend .friend_info .friend_bio {
   font-weight: 400;
   color: #999;
   font-size: 0.8rem;
-  margin-top: 4px;
+  font-family: 'LINE Seed JP', sans-serif;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;

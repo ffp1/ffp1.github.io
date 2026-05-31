@@ -54,11 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
             navTalk.classList.add('active');
             navbar.className = 'navbar nav-talk';
         }
+        sessionStorage.setItem('activeTab', tab);
     };
 
     navHome.addEventListener('click', () => switchTab('home'));
     navTalk.addEventListener('click', () => switchTab('talk'));
-    switchTab('home');
+    
+    // 初期タブ復元（トークルームから戻った時など）
+    const initialTab = sessionStorage.getItem('activeTab') || 'home';
+    switchTab(initialTab);
 
     // ===========================
     // ログイン処理
@@ -226,7 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     node.querySelector('.talkroom_infoname').textContent = targetName;
                     
                     if (lastMessage.type === 'image') {
-                        node.querySelector('.talkroom_infomessage').innerHTML = imgSvg;
+                        const isMe = lastMessage.senderId === currentUserInfo.uid;
+                        node.querySelector('.talkroom_infomessage').textContent = isMe ? '画像を送信しました' : '画像を送信されました';
                     } else {
                         node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
@@ -292,7 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (messageIds.length > 0) {
                     const lastMessage = messages[messageIds[messageIds.length - 1]];
                     if (lastMessage.type === 'image') {
-                        node.querySelector('.talkroom_infomessage').innerHTML = imgSvg;
+                        const isMe = lastMessage.senderId === currentUserInfo.uid;
+                        node.querySelector('.talkroom_infomessage').textContent = isMe ? '画像を送信しました' : '画像を送信されました';
                     } else {
                         node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
@@ -390,6 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn_open_profile_edit').addEventListener('click', () => openProfileModal('profile'));
     document.getElementById('btn_open_toocid_edit').addEventListener('click', () => openProfileModal('toocid'));
     document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
+
+    // モーダル枠外タップで閉じる（スマホ対応のためtouchstart追加）
+    const closeModalIfOutside = (e, modal) => {
+        if (e.target === modal) modal.style.display = 'none';
+    };
+    modalProfile.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalProfile));
+    modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile));
 
     // アイコン画像変更 (MAX 300px, quality 0.8)
     editIconInput.addEventListener('change', (e) => {
@@ -537,9 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal_add_friend_close').addEventListener('click', () => {
         modalAddFriend.style.display = 'none';
     });
-    modalAddFriend.addEventListener('click', (e) => {
-        if (e.target === modalAddFriend) modalAddFriend.style.display = 'none';
-    });
+    modalAddFriend.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalAddFriend));
+    modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend));
 
     document.getElementById('btn_search_toocid').addEventListener('click', () => {
         const searchId = document.getElementById('search_toocid_input').value.trim();

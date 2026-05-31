@@ -1,0 +1,258 @@
+/* ===== モーダル ===== */
+.modal_overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: modalFadeIn 0.2s ease;
+}
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.modal_box {
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    background-color: #fff;
+    border-radius: 24px 24px 0 0;
+    overflow-y: hidden;
+    animation: modalSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+@keyframes modalSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+.modal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 12px;
+    border-bottom: 1px solid #eee;
+}
+.modal_title {
+    font-family: "LINE Seed JP", sans-serif;
+    font-weight: 700;
+    color: #000;
+    font-size: 1.2rem;
+}
+.modal_close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 50%;
+    font-size: 1rem;
+    color: #666;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        fill: #666;
+        stroke: none;
+    }
+}
+.modal_tabs {
+    display: flex;
+    gap: 16px;
+    border-bottom: 2px solid #f0f0f0;
+
+    button {
+        flex: 1;
+        padding-bottom: 8px;
+        border: none;
+        background: none;
+        font-family: "LINE Seed JP", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        color: #999;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s, border-color 0.2s;
+        font-size: 0.95rem;
+
+        &.active {
+            color: #A855F7;
+            border-bottom-color: #A855F7;
+        }
+    }
+}
+.modal_body {
+    padding: 20px;
+    overflow-y: auto;
+    min-height: 440px; /* 固定高にしてタブ切替で高さが変わらないように */
+}
+.profile_edit_icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+.edit_icon_label {
+    font-family: "LINE Seed JP", sans-serif;
+    font-size: 0.85rem;
+    color: #A855F7;
+    cursor: pointer;
+}
+.profile_edit_field {
+    margin-bottom: 16px;
+
+    label {
+        display: block;
+        font-family: "LINE Seed JP", sans-serif;
+        font-weight: 700;
+        color: #333;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+    input {
+        width: 100%;
+        height: 44px;
+        padding: 0 12px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-family: "LINE Seed JP", sans-serif;
+        font-size: 1rem;
+        color: #000;
+        box-sizing: border-box;
+        outline: none;
+        background: #fafafa;
+
+        &:focus {
+            border-color: #A855F7;
+        }
+    }
+}
+.toocid_row {
+    display: flex;
+    gap: 8px;
+
+    input {
+        flex: 1;
+    }
+    button {
+        height: 44px;
+        padding: 0 16px;
+        border: none;
+        border-radius: 12px;
+        background: #A855F7;
+        color: #fff;
+        font-family: "LINE Seed JP", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        flex-shrink: 0;
+
+        &:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    }
+}
+.toocid_current {
+    font-family: "LINE Seed JP", sans-serif;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 4px;
+}
+.modal_save_btn {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 24px;
+    background: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 15%), #A855F7);
+    color: #fff;
+    font-family: "LINE Seed JP", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: scale 0.1s ease;
+
+    &:active {
+        scale: 0.97;
+    }
+}
+.modal_logout_btn {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 22px;
+    background: transparent;
+    color: #999;
+    font-family: "LINE Seed JP", sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 12px;
+}
+.search_result {
+    margin-top: 16px;
+}
+.search_result_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 16px;
+
+    img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+    .result_info {
+        flex: 1;
+
+        p {
+            font-family: "LINE Seed JP", sans-serif;
+            color: #000;
+
+            &:first-child {
+                font-weight: 700;
+                font-size: 1rem;
+            }
+            &:last-child {
+                font-weight: 400;
+                font-size: 0.8rem;
+                color: #999;
+            }
+        }
+    }
+    button {
+        height: 36px;
+        padding: 0 16px;
+        border: none;
+        border-radius: 18px;
+        background: #A855F7;
+        color: #fff;
+        font-family: "LINE Seed JP", sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        flex-shrink: 0;
+
+        &:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    }
+}
