@@ -195,6 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!friendsData) {
                 friendsContainer.innerHTML = '<p style="padding: 1rem; font-family: \'LINE Seed JP\', sans-serif; color: #999; font-size: 0.9rem;">友だちがまだいません。toocIDで友だちを追加しましょう。</p>';
+                isFriendsLoaded = true;
+                checkInitialLoad();
                 return;
             }
 
@@ -264,6 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!roomsData) {
                 talkContainer.innerHTML = '';
                 appendMemoRoom(talkContainer);
+                isRoomsLoaded = true;
+                checkInitialLoad();
                 return;
             }
 
