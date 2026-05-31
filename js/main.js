@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalProfile = document.getElementById('modal_profile');
     const modalAddFriend = document.getElementById('modal_add_friend');
 
+    // すべてのモーダルを閉じるヘルパー
+    const closeAllModals = () => {
+        modalProfile.style.display = 'none';
+        modalAddFriend.style.display = 'none';
+    };
+
     // ===========================
     // ナビバー切替ロジック
     // ===========================
@@ -50,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navHome.addEventListener('click', () => switchTab('home'));
     navTalk.addEventListener('click', () => switchTab('talk'));
-    // 初期状態
     switchTab('home');
 
     // ===========================
@@ -63,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ログアウト — モーダルを閉じてからサインアウト
     logoutBtn.addEventListener('click', () => {
+        closeAllModals();
         signOut(auth).catch(error => {
             console.error("ログアウトエラー:", error);
         });
@@ -80,10 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUserInfo = {
                 uid: user.uid,
                 displayName: user.displayName || '名無し',
-                photoURL: user.photoURL || 'img/icon(temp).jpg'
+                photoURL: user.photoURL || 'img/icon(temp).jpg',
+                bio: '',
+                toocId: ''
             };
 
-            // DB からプロフィールを取得（bio, toocId, カスタム photoURL など）
+            // DB からプロフィールを取得
             get(ref(db, `users/${user.uid}`)).then((snap) => {
                 if (snap.exists()) {
                     const saved = snap.val();
@@ -103,13 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     uid: user.uid,
                     displayName: currentUserInfo.displayName,
                     photoURL: currentUserInfo.photoURL
-                });
+                }).catch(err => console.error('ユーザー情報の保存に失敗:', err));
 
                 // データ取得開始
                 loadFriends();
                 loadTalkRooms();
+            }).catch(err => {
+                console.error('ユーザー情報の取得に失敗:', err);
+                // 取得に失敗しても基本UIは表示
+                myName.textContent = currentUserInfo.displayName;
+                myIcon.src = currentUserInfo.photoURL;
+                loadFriends();
+                loadTalkRooms();
             });
         } else {
+            // ログアウト時: モーダルを閉じてからUI切替
+            closeAllModals();
             loginOverlay.style.display = 'flex';
             mainApp.style.display = 'none';
             currentUserInfo = null;
@@ -117,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ===========================
-    // ナビ・ルームID生成ユーティリティ
+    // ユーティリティ
     // ===========================
     const getPrivateRoomId = (uid1, uid2) => {
         return [uid1, uid2].sort().join('_');
@@ -127,19 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // 友だちリストの読み込み
     // ===========================
     const loadFriends = () => {
-        // まず自分のfriendsノードを監視
         const myFriendsRef = ref(db, `users/${currentUserInfo.uid}/friends`);
         onValue(myFriendsRef, (friendsSnap) => {
             const friendsData = friendsSnap.val();
             friendsContainer.innerHTML = '';
 
             if (!friendsData) {
-                // 友だちが0人の場合
                 friendsContainer.innerHTML = '<p style="padding: 1rem; font-family: \'LINE Seed JP\', sans-serif; color: #999; font-size: 0.9rem;">友だちがまだいません。toocIDで友だちを追加しましょう。</p>';
                 return;
             }
 
-            // 友だちのUIDリストを取得
             const friendUids = Object.keys(friendsData);
 
             friendUids.forEach(friendUid => {
@@ -156,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     get(ref(db, `rooms/${roomId}/messages`)).then((msgSnap) => {
                         const msgs = msgSnap.val();
                         const latestMsgEl = node.querySelector('.friend_latest_msg');
-                        if (msgs) {
+                        if (latestMsgEl && msgs) {
                             const keys = Object.keys(msgs);
                             const last = msgs[keys[keys.length - 1]];
                             if (last.type === 'image') {
@@ -164,12 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             } else {
                                 latestMsgEl.textContent = last.text || '';
                             }
-                        } else {
-                            latestMsgEl.textContent = 'タップしてトークを開始';
                         }
-                    });
+                    }).catch(() => {});
 
-                    // タップでトークルームへ遷移
                     const friendElement = node.querySelector('.friends_friend');
                     friendElement.style.cursor = 'pointer';
                     friendElement.addEventListener('click', () => {
@@ -183,8 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     friendsContainer.appendChild(node);
-                });
+                }).catch(err => console.error('友だち情報取得エラー:', err));
             });
+        }, (err) => {
+            console.error('友だちリストの監視エラー:', err);
         });
     };
 
@@ -212,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (messageIds.length === 0) return;
 
                 const lastMessage = messages[messageIds[messageIds.length - 1]];
-
                 const uids = roomId.split('_');
                 const targetUid = uids[0] === currentUserInfo.uid ? uids[1] : uids[0];
 
@@ -230,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (lastMessage.type === 'image') {
                         node.querySelector('.talkroom_infomessage').textContent = '📷 画像';
                     } else {
-                        node.querySelector('.talkroom_infomessage').textContent = lastMessage.text;
+                        node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
                     node.querySelector('.room_icon_img').src = targetIcon;
 
@@ -253,13 +266,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     talkContainer.appendChild(node);
-                });
+                }).catch(err => console.error('ルーム情報取得エラー:', err));
             });
+        }, (err) => {
+            console.error('ルーム一覧の監視エラー:', err);
         });
     };
 
     // 自分用のメモルーム（Keep）
     const appendMemoRoom = () => {
+        if (!currentUserInfo) return;
         const memoRoomId = `memo_${currentUserInfo.uid}`;
         const node = document.importNode(templateTalkroom, true);
         node.querySelector('.talkroom_infoname').textContent = "Keep (自分用のメモ)";
@@ -275,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (lastMessage.type === 'image') {
                         node.querySelector('.talkroom_infomessage').textContent = '📷 画像';
                     } else {
-                        node.querySelector('.talkroom_infomessage').textContent = lastMessage.text;
+                        node.querySelector('.talkroom_infomessage').textContent = lastMessage.text || '';
                     }
                     if (lastMessage.timestamp) {
                         const date = new Date(lastMessage.timestamp);
@@ -285,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        });
+        }).catch(() => {});
 
         const talkElement = node.querySelector('.talk_talkroom');
         talkElement.style.cursor = 'pointer';
@@ -311,14 +327,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentToocid = document.getElementById('current_toocid');
     let pendingIconBase64 = null;
 
-    // プロフィール編集モーダルを開く
     const openProfileModal = () => {
         if (!currentUserInfo) return;
         editIconPreview.src = currentUserInfo.photoURL;
         editNameInput.value = currentUserInfo.displayName;
         editBioInput.value = currentUserInfo.bio || '';
         editToocidInput.value = '';
-        currentToocid.textContent = currentUserInfo.toocId ? `現在のtoocID: ${currentUserInfo.toocId}` : '未設定';
+        currentToocid.textContent = currentUserInfo.toocId ? `現在のtoocID: @${currentUserInfo.toocId}` : '未設定';
         pendingIconBase64 = null;
         modalProfile.style.display = 'flex';
     };
@@ -336,8 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
     editIconInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
-        // リサイズしてBase64に変換（最大120px, JPEG 60%品質）
         const reader = new FileReader();
         reader.onload = (ev) => {
             const img = new Image();
@@ -359,37 +372,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // toocID設定
-    document.getElementById('btn_set_toocid').addEventListener('click', async () => {
+    document.getElementById('btn_set_toocid').addEventListener('click', () => {
         const newId = editToocidInput.value.trim();
         if (!newId) { alert('IDを入力してください'); return; }
-        if (!/^[a-zA-Z0-9_.-]{3,20}$/.test(newId)) {
+        if (!/^[a-zA-Z0-9_.\-]{3,20}$/.test(newId)) {
             alert('toocIDは半角英数字とアンダースコア、ドット、ハイフンのみ（3～20文字）で入力してください');
             return;
         }
 
-        // 重複チェック
-        const existing = await get(ref(db, `toocIds/${newId}`));
-        if (existing.exists() && existing.val() !== currentUserInfo.uid) {
-            alert('このIDは既に使用されています');
-            return;
-        }
+        // 重複チェック → 保存
+        get(ref(db, `toocIds/${newId}`)).then((existing) => {
+            if (existing.exists() && existing.val() !== currentUserInfo.uid) {
+                alert('このIDは既に使用されています');
+                return;
+            }
 
-        // 旧IDの削除
-        if (currentUserInfo.toocId) {
-            await set(ref(db, `toocIds/${currentUserInfo.toocId}`), null);
-        }
+            // 旧IDの削除 → 新IDの設定をPromiseチェーンで
+            const promises = [];
 
-        // 新IDの設定
-        await set(ref(db, `toocIds/${newId}`), currentUserInfo.uid);
-        await update(ref(db, `users/${currentUserInfo.uid}`), { toocId: newId });
-        currentUserInfo.toocId = newId;
-        currentToocid.textContent = `現在のtoocID: ${newId}`;
-        editToocidInput.value = '';
-        alert('toocIDを設定しました！');
+            if (currentUserInfo.toocId) {
+                promises.push(set(ref(db, `toocIds/${currentUserInfo.toocId}`), null));
+            }
+            promises.push(set(ref(db, `toocIds/${newId}`), currentUserInfo.uid));
+            promises.push(update(ref(db, `users/${currentUserInfo.uid}`), { toocId: newId }));
+
+            Promise.all(promises).then(() => {
+                currentUserInfo.toocId = newId;
+                currentToocid.textContent = `現在のtoocID: @${newId}`;
+                editToocidInput.value = '';
+                alert('toocIDを設定しました！');
+            }).catch((err) => {
+                console.error('toocID設定エラー:', err);
+                alert('toocIDの設定に失敗しました: ' + err.message);
+            });
+        }).catch((err) => {
+            console.error('toocID重複チェックエラー:', err);
+            alert('エラーが発生しました: ' + err.message);
+        });
     });
 
     // プロフィール保存
-    document.getElementById('btn_save_profile').addEventListener('click', async () => {
+    document.getElementById('btn_save_profile').addEventListener('click', () => {
         const newName = editNameInput.value.trim() || currentUserInfo.displayName;
         const newBio = editBioInput.value.trim();
         const updates = {
@@ -398,34 +421,38 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         if (pendingIconBase64) {
             updates.photoURL = pendingIconBase64;
-            currentUserInfo.photoURL = pendingIconBase64;
         }
-        currentUserInfo.displayName = newName;
-        currentUserInfo.bio = newBio;
 
-        await update(ref(db, `users/${currentUserInfo.uid}`), updates);
+        update(ref(db, `users/${currentUserInfo.uid}`), updates).then(() => {
+            currentUserInfo.displayName = newName;
+            currentUserInfo.bio = newBio;
+            if (pendingIconBase64) {
+                currentUserInfo.photoURL = pendingIconBase64;
+            }
 
-        myName.textContent = newName;
-        myBio.textContent = newBio || '...';
-        myIcon.src = currentUserInfo.photoURL;
+            myName.textContent = newName;
+            myBio.textContent = newBio || '...';
+            myIcon.src = currentUserInfo.photoURL;
 
-        modalProfile.style.display = 'none';
-        alert('プロフィールを保存しました！');
+            modalProfile.style.display = 'none';
+            alert('プロフィールを保存しました！');
+        }).catch((err) => {
+            console.error('プロフィール保存エラー:', err);
+            alert('保存に失敗しました: ' + err.message);
+        });
     });
 
     // ===========================
     // 友だち追加モーダル（toocID検索）
     // ===========================
-    document.getElementById('btn_add_by_toocid').addEventListener('click', () => {
+    const openAddFriendModal = () => {
         modalAddFriend.style.display = 'flex';
         document.getElementById('search_result').innerHTML = '';
         document.getElementById('search_toocid_input').value = '';
-    });
-    document.getElementById('btn_open_add_friend').addEventListener('click', () => {
-        modalAddFriend.style.display = 'flex';
-        document.getElementById('search_result').innerHTML = '';
-        document.getElementById('search_toocid_input').value = '';
-    });
+    };
+
+    document.getElementById('btn_add_by_toocid').addEventListener('click', openAddFriendModal);
+    document.getElementById('btn_open_add_friend').addEventListener('click', openAddFriendModal);
     document.getElementById('modal_add_friend_close').addEventListener('click', () => {
         modalAddFriend.style.display = 'none';
     });
@@ -433,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modalAddFriend) modalAddFriend.style.display = 'none';
     });
 
-    document.getElementById('btn_search_toocid').addEventListener('click', async () => {
+    document.getElementById('btn_search_toocid').addEventListener('click', () => {
         const searchId = document.getElementById('search_toocid_input').value.trim();
         const resultDiv = document.getElementById('search_result');
         resultDiv.innerHTML = '';
@@ -441,57 +468,73 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!searchId) { alert('IDを入力してください'); return; }
 
         // toocIds/{id} → uid を取得
-        const snap = await get(ref(db, `toocIds/${searchId}`));
-        if (!snap.exists()) {
-            resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center;">ユーザーが見つかりません</p>';
-            return;
-        }
+        get(ref(db, `toocIds/${searchId}`)).then((snap) => {
+            if (!snap.exists()) {
+                resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center; padding: 16px;">ユーザーが見つかりません</p>';
+                return;
+            }
 
-        const foundUid = snap.val();
-        if (foundUid === currentUserInfo.uid) {
-            resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center;">自分自身のIDです</p>';
-            return;
-        }
+            const foundUid = snap.val();
+            if (foundUid === currentUserInfo.uid) {
+                resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center; padding: 16px;">自分自身のIDです</p>';
+                return;
+            }
 
-        // ユーザー情報を取得
-        const userSnap = await get(ref(db, `users/${foundUid}`));
-        if (!userSnap.exists()) {
-            resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center;">ユーザーが見つかりません</p>';
-            return;
-        }
+            // ユーザー情報を取得
+            get(ref(db, `users/${foundUid}`)).then((userSnap) => {
+                if (!userSnap.exists()) {
+                    resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #999; text-align: center; padding: 16px;">ユーザーが見つかりません</p>';
+                    return;
+                }
 
-        const foundUser = userSnap.val();
+                const foundUser = userSnap.val();
 
-        // 既に友だちか確認
-        const friendSnap = await get(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`));
-        const isAlreadyFriend = friendSnap.exists();
+                // 既に友だちか確認
+                get(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`)).then((friendSnap) => {
+                    const isAlreadyFriend = friendSnap.exists();
 
-        const item = document.createElement('div');
-        item.className = 'search_result_item';
-        item.innerHTML = `
-            <img src="${foundUser.photoURL || 'img/icon(temp).jpg'}" alt="">
-            <div class="result_info">
-                <p>${foundUser.displayName}</p>
-                <p>@${searchId}</p>
-            </div>
-            <button class="btn_do_add_friend">${isAlreadyFriend ? '追加済み' : '追加'}</button>
-        `;
+                    const item = document.createElement('div');
+                    item.className = 'search_result_item';
+                    item.innerHTML = `
+                        <img src="${foundUser.photoURL || 'img/icon(temp).jpg'}" alt="">
+                        <div class="result_info">
+                            <p>${foundUser.displayName}</p>
+                            <p>@${searchId}</p>
+                        </div>
+                        <button class="btn_do_add_friend">${isAlreadyFriend ? '追加済み' : '追加'}</button>
+                    `;
 
-        if (!isAlreadyFriend) {
-            item.querySelector('.btn_do_add_friend').addEventListener('click', async () => {
-                // 双方のfriendsに追加
-                await set(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`), true);
-                await set(ref(db, `users/${foundUid}/friends/${currentUserInfo.uid}`), true);
-                item.querySelector('.btn_do_add_friend').textContent = '追加済み';
-                item.querySelector('.btn_do_add_friend').disabled = true;
-                alert(`${foundUser.displayName} を友だちに追加しました！`);
+                    if (!isAlreadyFriend) {
+                        item.querySelector('.btn_do_add_friend').addEventListener('click', () => {
+                            // 双方のfriendsに追加
+                            Promise.all([
+                                set(ref(db, `users/${currentUserInfo.uid}/friends/${foundUid}`), true),
+                                set(ref(db, `users/${foundUid}/friends/${currentUserInfo.uid}`), true)
+                            ]).then(() => {
+                                item.querySelector('.btn_do_add_friend').textContent = '追加済み';
+                                item.querySelector('.btn_do_add_friend').disabled = true;
+                                item.querySelector('.btn_do_add_friend').style.background = '#ccc';
+                                alert(`${foundUser.displayName} を友だちに追加しました！`);
+                            }).catch((err) => {
+                                console.error('友だち追加エラー:', err);
+                                alert('友だち追加に失敗しました: ' + err.message);
+                            });
+                        });
+                    } else {
+                        item.querySelector('.btn_do_add_friend').disabled = true;
+                        item.querySelector('.btn_do_add_friend').style.background = '#ccc';
+                    }
+
+                    resultDiv.appendChild(item);
+                }).catch(err => console.error(err));
+            }).catch(err => {
+                console.error('ユーザー検索エラー:', err);
+                resultDiv.innerHTML = '<p style="font-family: \'LINE Seed JP\', sans-serif; color: #f00; text-align: center; padding: 16px;">エラーが発生しました</p>';
             });
-        } else {
-            item.querySelector('.btn_do_add_friend').disabled = true;
-            item.querySelector('.btn_do_add_friend').style.background = '#ccc';
-        }
-
-        resultDiv.appendChild(item);
+        }).catch((err) => {
+            console.error('toocID検索エラー:', err);
+            alert('検索に失敗しました: ' + err.message);
+        });
     });
 
 });

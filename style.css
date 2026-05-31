@@ -826,6 +826,12 @@ aside.navbar.nav-talk::after {
   display: grid;
   place-items: center;
 }
+.modal_close svg {
+  width: 18px;
+  height: 18px;
+  fill: #666;
+  stroke: none;
+}
 .modal_body {
   padding: 20px;
 }
