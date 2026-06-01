@@ -8,6 +8,12 @@
     align-items: flex-end;
     justify-content: center;
     animation: modalFadeIn 0.2s ease;
+
+    &#modal_profile,
+    &#modal_add_friend,
+    &#modal_delete_account {
+        display: none;
+    }
 }
 
 @keyframes modalFadeIn {
@@ -61,6 +67,10 @@
     font-weight: 700;
     color: #000;
     font-size: 1.2rem;
+
+    &.text-danger {
+        color: #ef4444;
+    }
 }
 
 .modal_close {
@@ -102,8 +112,8 @@
         font-size: 0.95rem;
 
         &.active {
-            color: #A855F7;
-            border-bottom-color: #A855F7;
+            color: #FF6F3C;
+            border-bottom-color: #FF6F3C;
         }
     }
 }
@@ -112,7 +122,81 @@
     padding: 0;
     overflow: hidden;
     min-height: 440px;
-    /* 固定高にしてタブ切替で高さが変わらないように */
+    padding-inline: 1rem;
+    box-sizing: border-box;
+
+    .modal_desc {
+        margin-bottom: 16px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #333;
+
+        span.strong {
+            font-weight: 700;
+            color: #ef4444;
+        }
+    }
+
+    .modal_btn_wrap {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    #btn_delete_cancel,
+    #btn_delete_cancel2 {
+        flex: 1;
+        padding: 12px;
+        border-radius: 24px;
+        background: #f3f4f6;
+        color: #000;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    #btn_delete_next {
+        flex: 1;
+        padding: 12px;
+        border-radius: 24px;
+        background: #ef4444;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    #btn_delete_execute {
+        flex: 1;
+        padding: 12px;
+        border-radius: 24px;
+        background: #ef4444;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        opacity: 0.5;
+        pointer-events: none;
+        font-size: 1rem;
+        transition: opacity 0.2s;
+    }
+
+    #delete_account_step2 {
+        display: none;
+    }
+
+    #delete_confirm_input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        box-sizing: border-box;
+        text-align: center;
+        margin-bottom: 24px;
+    }
 }
 
 .modal_body_scroll {
@@ -129,6 +213,14 @@
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
+
+    #profile_error_msg {
+        color: #ef4444;
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+        display: none;
+        text-align: center;
+    }
 }
 
 .profile_edit_icon {
@@ -145,12 +237,20 @@
         object-fit: cover;
         cursor: pointer;
     }
+
+    #edit_icon_preview {
+        cursor: pointer;
+    }
+
+    #edit_icon_input {
+        display: none;
+    }
 }
 
 .edit_icon_label {
     font-family: "LINE Seed JP", sans-serif;
     font-size: 0.85rem;
-    color: #A855F7;
+    color: #FF6F3C;
     cursor: pointer;
 }
 
@@ -180,8 +280,18 @@
         background: #fafafa;
 
         &:focus {
-            border-color: #A855F7;
+            border-color: #FF6F3C;
         }
+    }
+
+    #toocid_validation_msg {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 6px;
+    }
+
+    #current_toocid {
+        margin-top: 16px;
     }
 }
 
@@ -198,7 +308,7 @@
         padding: 0 16px;
         border: none;
         border-radius: 12px;
-        background: #A855F7;
+        background: #FF6F3C;
         color: #fff;
         font-family: "LINE Seed JP", sans-serif;
         font-weight: 700;
@@ -225,7 +335,7 @@
     height: 48px;
     border: none;
     border-radius: 24px;
-    background: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 15%), #A855F7);
+    background: linear-gradient(to right, color-mix(in srgb, #FF6F3C, #fff 15%), #FF6F3C);
     color: #fff;
     font-family: "LINE Seed JP", sans-serif;
     font-weight: 700;
@@ -317,7 +427,7 @@
         padding: 0 16px;
         border: none;
         border-radius: 18px;
-        background: #A855F7;
+        background: #FF6F3C;
         color: #fff;
         font-family: "LINE Seed JP", sans-serif;
         font-weight: 700;

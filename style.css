@@ -25,6 +25,22 @@ body {
   background-color: #fff;
   padding-top: 68px;
 }
+body #home_page {
+  width: 100vw;
+  min-height: 100dvh;
+}
+body .page_overlay {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 1000;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+  display: none;
+  overscroll-behavior: contain;
+}
 body::-webkit-scrollbar {
   width: 10px;
 }
@@ -45,7 +61,7 @@ body::-webkit-scrollbar-track {
   position: fixed;
   top: 0;
   left: 0;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -55,7 +71,7 @@ body::-webkit-scrollbar-track {
   z-index: 99;
 }
 #login_overlay svg {
-  fill: #A855F7;
+  fill: #FF6F3C;
   width: 172px;
   margin-bottom: 56px;
   overflow: visible;
@@ -90,7 +106,7 @@ body::-webkit-scrollbar-track {
   width: 20px;
   aspect-ratio: 1;
   border-radius: 4px;
-  background-color: #A855F7;
+  background-color: #FF6F3C;
   pointer-events: none;
   opacity: 0;
   scale: 0.6;
@@ -120,8 +136,8 @@ body::-webkit-scrollbar-track {
   font-size: 16px;
 }
 #login_overlay .agrees label p span {
-  color: #a855f7;
-  border-bottom: 1px solid #a855f7;
+  color: #FF6F3C;
+  border-bottom: 1px solid #FF6F3C;
   cursor: pointer;
 }
 #login_overlay .agrees label p::after {
@@ -138,7 +154,7 @@ body::-webkit-scrollbar-track {
   margin-inline: auto;
   border: none;
   border-radius: 24px;
-  background-color: #A855F7;
+  background-color: #FF6F3C;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
   color: #fff;
@@ -240,7 +256,7 @@ body::-webkit-scrollbar-track {
   margin-left: 8px;
 }
 #login_overlay section.modal .modal_container .content p a {
-  color: #a855f7;
+  color: #FF6F3C;
 }
 #login_overlay section.modal .modal_container .content p.heading {
   font-size: 1.2rem;
@@ -253,8 +269,9 @@ body::-webkit-scrollbar-track {
   place-items: center;
   width: min(180px, 100%);
   height: 48px;
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   box-sizing: border-box;
+  border: none;
   border-radius: 24px;
   margin-inline: auto;
   font-size: 1.05rem;
@@ -285,7 +302,7 @@ header.top_header .logo {
 header.top_header .logo svg {
   display: block;
   height: 48%;
-  fill: #A855F7;
+  fill: #FF6F3C;
   overflow: visible;
 }
 header.top_header nav {
@@ -340,7 +357,7 @@ section.tab_top .top_user {
   width: min(100vw - 2rem, 720px);
   margin-inline: auto;
   background-color: #f5f5f5;
-  background-image: linear-gradient(-20deg, color-mix(in srgb, #A855F7, #fff 90%), #fff);
+  background-image: linear-gradient(-20deg, color-mix(in srgb, #FF6F3C, #fff 90%), #fff);
   box-shadow: 0 0 2rem -1rem rgba(0, 0, 0, 0.5333333333);
   margin-top: 32px;
   padding-block: 12px;
@@ -428,7 +445,7 @@ section.tab_top .top_user .user_actions_wrap .editprofile {
   justify-content: center;
   gap: 4px;
   height: 28px;
-  background-image: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 25%), #A855F7);
+  background-image: linear-gradient(to right, color-mix(in srgb, #FF6F3C, #fff 25%), #FF6F3C);
   border: none;
   border-radius: 14px;
   box-sizing: border-box;
@@ -582,7 +599,7 @@ section.tab_top .top_friends .friends_container .friends_group .friend_info p.tt
 section.tab_top .top_friends .friends_container .friends_group .friend_info p.friend_name span,
 section.tab_top .top_friends .friends_container .friends_group .group_info p.ttl span,
 section.tab_top .top_friends .friends_container .friends_group .group_info p.friend_name span {
-  color: rgba(168, 85, 247, 0.6666666667);
+  color: rgba(255, 111, 60, 0.6666666667);
   font-size: 0.9rem;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ex,
@@ -690,7 +707,7 @@ section.tab_top .top_add-friend .container .boxitem {
 section.tab_top .top_add-friend .container .boxitem svg {
   width: 40px;
   fill: none;
-  stroke: #A855F7;
+  stroke: #FF6F3C;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -699,7 +716,7 @@ section.tab_top .top_add-friend .container .boxitem p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: rgba(168, 85, 247, 0.4666666667);
+  color: rgba(255, 111, 60, 0.4666666667);
   font-size: 0.9rem;
 }
 section.tab_top .top_add-friend .container .boxitem:active {
@@ -771,7 +788,7 @@ section.tab_top .top_shop .container .boxitem {
 section.tab_top .top_shop .container .boxitem svg {
   width: 40px;
   fill: none;
-  stroke: #A855F7;
+  stroke: #FF6F3C;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -780,7 +797,7 @@ section.tab_top .top_shop .container .boxitem p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: rgba(168, 85, 247, 0.4666666667);
+  color: rgba(255, 111, 60, 0.4666666667);
   font-size: 0.9rem;
 }
 section.tab_top .top_shop .container .boxitem:active {
@@ -931,12 +948,15 @@ section.tab_talk .talk_container .talk_talkroom .talkroom_noti .talkroom_noticou
   place-items: center;
   width: 24px;
   height: 24px;
-  background-color: #A855F7;
+  background-color: #FF6F3C;
   font-size: 0.85rem;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
   color: #fff;
   border-radius: 50%;
+}
+section.tab_talk .talk_container .talk_talkroom .talkroom_noti .talkroom_noticount:empty {
+  display: none;
 }
 
 aside.navbar {
@@ -983,10 +1003,10 @@ aside.navbar .nav p {
   transition: color 0.2s;
 }
 aside.navbar .nav.active svg {
-  stroke: #A855F7;
+  stroke: #FF6F3C;
 }
 aside.navbar .nav.active p {
-  color: #A855F7;
+  color: #FF6F3C;
   font-weight: 700;
 }
 aside.navbar::after {
@@ -1016,6 +1036,9 @@ aside.navbar.nav-talk::after {
   align-items: flex-end;
   justify-content: center;
   animation: modalFadeIn 0.2s ease;
+}
+.modal_overlay#modal_profile, .modal_overlay#modal_add_friend, .modal_overlay#modal_delete_account {
+  display: none;
 }
 
 @keyframes modalFadeIn {
@@ -1066,6 +1089,9 @@ aside.navbar.nav-talk::after {
   color: #000;
   font-size: 1.2rem;
 }
+.modal_title.text-danger {
+  color: #ef4444;
+}
 
 .modal_close {
   width: 36px;
@@ -1105,15 +1131,81 @@ aside.navbar.nav-talk::after {
   font-size: 0.95rem;
 }
 .modal_tabs button.active {
-  color: #A855F7;
-  border-bottom-color: #A855F7;
+  color: #FF6F3C;
+  border-bottom-color: #FF6F3C;
 }
 
 .modal_body {
   padding: 0;
   overflow: hidden;
   min-height: 440px;
-  /* 固定高にしてタブ切替で高さが変わらないように */
+  padding-inline: 1rem;
+  box-sizing: border-box;
+}
+.modal_body .modal_desc {
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+}
+.modal_body .modal_desc span.strong {
+  font-weight: 700;
+  color: #ef4444;
+}
+.modal_body .modal_btn_wrap {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.modal_body #btn_delete_cancel,
+.modal_body #btn_delete_cancel2 {
+  flex: 1;
+  padding: 12px;
+  border-radius: 24px;
+  background: #f3f4f6;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.modal_body #btn_delete_next {
+  flex: 1;
+  padding: 12px;
+  border-radius: 24px;
+  background: #ef4444;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.modal_body #btn_delete_execute {
+  flex: 1;
+  padding: 12px;
+  border-radius: 24px;
+  background: #ef4444;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  pointer-events: none;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+.modal_body #delete_account_step2 {
+  display: none;
+}
+.modal_body #delete_confirm_input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .modal_body_scroll {
@@ -1131,6 +1223,13 @@ aside.navbar.nav-talk::after {
   box-sizing: border-box;
   overflow-y: auto;
 }
+.modal_tab_panel #profile_error_msg {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+  display: none;
+  text-align: center;
+}
 
 .profile_edit_icon {
   display: flex;
@@ -1147,11 +1246,17 @@ aside.navbar.nav-talk::after {
      object-fit: cover;
   cursor: pointer;
 }
+.profile_edit_icon #edit_icon_preview {
+  cursor: pointer;
+}
+.profile_edit_icon #edit_icon_input {
+  display: none;
+}
 
 .edit_icon_label {
   font-family: "LINE Seed JP", sans-serif;
   font-size: 0.85rem;
-  color: #A855F7;
+  color: #FF6F3C;
   cursor: pointer;
 }
 
@@ -1180,7 +1285,15 @@ aside.navbar.nav-talk::after {
   background: #fafafa;
 }
 .profile_edit_field input:focus {
-  border-color: #A855F7;
+  border-color: #FF6F3C;
+}
+.profile_edit_field #toocid_validation_msg {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 6px;
+}
+.profile_edit_field #current_toocid {
+  margin-top: 16px;
 }
 
 .toocid_row {
@@ -1195,7 +1308,7 @@ aside.navbar.nav-talk::after {
   padding: 0 16px;
   border: none;
   border-radius: 12px;
-  background: #A855F7;
+  background: #FF6F3C;
   color: #fff;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
@@ -1220,7 +1333,7 @@ aside.navbar.nav-talk::after {
   height: 48px;
   border: none;
   border-radius: 24px;
-  background: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 15%), #A855F7);
+  background: linear-gradient(to right, color-mix(in srgb, #FF6F3C, #fff 15%), #FF6F3C);
   color: #fff;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
@@ -1306,7 +1419,7 @@ aside.navbar.nav-talk::after {
   padding: 0 16px;
   border: none;
   border-radius: 18px;
-  background: #A855F7;
+  background: #FF6F3C;
   color: #fff;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
@@ -1380,6 +1493,10 @@ section.inputarea {
 section.inputarea.room-open {
   translate: 0 var(--translate);
 }
+section.inputarea #area_add-image,
+section.inputarea #more_files {
+  display: none;
+}
 section.inputarea.moreactive .area_morecontainer {
   margin-top: 0;
 }
@@ -1432,7 +1549,7 @@ section.inputarea .area_voicemessage .send_icon {
   filter: blur(8px);
   transform: scale(0.5) rotate(-90deg);
   pointer-events: none;
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   border-radius: 50%;
 }
 section.inputarea .area_voicemessage .send_icon svg {
@@ -1448,7 +1565,7 @@ section.inputarea .area_send .send_icon {
   opacity: 1;
   filter: blur(0);
   transform: scale(1) rotate(0deg);
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   border-radius: 50%;
 }
 section.inputarea .area_send .send_icon svg {
@@ -1506,7 +1623,7 @@ section.inputarea .area_morecontainer .more_item {
 section.inputarea .area_morecontainer .more_item svg {
   width: 32px;
   fill: none;
-  stroke: #a855f7;
+  stroke: #FF6F3C;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1515,7 +1632,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: rgba(168, 85, 247, 0.6666666667);
+  color: rgba(255, 111, 60, 0.6666666667);
   font-size: 0.8rem;
 }
 
@@ -1584,7 +1701,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: #a855f7;
+  color: #FF6F3C;
   font-size: 0.65rem;
   white-space: nowrap;
 }
@@ -1640,7 +1757,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: inline-flex;
   max-width: 70%;
   align-items: center;
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   min-height: 36px;
   padding: 8px 16px;
   border-radius: 18px;
@@ -1693,7 +1810,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
-  color: #a855f7;
+  color: #FF6F3C;
   font-size: 2rem;
 }
 #talkroom_page .wip_container .wip_box p.desc {
@@ -1721,6 +1838,9 @@ header.talkroom_header {
 }
 header.talkroom_header.room-open {
   translate: 0 0;
+}
+header.talkroom_header #header_back_btn {
+  cursor: pointer;
 }
 header.talkroom_header .header_vec {
   display: grid;

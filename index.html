@@ -6,16 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>tooc</title>
     <link rel="stylesheet" href="style.css?v=1">
+    <link rel="icon" href="favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/favicon-apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
 </head>
 
 <body>
 
 
     <!-- トップページ画面 -->
-    <div id="home_page" style="width: 100vw; min-height: 100dvh;">
+    <div id="home_page">
 
         <!-- ログイン画面（初期: 非表示。JSで認証判定後に表示） -->
-        <div id="login_overlay" style="display: none;">
+        <div id="login_overlay">
             <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
@@ -341,7 +346,7 @@
         </div> <!-- /main_app -->
 
         <!-- ===== モーダル: プロフィール編集 ===== -->
-        <div class="modal_overlay" id="modal_profile" style="display: none;">
+        <div class="modal_overlay" id="modal_profile">
             <div class="modal_box">
                 <div class="modal_header">
                     <div class="modal_header_top">
@@ -365,23 +370,22 @@
                                 <label>新しいtoocID</label>
                                 <div class="toocid_row">
                                     <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
-                                    <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
+                                    <button id="btn_set_toocid" disabled>設定</button>
                                 </div>
-                                <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">
+                                <p id="toocid_validation_msg">
                                     3〜20文字で入力してください</p>
-                                <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
+                                <p class="toocid_current" id="current_toocid">未設定</p>
                             </div>
                         </div>
 
                         <!-- プロフィールタブ (右) -->
                         <div class="modal_tab_panel" id="tab_content_profile">
-                            <p id="profile_error_msg"
-                                style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;">
+                            <p class="profile_error_msg" id="profile_error_msg">
                             </p>
                             <div class="profile_edit_icon">
-                                <img id="edit_icon_preview" src="" alt="" style="cursor:pointer;">
+                                <img id="edit_icon_preview" src="" alt="">
                                 <label for="edit_icon_input" class="edit_icon_label">変更</label>
-                                <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
+                                <input type="file" id="edit_icon_input" accept="image/*">
                             </div>
                             <div class="profile_edit_field">
                                 <label>名前</label>
@@ -401,7 +405,7 @@
         </div>
 
         <!-- ===== モーダル: toocIDで友だち追加 ===== -->
-        <div class="modal_overlay" id="modal_add_friend" style="display: none;">
+        <div class="modal_overlay" id="modal_add_friend">
             <div class="modal_box">
                 <div class="modal_header">
                     <div class="modal_header_top">
@@ -429,32 +433,36 @@
         </div>
 
         <!-- ===== モーダル: アカウント削除確認 ===== -->
-        <div class="modal_overlay" id="modal_delete_account" style="display: none;">
+        <div class="modal_overlay" id="modal_delete_account">
             <div class="modal_box">
                 <div class="modal_header">
                     <div class="modal_header_top">
-                        <p class="modal_title" style="color: #ef4444;">アカウントを削除</p>
-                        <button class="modal_close" id="modal_delete_account_close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg></button>
+                        <p class="modal_title text-danger">アカウントを削除</p>
+                        <button class="modal_close" id="modal_delete_account_close"><svg
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                            </svg></button>
                     </div>
                 </div>
                 <div class="modal_body" id="delete_account_step1">
-                    <p style="margin-bottom: 16px; font-size: 0.95rem; line-height: 1.5; color: #333;">
+                    <p class="modal_desc">
                         本当にアカウントを削除しますか？この操作は取り消せません。<br>
                         すべてのトーク履歴やフレンド情報、プロフィールが完全に失われます。
                     </p>
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button id="btn_delete_cancel" style="flex: 1; padding: 12px; border-radius: 24px; background: #f3f4f6; color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">キャンセル</button>
-                        <button id="btn_delete_next" style="flex: 1; padding: 12px; border-radius: 24px; background: #ef4444; color: #fff; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">次へ</button>
+                    <div class="modal_btn_wrap">
+                        <button id="btn_delete_cancel">キャンセル</button>
+                        <button id="btn_delete_next">次へ</button>
                     </div>
                 </div>
-                <div class="modal_body" id="delete_account_step2" style="display: none;">
-                    <p style="margin-bottom: 16px; font-size: 0.95rem; line-height: 1.5; color: #333;">
-                        退会を確定するには、下の入力欄に「<strong>Delete</strong>」と入力してください。（大文字・小文字は問いません）
+                <div class="modal_body" id="delete_account_step2">
+                    <p class="modal_desc">
+                        退会を確定するには、下の入力欄に「<span class="strong">Delete</span>」と入力してください。（大文字・小文字は問いません）
                     </p>
-                    <input type="text" id="delete_confirm_input" placeholder="Delete" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; text-align: center; margin-bottom: 24px;">
-                    <div style="display: flex; gap: 12px;">
-                        <button id="btn_delete_cancel2" style="flex: 1; padding: 12px; border-radius: 24px; background: #f3f4f6; color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">戻る</button>
-                        <button id="btn_delete_execute" style="flex: 1; padding: 12px; border-radius: 24px; background: #ef4444; color: #fff; font-weight: bold; border: none; cursor: pointer; opacity: 0.5; pointer-events: none; font-size: 1rem; transition: opacity 0.2s;">完全に削除</button>
+                    <input type="text" id="delete_confirm_input" placeholder="Delete">
+                    <div class="modal_btn_wrap">
+                        <button id="btn_delete_cancel2">戻る</button>
+                        <button id="btn_delete_execute">完全に削除</button>
                     </div>
                 </div>
             </div>
@@ -482,7 +490,7 @@
                 </div>
                 <div class="talkroom_noti">
                     <p class="talkroom_notitime"></p>
-                    <p class="talkroom_noticount" style="display: none;"></p>
+                    <p class="talkroom_noticount"></p>
                 </div>
             </div>
         </template>
@@ -490,8 +498,7 @@
     </div><!-- /home_page -->
 
     <!-- トークルーム画面（初期: 右に隠れる） -->
-    <div id="talkroom_page" class="page_overlay"
-        style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none; overscroll-behavior: contain;">
+    <div id="talkroom_page" class="page_overlay">
         <main id="chat_main">
             <!-- メッセージがここに動的に追加されます -->
         </main>
@@ -505,7 +512,7 @@
     </div>
 
     <header class="talkroom_header">
-        <div class="header_backlist header_vec" id="header_back_btn" style="cursor: pointer;">
+        <div class="header_backlist header_vec" id="header_back_btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M15 6l-6 6l6 6" />
             </svg>
@@ -546,7 +553,7 @@
                 <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
                 <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
             </svg>
-            <input type="file" id="area_add-image" accept="image/*" style="display: none;">
+            <input type="file" id="area_add-image" accept="image/*">
         </label>
         <label for="area_input" class="area_input">
             <textarea id="area_input" rows="1" placeholder="メッセージを入力"></textarea>
@@ -577,7 +584,7 @@
                     <path d="M12 11h.01" />
                 </svg>
                 <p>ファイル</p>
-                <input type="file" id="more_files" style="display: none;">
+                <input type="file" id="more_files">
             </label>
             <div class="more_item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">

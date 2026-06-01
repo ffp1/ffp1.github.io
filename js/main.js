@@ -8,7 +8,7 @@ const imgSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill
 // SVGアイコン定数
 const svgUnavailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20.042 16.045a9 9 0 0 0 -12.087 -12.087m-2.318 1.677a9 9 0 1 0 12.725 12.73" /><path d="M3 3l18 18" /></svg>`;
 const svgAvailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l5 5l10 -10" /></svg>`;
-const svgSuccess = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" /></svg>`;
+const svgSuccess = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FF6F3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" /></svg>`;
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('login_overlay');
@@ -592,8 +592,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalBodyScroll = document.querySelector('.modal_body_scroll');
 
     const activateProfileTab = () => {
-        tabBtnProfile.style.color = '#A855F7';
-        tabBtnProfile.style.borderBottomColor = '#A855F7';
+        tabBtnProfile.style.color = '#FF6F3C';
+        tabBtnProfile.style.borderBottomColor = '#FF6F3C';
         tabBtnToocid.style.color = '#999';
         tabBtnToocid.style.borderBottomColor = 'transparent';
         profileErrorMsg.style.display = 'none';
@@ -606,8 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const activateToocidTab = () => {
         tabBtnProfile.style.color = '#999';
         tabBtnProfile.style.borderBottomColor = 'transparent';
-        tabBtnToocid.style.color = '#A855F7';
-        tabBtnToocid.style.borderBottomColor = '#A855F7';
+        tabBtnToocid.style.color = '#FF6F3C';
+        tabBtnToocid.style.borderBottomColor = '#FF6F3C';
         document.getElementById('toocid_validation_msg').innerHTML = '3〜20文字で入力してください';
         document.getElementById('toocid_validation_msg').style.color = '#999';
         document.getElementById('btn_set_toocid').disabled = true;
@@ -777,7 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     msgEl.innerHTML = `${svgAvailable} 使用可能です！`;
                     msgEl.style.color = '#22c55e';
                     btn.disabled = false;
-                    btn.style.background = '#A855F7';
+                    btn.style.background = '#FF6F3C';
                 }
             }).catch(() => {
                 msgEl.innerHTML = `${svgUnavailable} 確認エラー`;
@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toocidDisplay.textContent = `@${newId}`;
             editToocidInput.value = '';
             msgEl.innerHTML = `${svgSuccess} 保存完了しました！`;
-            msgEl.style.color = '#A855F7';
+            msgEl.style.color = '#FF6F3C';
         }).catch((err) => {
             msgEl.innerHTML = `${svgUnavailable} 保存エラー: ${err.message}`;
             msgEl.style.color = '#ef4444';
@@ -934,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPtrIndicator = () => {
         if (ptrIndicator) return;
         ptrIndicator = document.createElement('div');
-        ptrIndicator.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:4px;background:linear-gradient(to right,#a855f7,#c084fc);transform:scaleX(0);transform-origin:left;transition:transform 0.1s;z-index:9999;';
+        ptrIndicator.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:4px;background:linear-gradient(to right,#FF6F3C,#c084fc);transform:scaleX(0);transform-origin:left;transition:transform 0.1s;z-index:9999;';
         document.body.appendChild(ptrIndicator);
     };
 

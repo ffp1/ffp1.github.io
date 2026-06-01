@@ -23,6 +23,24 @@ body {
     background-color: #fff;
     padding-top: 68px;
 
+    #home_page {
+        width: 100vw;
+        min-height: 100dvh;
+    }
+
+    .page_overlay {
+        position: fixed;
+        inset: 0;
+        background: #fff;
+        z-index: 1000;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+        display: none;
+        overscroll-behavior: contain;
+    }
+
     &::-webkit-scrollbar {
         width: 10px;
     }
@@ -47,7 +65,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -57,7 +75,7 @@ body {
     z-index: 99;
 
     svg {
-        fill: #A855F7;
+        fill: #FF6F3C;
         width: 172px;
         margin-bottom: 56px;
         overflow: visible;
@@ -95,7 +113,7 @@ body {
                 width: 20px;
                 aspect-ratio: 1;
                 border-radius: 4px;
-                background-color: #A855F7;
+                background-color: #FF6F3C;
                 pointer-events: none;
                 opacity: 0;
                 scale: .6;
@@ -130,8 +148,8 @@ body {
                 font-size: 16px;
 
                 span {
-                    color: #a855f7;
-                    border-bottom: 1px solid #a855f7;
+                    color: #FF6F3C;
+                    border-bottom: 1px solid #FF6F3C;
                     cursor: pointer;
                 }
 
@@ -153,7 +171,7 @@ body {
         margin-inline: auto;
         border: none;
         border-radius: 24px;
-        background-color: #A855F7;
+        background-color: #FF6F3C;
         font-family: 'LINE Seed JP', sans-serif;
         font-weight: 700;
         color: #fff;
@@ -265,7 +283,7 @@ body {
                     margin-left: 8px;
 
                     a {
-                        color: #a855f7;
+                        color: #FF6F3C;
                     }
 
                     &.heading {
@@ -281,8 +299,9 @@ body {
                     place-items: center;
                     width: min(180px, 100%);
                     height: 48px;
-                    background-color: #a855f7;
+                    background-color: #FF6F3C;
                     box-sizing: border-box;
+                    border: none;
                     border-radius: 24px;
                     margin-inline: auto;
                     font-size: 1.05rem;
@@ -317,7 +336,7 @@ header.top_header {
         svg {
             display: block;
             height: 48%;
-            fill: #A855F7;
+            fill: #FF6F3C;
             overflow: visible;
         }
     }
@@ -379,7 +398,7 @@ section.tab_top {
         width: min(100vw - 2rem, 720px);
         margin-inline: auto;
         background-color: #f5f5f5;
-        background-image: linear-gradient(-20deg, color-mix(in srgb, #A855F7, #fff 90%), #fff);
+        background-image: linear-gradient(-20deg, color-mix(in srgb, #FF6F3C, #fff 90%), #fff);
         box-shadow: 0 0 2rem -1rem #0008;
         margin-top: 32px;
         padding-block: 12px;
@@ -473,7 +492,7 @@ section.tab_top {
                 justify-content: center;
                 gap: 4px;
                 height: 28px;
-                background-image: linear-gradient(to right, color-mix(in srgb, #A855F7, #fff 25%), #A855F7);
+                background-image: linear-gradient(to right, color-mix(in srgb, #FF6F3C, #fff 25%), #FF6F3C);
                 border: none;
                 border-radius: 14px;
                 box-sizing: border-box;
@@ -615,7 +634,7 @@ section.tab_top {
                         text-overflow: ellipsis;
 
                         span {
-                            color: #a855f7aa;
+                            color: #FF6F3Caa;
                             font-size: .9rem;
                         }
                     }
@@ -725,7 +744,7 @@ section.tab_top {
                 svg {
                     width: 40px;
                     fill: none;
-                    stroke: #A855F7;
+                    stroke: #FF6F3C;
                     stroke-width: 2;
                     stroke-linecap: round;
                     stroke-linejoin: round;
@@ -735,7 +754,7 @@ section.tab_top {
                     display: block;
                     font-family: 'LINE Seed JP', sans-serif;
                     font-weight: 400;
-                    color: #A855F777;
+                    color: #FF6F3C77;
                     font-size: 0.9rem;
                 }
 
@@ -816,7 +835,7 @@ section.tab_top {
                 svg {
                     width: 40px;
                     fill: none;
-                    stroke: #A855F7;
+                    stroke: #FF6F3C;
                     stroke-width: 2;
                     stroke-linecap: round;
                     stroke-linejoin: round;
@@ -826,7 +845,7 @@ section.tab_top {
                     display: block;
                     font-family: 'LINE Seed JP', sans-serif;
                     font-weight: 400;
-                    color: #A855F777;
+                    color: #FF6F3C77;
                     font-size: 0.9rem;
                 }
 
@@ -989,12 +1008,16 @@ section.tab_talk {
                     place-items: center;
                     width: 24px;
                     height: 24px;
-                    background-color: #A855F7;
+                    background-color: #FF6F3C;
                     font-size: 0.85rem;
                     font-family: 'LINE Seed JP', sans-serif;
                     font-weight: 400;
                     color: #fff;
                     border-radius: 50%;
+
+                    &:empty {
+                        display: none;
+                    }
                 }
             }
         }
@@ -1048,11 +1071,11 @@ aside.navbar {
 
         &.active {
             svg {
-                stroke: #A855F7;
+                stroke: #FF6F3C;
             }
 
             p {
-                color: #A855F7;
+                color: #FF6F3C;
                 font-weight: 700;
             }
         }

@@ -68,6 +68,11 @@ section.inputarea {
         translate: 0 var(--translate);
     }
 
+    #area_add-image,
+    #more_files {
+        display: none;
+    }
+
     &.moreactive {
         .area_morecontainer {
             margin-top: 0;
@@ -130,7 +135,7 @@ section.inputarea {
             filter: blur(8px);
             transform: scale(0.5) rotate(-90deg);
             pointer-events: none;
-            background-color: #a855f7;
+            background-color: #FF6F3C;
             border-radius: 50%;
 
             svg {
@@ -151,7 +156,7 @@ section.inputarea {
             opacity: 1;
             filter: blur(0);
             transform: scale(1) rotate(0deg);
-            background-color: #a855f7;
+            background-color: #FF6F3C;
             border-radius: 50%;
 
             svg {
@@ -212,7 +217,7 @@ section.inputarea {
             svg {
                 width: 32px;
                 fill: none;
-                stroke: #a855f7;
+                stroke: #FF6F3C;
                 stroke-width: 2;
                 stroke-linecap: round;
                 stroke-linejoin: round;
@@ -222,7 +227,7 @@ section.inputarea {
                 display: block;
                 font-family: 'LINE Seed JP', sans-serif;
                 font-weight: 400;
-                color: #a855f7aa;
+                color: #FF6F3Caa;
                 font-size: 0.8rem;
             }
         }
@@ -302,7 +307,7 @@ section.inputarea {
                     display: block;
                     font-family: 'LINE Seed JP', sans-serif;
                     font-weight: 400;
-                    color: #a855f7;
+                    color: #FF6F3C;
                     font-size: 0.65rem;
                     white-space: nowrap;
                 }
@@ -366,7 +371,7 @@ section.inputarea {
                     display: inline-flex;
                     max-width: 70%;
                     align-items: center;
-                    background-color: #a855f7;
+                    background-color: #FF6F3C;
                     min-height: 36px;
                     padding: 8px 16px;
                     border-radius: 18px;
@@ -423,7 +428,7 @@ section.inputarea {
                 display: block;
                 font-family: 'LINE Seed JP', sans-serif;
                 font-weight: 700;
-                color: #a855f7;
+                color: #FF6F3C;
                 font-size: 2rem;
             }
 
@@ -455,6 +460,10 @@ header.talkroom_header {
 
     &.room-open {
         translate: 0 0;
+    }
+
+    #header_back_btn {
+        cursor: pointer;
     }
 
     .header_vec {

@@ -59,6 +59,10 @@ section.inputarea {
 section.inputarea.room-open {
   translate: 0 var(--translate);
 }
+section.inputarea #area_add-image,
+section.inputarea #more_files {
+  display: none;
+}
 section.inputarea.moreactive .area_morecontainer {
   margin-top: 0;
 }
@@ -111,7 +115,7 @@ section.inputarea .area_voicemessage .send_icon {
   filter: blur(8px);
   transform: scale(0.5) rotate(-90deg);
   pointer-events: none;
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   border-radius: 50%;
 }
 section.inputarea .area_voicemessage .send_icon svg {
@@ -127,7 +131,7 @@ section.inputarea .area_send .send_icon {
   opacity: 1;
   filter: blur(0);
   transform: scale(1) rotate(0deg);
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   border-radius: 50%;
 }
 section.inputarea .area_send .send_icon svg {
@@ -185,7 +189,7 @@ section.inputarea .area_morecontainer .more_item {
 section.inputarea .area_morecontainer .more_item svg {
   width: 32px;
   fill: none;
-  stroke: #a855f7;
+  stroke: #FF6F3C;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -194,7 +198,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: rgba(168, 85, 247, 0.6666666667);
+  color: rgba(255, 111, 60, 0.6666666667);
   font-size: 0.8rem;
 }
 
@@ -263,7 +267,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: #a855f7;
+  color: #FF6F3C;
   font-size: 0.65rem;
   white-space: nowrap;
 }
@@ -319,7 +323,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: inline-flex;
   max-width: 70%;
   align-items: center;
-  background-color: #a855f7;
+  background-color: #FF6F3C;
   min-height: 36px;
   padding: 8px 16px;
   border-radius: 18px;
@@ -372,7 +376,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 700;
-  color: #a855f7;
+  color: #FF6F3C;
   font-size: 2rem;
 }
 #talkroom_page .wip_container .wip_box p.desc {
@@ -400,6 +404,9 @@ header.talkroom_header {
 }
 header.talkroom_header.room-open {
   translate: 0 0;
+}
+header.talkroom_header #header_back_btn {
+  cursor: pointer;
 }
 header.talkroom_header .header_vec {
   display: grid;
