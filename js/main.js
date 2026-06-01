@@ -15,6 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainApp = document.getElementById('main_app');
     const loginBtn = document.getElementById('login_btn');
     const logoutBtn = document.getElementById('logout_btn');
+    const deleteAccountBtn = document.getElementById('delete_account_btn');
+    
+    // アカウント削除モーダル関連
+    const modalDeleteAccount = document.getElementById('modal_delete_account');
+    const modalDeleteAccountClose = document.getElementById('modal_delete_account_close');
+    const step1 = document.getElementById('delete_account_step1');
+    const step2 = document.getElementById('delete_account_step2');
+    const btnDeleteCancel = document.getElementById('btn_delete_cancel');
+    const btnDeleteNext = document.getElementById('btn_delete_next');
+    const btnDeleteCancel2 = document.getElementById('btn_delete_cancel2');
+    const btnDeleteExecute = document.getElementById('btn_delete_execute');
+    const deleteConfirmInput = document.getElementById('delete_confirm_input');
+    
+    // 規約同意のチェックボックス
+    const termsOfService = document.getElementById('termsOfService');
+    const privacyPolicy = document.getElementById('privacyPolicy');
 
     const myName = document.getElementById('my_name');
     const myIcon = document.getElementById('my_icon');
@@ -37,6 +53,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // モーダル関連
     const modalProfile = document.getElementById('modal_profile');
     const modalAddFriend = document.getElementById('modal_add_friend');
+
+    // ===========================
+    // モーダル関連 (規約・プライバシーポリシー)
+    // ===========================
+    const modalTerms = document.querySelector('.modal_termsOfService');
+    const modalPrivacy = document.querySelector('.modal_privacyPolicy');
+
+    const handleModalOutsideClick = (e, modal) => {
+        if (e.target === modal) modal.classList.remove('active');
+    };
+
+    document.getElementById('show_termsOfService')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (modalTerms) modalTerms.classList.add('active');
+    });
+    modalTerms?.querySelector('.header_close')?.addEventListener('click', () => {
+        modalTerms.classList.remove('active');
+    });
+    modalTerms?.addEventListener('click', (e) => handleModalOutsideClick(e, modalTerms));
+
+    document.getElementById('show_privacyPolicy')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (modalPrivacy) modalPrivacy.classList.add('active');
+    });
+    modalPrivacy?.querySelector('.header_close')?.addEventListener('click', () => {
+        modalPrivacy.classList.remove('active');
+    });
+    modalPrivacy?.addEventListener('click', (e) => handleModalOutsideClick(e, modalPrivacy));
 
     // すべてのモーダルを閉じるヘルパー
     const closeAllModals = () => {
@@ -87,9 +133,70 @@ document.addEventListener('DOMContentLoaded', () => {
     switchTab(initialTab);
 
     // ===========================
-    // ログイン処理
+    // ログイン処理 (同意チェック制御)
     // ===========================
+    const btnAgreeTerms = document.getElementById('doAgree_with_termsOfService');
+    const btnAgreePrivacy = document.getElementById('doAgree_with_privacyPolicy');
+
+    const updateLoginBtnState = () => {
+        if (!termsOfService || !privacyPolicy || !loginBtn) return;
+        
+        // メインログインボタンの更新
+        if (termsOfService.checked && privacyPolicy.checked) {
+            loginBtn.disabled = false;
+            loginBtn.style.opacity = '1';
+            loginBtn.style.cursor = 'pointer';
+        } else {
+            loginBtn.disabled = true;
+            loginBtn.style.opacity = '0.5';
+            loginBtn.style.cursor = 'not-allowed';
+        }
+
+        // モーダル内の「同意する」ボタンのスタイル同期
+        if (btnAgreeTerms) {
+            if (termsOfService.checked) {
+                btnAgreeTerms.style.opacity = '0.5';
+                btnAgreeTerms.textContent = '同意済み';
+            } else {
+                btnAgreeTerms.style.opacity = '1';
+                btnAgreeTerms.textContent = '同意する';
+            }
+        }
+        if (btnAgreePrivacy) {
+            if (privacyPolicy.checked) {
+                btnAgreePrivacy.style.opacity = '0.5';
+                btnAgreePrivacy.textContent = '同意済み';
+            } else {
+                btnAgreePrivacy.style.opacity = '1';
+                btnAgreePrivacy.textContent = '同意する';
+            }
+        }
+    };
+
+    if (termsOfService && privacyPolicy) {
+        termsOfService.addEventListener('change', updateLoginBtnState);
+        privacyPolicy.addEventListener('change', updateLoginBtnState);
+        updateLoginBtnState(); // 初期化
+    }
+
+    btnAgreeTerms?.addEventListener('click', () => {
+        if (termsOfService) {
+            termsOfService.checked = true;
+            updateLoginBtnState();
+            modalTerms?.classList.remove('active');
+        }
+    });
+
+    btnAgreePrivacy?.addEventListener('click', () => {
+        if (privacyPolicy) {
+            privacyPolicy.checked = true;
+            updateLoginBtnState();
+            modalPrivacy?.classList.remove('active');
+        }
+    });
+
     loginBtn.addEventListener('click', () => {
+        if (loginBtn.disabled) return;
         signInWithPopup(auth, provider).catch(error => {
             console.error("ログインエラー:", error);
         });
@@ -99,6 +206,93 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAllModals();
         signOut(auth).catch(error => console.error(error));
     });
+
+    // ===========================
+    // アカウント削除処理
+    // ===========================
+    deleteAccountBtn?.addEventListener('click', () => {
+        closeAllModals(); // プロフィール編集を閉じる
+        modalDeleteAccount.style.display = 'flex';
+        step1.style.display = 'block';
+        step2.style.display = 'none';
+        deleteConfirmInput.value = '';
+        btnDeleteExecute.style.opacity = '0.5';
+        btnDeleteExecute.style.pointerEvents = 'none';
+    });
+
+    const closeDeleteModal = () => {
+        modalDeleteAccount.style.display = 'none';
+    };
+
+    modalDeleteAccountClose?.addEventListener('click', closeDeleteModal);
+    btnDeleteCancel?.addEventListener('click', closeDeleteModal);
+    modalDeleteAccount?.addEventListener('click', (e) => handleModalOutsideClick(e, modalDeleteAccount));
+    // modalDeleteAccountは `.modal` クラスではなく独自の表示処理をしているため
+    modalDeleteAccount?.addEventListener('mousedown', (e) => {
+        if(e.target === modalDeleteAccount) closeDeleteModal();
+    });
+
+    btnDeleteNext?.addEventListener('click', () => {
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+        deleteConfirmInput.focus();
+    });
+
+    btnDeleteCancel2?.addEventListener('click', () => {
+        step2.style.display = 'none';
+        step1.style.display = 'block';
+        deleteConfirmInput.value = '';
+    });
+
+    deleteConfirmInput?.addEventListener('input', (e) => {
+        if (e.target.value.trim().toLowerCase() === 'delete') {
+            btnDeleteExecute.style.opacity = '1';
+            btnDeleteExecute.style.pointerEvents = 'auto';
+        } else {
+            btnDeleteExecute.style.opacity = '0.5';
+            btnDeleteExecute.style.pointerEvents = 'none';
+        }
+    });
+
+    btnDeleteExecute?.addEventListener('click', async () => {
+        const user = auth.currentUser;
+        if (!user || !currentUserInfo) return;
+
+        btnDeleteExecute.textContent = '処理中...';
+        btnDeleteExecute.style.opacity = '0.5';
+        btnDeleteExecute.style.pointerEvents = 'none';
+
+        try {
+            // toocIDが登録されていればtoocIdsノードを削除
+            if (currentUserInfo.toocId) {
+                await set(ref(db, `toocIds/${currentUserInfo.toocId}`), null);
+            }
+            // ユーザーノードを削除
+            await set(ref(db, `users/${user.uid}`), null);
+            
+            // Firebase Authからユーザーを削除
+            import('./firebase-config.js').then(async (module) => {
+                try {
+                    await module.deleteUser(user);
+                    closeDeleteModal();
+                    // 削除成功時は自動的にログアウトされ、onAuthStateChangedが走る
+                } catch (error) {
+                    if (error.code === 'auth/requires-recent-login') {
+                        alert('セキュリティのため、アカウントを削除するには再ログインが必要です。\n一度ログアウトし、再度ログインしてからもう一度お試しください。');
+                    } else {
+                        alert('アカウントの削除に失敗しました: ' + error.message);
+                    }
+                    btnDeleteExecute.textContent = '完全に削除';
+                }
+            });
+        } catch (dbError) {
+            alert('データの削除中にエラーが発生しました: ' + dbError.message);
+            btnDeleteExecute.textContent = '完全に削除';
+            btnDeleteExecute.style.opacity = '1';
+            btnDeleteExecute.style.pointerEvents = 'auto';
+        }
+    });
+
 
     // ===========================
     // 認証状態の監視

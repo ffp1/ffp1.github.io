@@ -253,6 +253,25 @@
     margin-top: 12px;
 }
 
+.modal_delete_account_btn {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 22px;
+    background: transparent;
+    color: #ef4444;
+    font-family: "LINE Seed JP", sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 0;
+    transition: background-color 0.2s;
+
+    &:active {
+        background: #fef2f2;
+    }
+}
+
 .search_result {
     margin-top: 16px;
 }

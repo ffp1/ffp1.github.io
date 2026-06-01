@@ -190,7 +190,7 @@ const appendMessage = (data, msgKey) => {
     const mainContainer = document.getElementById('chat_main');
 
     // ===========================
-    // 日付セパレータ（sticky）
+    // 日付セパレータ
     // ===========================
     if (data.timestamp) {
         const msgDate = new Date(data.timestamp);

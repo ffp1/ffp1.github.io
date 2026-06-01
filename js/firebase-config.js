@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, get, update, serverTimestamp, query, orderByChild, equalTo, off } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 // TODO: Firebaseコンソールから取得した設定値に置き換えてください
@@ -20,4 +20,4 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-export { db, auth, provider, signInWithPopup, onAuthStateChanged, signOut, ref, push, onChildAdded, onValue, set, get, update, serverTimestamp, query, orderByChild, equalTo, off };
+export { db, auth, provider, signInWithPopup, onAuthStateChanged, signOut, deleteUser, ref, push, onChildAdded, onValue, set, get, update, serverTimestamp, query, orderByChild, equalTo, off };

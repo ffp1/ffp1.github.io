@@ -14,316 +14,484 @@
     <!-- トップページ画面 -->
     <div id="home_page" style="width: 100vw; min-height: 100dvh;">
 
-    <!-- ログイン画面（初期: 非表示。JSで認証判定後に表示） -->
-    <div id="login_overlay" style="display: none;">
-        <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
-            <path
-                d="M103.268 96C81.2697 96 65.7582 80.5161 65.7582 59.4018C65.7582 38.2874 81.2697 22.8035 103.268 22.8035C125.266 22.8035 140.777 38.2874 140.777 59.4018C140.777 80.5161 125.266 96 103.268 96ZM103.268 76.2933C112.857 76.2933 119.343 69.3959 119.343 59.4018C119.343 49.4076 112.857 42.5103 103.268 42.5103C93.6788 42.5103 87.1922 49.4076 87.1922 59.4018C87.1922 69.3959 93.6788 76.2933 103.268 76.2933Z" />
-            <path
-                d="M186.443 96C164.445 96 148.934 80.5161 148.934 59.4018C148.934 38.2874 164.445 22.8035 186.443 22.8035C208.441 22.8035 223.953 38.2874 223.953 59.4018C223.953 80.5161 208.441 96 186.443 96ZM186.443 76.2933C196.032 76.2933 202.519 69.3959 202.519 59.4018C202.519 49.4076 196.032 42.5103 186.443 42.5103C176.854 42.5103 170.368 49.4076 170.368 59.4018C170.368 69.3959 176.854 76.2933 186.443 76.2933Z" />
-            <path
-                d="M269.619 96C247.621 96 232.109 80.5161 232.109 59.4018C232.109 38.2874 247.621 22.8035 269.619 22.8035C288.937 22.8035 303.039 34.7683 306 51.9413H284.566C282.169 46.1701 276.669 42.5103 269.619 42.5103C260.03 42.5103 253.543 49.4076 253.543 59.4018C253.543 69.3959 260.03 76.2933 269.619 76.2933C276.669 76.2933 282.169 72.6334 284.566 66.8622H306C303.039 84.0352 288.937 96 269.619 96Z" />
-        </svg>
-        <button id="login_btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <!-- ログイン画面（初期: 非表示。JSで認証判定後に表示） -->
+        <div id="login_overlay" style="display: none;">
+            <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
                 <path
-                    d="M12 2a9.96 9.96 0 0 1 6.29 2.226a1 1 0 0 1 .04 1.52l-1.51 1.362a1 1 0 0 1 -1.265 .06a6 6 0 1 0 2.103 6.836l.001 -.004h-3.66a1 1 0 0 1 -.992 -.883l-.007 -.117v-2a1 1 0 0 1 1 -1h6.945a1 1 0 0 1 .994 .89c.04 .367 .061 .737 .061 1.11c0 5.523 -4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10z" />
+                    d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
+                <path
+                    d="M103.268 96C81.2697 96 65.7582 80.5161 65.7582 59.4018C65.7582 38.2874 81.2697 22.8035 103.268 22.8035C125.266 22.8035 140.777 38.2874 140.777 59.4018C140.777 80.5161 125.266 96 103.268 96ZM103.268 76.2933C112.857 76.2933 119.343 69.3959 119.343 59.4018C119.343 49.4076 112.857 42.5103 103.268 42.5103C93.6788 42.5103 87.1922 49.4076 87.1922 59.4018C87.1922 69.3959 93.6788 76.2933 103.268 76.2933Z" />
+                <path
+                    d="M186.443 96C164.445 96 148.934 80.5161 148.934 59.4018C148.934 38.2874 164.445 22.8035 186.443 22.8035C208.441 22.8035 223.953 38.2874 223.953 59.4018C223.953 80.5161 208.441 96 186.443 96ZM186.443 76.2933C196.032 76.2933 202.519 69.3959 202.519 59.4018C202.519 49.4076 196.032 42.5103 186.443 42.5103C176.854 42.5103 170.368 49.4076 170.368 59.4018C170.368 69.3959 176.854 76.2933 186.443 76.2933Z" />
+                <path
+                    d="M269.619 96C247.621 96 232.109 80.5161 232.109 59.4018C232.109 38.2874 247.621 22.8035 269.619 22.8035C288.937 22.8035 303.039 34.7683 306 51.9413H284.566C282.169 46.1701 276.669 42.5103 269.619 42.5103C260.03 42.5103 253.543 49.4076 253.543 59.4018C253.543 69.3959 260.03 76.2933 269.619 76.2933C276.669 76.2933 282.169 72.6334 284.566 66.8622H306C303.039 84.0352 288.937 96 269.619 96Z" />
             </svg>
-            Googleでログイン
-        </button>
-    </div>
-
-    <!-- メインコンテンツ -->
-    <div id="main_app">
-        <header class="top_header">
-            <div class="logo">
-                <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
-                    <path
-                        d="M103.268 96C81.2697 96 65.7582 80.5161 65.7582 59.4018C65.7582 38.2874 81.2697 22.8035 103.268 22.8035C125.266 22.8035 140.777 38.2874 140.777 59.4018C140.777 80.5161 125.266 96 103.268 96ZM103.268 76.2933C112.857 76.2933 119.343 69.3959 119.343 59.4018C119.343 49.4076 112.857 42.5103 103.268 42.5103C93.6788 42.5103 87.1922 49.4076 87.1922 59.4018C87.1922 69.3959 93.6788 76.2933 103.268 76.2933Z" />
-                    <path
-                        d="M186.443 96C164.445 96 148.934 80.5161 148.934 59.4018C148.934 38.2874 164.445 22.8035 186.443 22.8035C208.441 22.8035 223.953 38.2874 223.953 59.4018C223.953 80.5161 208.441 96 186.443 96ZM186.443 76.2933C196.032 76.2933 202.519 69.3959 202.519 59.4018C202.519 49.4076 196.032 42.5103 186.443 42.5103C176.854 42.5103 170.368 49.4076 170.368 59.4018C170.368 69.3959 176.854 76.2933 186.443 76.2933Z" />
-                    <path
-                        d="M269.619 96C247.621 96 232.109 80.5161 232.109 59.4018C232.109 38.2874 247.621 22.8035 269.619 22.8035C288.937 22.8035 303.039 34.7683 306 51.9413H284.566C282.169 46.1701 276.669 42.5103 269.619 42.5103C260.03 42.5103 253.543 49.4076 253.543 59.4018C253.543 69.3959 260.03 76.2933 269.619 76.2933C276.669 76.2933 282.169 72.6334 284.566 66.8622H306C303.039 84.0352 288.937 96 269.619 96Z" />
-                </svg>
-            </div>
-            <nav>
-                <button class="add-talkroom">
+            <div class="agrees">
+                <label for="termsOfService">
+                    <input type="checkbox" id="termsOfService">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M12.007 19.98a9.869 9.869 0 0 1 -4.307 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.992 1.7 2.93 4.04 2.747 6.34" />
-                        <path d="M16 19h6" />
-                        <path d="M19 16v6" />
+                        <path d="M5 12l5 5l10 -10" />
                     </svg>
-                </button>
-                <button class="add-friends" id="btn_open_add_friend">
+                    <p><span id="show_termsOfService">利用規約</span>に同意</p>
+                </label>
+                <label for="privacyPolicy">
+                    <input type="checkbox" id="privacyPolicy">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4c.96 0 1.84 .338 2.53 .901" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M16 19h6" />
-                        <path d="M19 16v6" />
+                        <path d="M5 12l5 5l10 -10" />
                     </svg>
-                </button>
-                <button class="settings" id="btn_open_profile_edit">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
-                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                    </svg>
-                </button>
-            </nav>
-        </header>
-
-        <!-- ホームタブ -->
-        <section class="tab_top active" id="tab_top">
-
-            <div class="top_user">
-                <div class="user_flexwrap">
-                    <div class="usericon">
-                        <img id="my_icon" src="img/default_icon.png" alt="自分">
-                    </div>
-                    <div class="userinfo">
-                        <p class="username" id="my_name">読み込み中...</p>
-                        <p class="userbio" id="my_bio">...</p>
-                    </div>
-                </div>
-                <div class="user_actions_wrap">
-                    <p class="toocid_display" id="btn_open_toocid_edit">@...</p>
-                    <button id="btn_open_profile_edit" class="editprofile btn_profile">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                            <path d="M13.5 6.5l4 4" />
-                            <path d="M16 19h6" />
-                        </svg>
-                        <p>プロフィールを編集</p>
-                    </button>
-                </div>
+                    <p><span id="show_privacyPolicy">プライバシーポリシー</span>に同意</p>
+                </label>
             </div>
-            <div class="top_friends">
-                <header class="topsecs friends_header">
-                    <p class="ttl">友だちリスト</p>
-                </header>
-                <div class="friends_container" id="friends_container">
-                    <!-- 友だちリストがここに動的に追加されます -->
-                </div>
-            </div>
-            <div class="top_add-friend">
-                <header class="topsecs add-friend_header">
-                    <p class="ttl">友だちを追加</p>
-                    <div class="more">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6l-6 6" />
-                        </svg>
-                    </div>
-                </header>
-                <div class="container">
-                    <div class="boxitem" id="btn_add_by_toocid">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                            <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" />
-                        </svg>
-                        <p>toocID</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="top_shop">
-                <header class="topsecs add-shop">
-                    <p class="ttl">ショップ</p>
-                </header>
-                <div class="container">
-                    <div class="boxitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                            <path d="M9 10l.01 0" />
-                            <path d="M15 10l.01 0" />
-                            <path d="M9.5 15a3.5 3.5 0 0 0 5 0" />
-                        </svg>
-                        <p>スタンプ</p>
-                    </div>
-                    <div class="boxitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path
-                                d="M14 6a2 2 0 1 0 -4 0c0 1.667 .67 3 2 4h-.008l7.971 4.428a2 2 0 0 1 1.029 1.749v.823a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-.823a2 2 0 0 1 1.029 -1.749l7.971 -4.428" />
-                        </svg>
-                        <p>きせかえ</p>
-                    </div>
-                    <div class="boxitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M3 9a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -2" />
-                            <path d="M12 8l0 13" />
-                            <path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7" />
-                            <path
-                                d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" />
-                        </svg>
-                        <p>ギフト</p>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- トークタブ -->
-        <section class="tab_talk" id="tab_talk">
-
-            <label for="talk_searchbox" class="talk_searchbox">
-                <div class="searchbox_vec">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                        <path d="M21 21l-6 -6" />
-                    </svg>
-                </div>
-                <input type="text" id="talk_searchbox" placeholder="toocを検索">
-            </label>
-
-            <div class="talk_container" id="talk_container">
-                <!-- トーク一覧がここに動的に追加されます -->
-            </div>
-
-        </section>
-
-
-        <aside class="navbar">
-            <div class="nav active" id="nav_home">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                </svg>
-                <p>ホーム</p>
-            </div>
-            <div class="nav" id="nav_talk">
+            <button id="login_btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
-                        d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />
+                        d="M12 2a9.96 9.96 0 0 1 6.29 2.226a1 1 0 0 1 .04 1.52l-1.51 1.362a1 1 0 0 1 -1.265 .06a6 6 0 1 0 2.103 6.836l.001 -.004h-3.66a1 1 0 0 1 -.992 -.883l-.007 -.117v-2a1 1 0 0 1 1 -1h6.945a1 1 0 0 1 .994 .89c.04 .367 .061 .737 .061 1.11c0 5.523 -4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10z" />
                 </svg>
-                <p>トーク</p>
-            </div>
-        </aside>
-    </div> <!-- /main_app -->
+                Googleでログイン
+            </button>
 
-    <!-- ===== モーダル: プロフィール編集 ===== -->
-    <div class="modal_overlay" id="modal_profile" style="display: none;">
-        <div class="modal_box">
-            <div class="modal_header">
-                <div class="modal_header_top">
-                    <p class="modal_title">設定</p>
-                    <button class="modal_close" id="modal_profile_close"><svg xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
-                        </svg></button>
-                </div>
-                <div class="modal_tabs">
-                    <button id="tab_btn_toocid">toocID</button>
-                    <button id="tab_btn_profile">プロフィール</button>
-                </div>
-            </div>
-            <div class="modal_body no_padding" id="modal_body_swipe_area">
-                <div class="modal_body_scroll">
-                    <!-- toocIDタブ (左) -->
-                    <div class="modal_tab_panel" id="tab_content_toocid">
-                        <div class="profile_edit_field">
-                            <label>新しいtoocID</label>
-                            <div class="toocid_row">
-                                <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
-                                <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
-                            </div>
-                            <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">
-                                3〜20文字で入力してください</p>
-                            <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
+            <section class="modal_termsOfService modal">
+                <div class="modal_container">
+                    <header>
+                        <div class="header_txt">
+                            <p class="ttl">利用規約</p>
+                            <p class="update">2026.06.01 改訂</p>
                         </div>
-                    </div>
+                        <div class="header_close">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                            </svg>
+                        </div>
+                    </header>
 
-                    <!-- プロフィールタブ (右) -->
-                    <div class="modal_tab_panel" id="tab_content_profile">
-                        <p id="profile_error_msg"
-                            style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;">
+                    <div class="content">
+                        <p>この利用規約（以下、「本規約」といいます。）は、当サービスが提供するすべての機能の利用条件を定めるものです。</p>
+                        <p>ユーザーの皆さまには、本規約に従って本サービスをご利用いただきます。</p>
+
+                        <p class="heading">第1条 適用</p>
+                        <p>本規約は、ユーザーと当サービスとの間の、利用に関わる一切の関係に適用されるものとします。</p>
+
+                        <p class="heading">第2条 ユーザー登録とアカウント管理</p>
+                        <p>本サービスのアカウント登録は、Googleアカウントを用いた認証ログインのみに対応しています。</p>
+                        <p>ユーザーは、自身のGoogleアカウントを自己の責任において適切に管理・保管するものとします。</p>
+                        <p>Googleアカウントの管理不十分、または第三者の使用によって生じた損害について、当サービスは一切の責任を負いません。</p>
+
+                        <p class="heading">第3条 禁止行為</p>
+                        <p>本サービスの利用にあたり、以下の行為を禁止します。</p>
+                        <p>・法令または公序良俗に違反する行為</p>
+                        <p>・他のユーザー、第三者、または当サービスの権利を侵害する行為</p>
+                        <p>・当サービスのシステムに過度な負荷をかける行為、または不正にアクセスする行為</p>
+
+                        <p class="heading">第4条 ユーザー投稿コンテンツの取扱い</p>
+                        <p>ユーザーが本サービス内で送信・投稿したメッセージや画像（以下、「コンテンツ」）に関する責任は、ユーザー自身が負うものとします。</p>
+                        <p>当サービスは、コンテンツが本規約に違反すると判断した場合、ユーザーに事前に通知することなく、当該コンテンツを削除または非表示にする権利を有します。</p>
+
+                        <p class="heading">第5条 アカウントの利用停止・抹消</p>
+                        <p>当サービスは、ユーザーが本規約に違反した場合、または当サービスが不適切と判断した場合、事前の通知なく当該ユーザーのアカウントを利用停止または抹消することができます。</p>
+                        <p>これによってユーザーに生じた損害について、当サービスは一切の責任を負いません。</p>
+
+                        <p class="heading">第6条 サービスの提供の停止等</p>
+                        <p>当サービスは、システムの保守点検や不可抗力（天災、停電など）により、ユーザーに事前の通知をすることなく、サービスの内容を変更、停止または終了できるものとします。</p>
+
+                        <p class="heading">第7条 免責事項</p>
+                        <p>当サービスの利用によってユーザーに生じた損害について、当サービスは故意または重過失がない限り一切の責任を負いません。</p>
+
+                        <p class="heading">第8条 規約の変更</p>
+                        <p>当サービスは、必要と判断した場合には、ユーザーに通知することなくいつでも本規約を変更することができるものとします。</p>
+                        <p>変更後の規約は、本サービス上に掲示した時点から効力を生じるものとします。</p>
+
+                        <button id="doAgree_with_termsOfService" class="do_agree">同意する</button>
+                    </div>
+                </div>
+            </section>
+            <section class="modal_privacyPolicy modal">
+                <div class="modal_container">
+                    <header>
+                        <div class="header_txt">
+                            <p class="ttl">プライバシーポリシー</p>
+                            <p class="update">2026.06.01 改訂</p>
+                        </div>
+                        <div class="header_close">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                            </svg>
+                        </div>
+                    </header>
+
+                    <div class="content">
+                        <p>当サービスは、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。</p>
+
+                        <p class="heading">第1条 情報の取得</p>
+                        <p>当サービスは、ユーザーがGoogleアカウントを利用してログインを行う際、当該アカウントに登録されている氏名、メールアドレス、プロフィール画像（アイコン）などの情報を取得します。</p>
+                        <p>また、サービスを利用する過程で、サービス内で送信されたメッセージや画像データ、端末情報などを適法かつ公正な手段によって取得します。</p>
+
+                        <p class="heading">第2条 利用目的</p>
+                        <p>取得した情報は、以下の目的で利用いたします。</p>
+                        <p>・本サービスの提供・運営（メッセージの送受信やデータの保存を含む）のため</p>
+                        <p>・ユーザーからのお問い合わせに対する回答のため</p>
+                        <p>・新機能や更新情報等のご案内のため</p>
+                        <p>・利用規約に違反したユーザーの特定、調査、および対応のため</p>
+
+                        <p class="heading">第3条 トーク内容の通信の秘密と保護</p>
+                        <p>当サービスは、ユーザー間でやり取りされるメッセージや画像データ等の通信の秘密を保護します。</p>
+                        <p>これら通信内容については、システムの提供や不具合の調査、または利用規約違反の調査が必要な場合を除き、運営者が閲覧したり、第三者に開示したりすることはありません。</p>
+
+                        <p class="heading">第4条 第三者への提供</p>
+                        <p>当サービスは、法令に基づく場合や人の生命・身体・財産の保護のために必要がある場合を除き、あらかじめユーザーの同意を得ることなく、第三者に個人情報やトーク内容を提供することはありません。
                         </p>
-                        <div class="profile_edit_icon">
-                            <img id="edit_icon_preview" src="" alt="" style="cursor:pointer;">
-                            <label for="edit_icon_input" class="edit_icon_label">変更</label>
-                            <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
-                        </div>
-                        <div class="profile_edit_field">
-                            <label>名前</label>
-                            <input type="text" id="edit_name_input" placeholder="名前を入力">
-                        </div>
-                        <div class="profile_edit_field">
-                            <label>Bio</label>
-                            <input type="text" id="edit_bio_input" placeholder="Bioを入力">
-                        </div>
-                        <button class="modal_save_btn" id="btn_save_profile">保存</button>
-                        <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ===== モーダル: toocIDで友だち追加 ===== -->
-    <div class="modal_overlay" id="modal_add_friend" style="display: none;">
-        <div class="modal_box">
-            <div class="modal_header">
-                <div class="modal_header_top">
-                    <p class="modal_title">友だちを追加</p>
-                    <button class="modal_close" id="modal_add_friend_close"><svg xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
+                        <p class="heading">第5条 Cookieおよびローカルストレージの利用</p>
+                        <p>当サービスでは、ユーザーの利便性向上（ログイン状態の維持やUIの記憶など）のために、Cookieやローカルストレージ（sessionStorage等のブラウザ保存機能）を使用しています。
+                        </p>
+
+                        <p class="heading">第6条 安全管理とセキュリティ</p>
+                        <p>当サービスは、個人情報やトークデータへの不正アクセス・紛失・破損・改ざん・漏洩などを防止するため、システムの維持など必要な措置を講じ、適切な安全対策を実施します。</p>
+
+                        <p class="heading">第7条 データの削除と退会</p>
+                        <p>ユーザーがアカウントの削除（退会）を希望する場合、当サービスが定める手続きに従ってデータの削除を申請することができます。退会後は、関連する個人情報やトークデータは、システムの仕様に従い適宜破棄されます。
+                        </p>
+
+                        <p class="heading">第8条 本ポリシーの変更</p>
+                        <p>本ポリシーの内容は、法令等に別段の定めがある場合を除き、ユーザーに通知することなく変更することができるものとします。</p>
+                        <p>変更後のプライバシーポリシーは、本サービス内に掲載した時点から効力を生じるものとします。</p>
+
+                        <p class="heading">第9条 お問い合わせ窓口</p>
+                        <p>本ポリシーに関するお問い合わせ、またはデータの削除等に関するご相談は、以下までお願いいたします。</p>
+                        <p>Eメール： <a href="mailto:ff.ph1e.00@gmail.com">ff.ph1e.00@gmail.com</a></p>
+
+                        <button id="doAgree_with_privacyPolicy" class="do_agree">同意する</button>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div id="main_app">
+            <header class="top_header">
+                <div class="logo">
+                    <svg viewBox="0 0 306 96" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M29.1897 96C11.8451 96 0 86.5689 0 66.7214V0H21.1519V24.6334H54.1489V43.6364H21.1519V66.7214C21.1519 74.0411 24.5362 76.2933 29.1897 76.2933C33.8431 76.2933 37.2274 74.0411 37.2274 66.7214V64.61H58.3793V66.7214C58.3793 86.5689 46.5342 96 29.1897 96Z" />
+                        <path
+                            d="M103.268 96C81.2697 96 65.7582 80.5161 65.7582 59.4018C65.7582 38.2874 81.2697 22.8035 103.268 22.8035C125.266 22.8035 140.777 38.2874 140.777 59.4018C140.777 80.5161 125.266 96 103.268 96ZM103.268 76.2933C112.857 76.2933 119.343 69.3959 119.343 59.4018C119.343 49.4076 112.857 42.5103 103.268 42.5103C93.6788 42.5103 87.1922 49.4076 87.1922 59.4018C87.1922 69.3959 93.6788 76.2933 103.268 76.2933Z" />
+                        <path
+                            d="M186.443 96C164.445 96 148.934 80.5161 148.934 59.4018C148.934 38.2874 164.445 22.8035 186.443 22.8035C208.441 22.8035 223.953 38.2874 223.953 59.4018C223.953 80.5161 208.441 96 186.443 96ZM186.443 76.2933C196.032 76.2933 202.519 69.3959 202.519 59.4018C202.519 49.4076 196.032 42.5103 186.443 42.5103C176.854 42.5103 170.368 49.4076 170.368 59.4018C170.368 69.3959 176.854 76.2933 186.443 76.2933Z" />
+                        <path
+                            d="M269.619 96C247.621 96 232.109 80.5161 232.109 59.4018C232.109 38.2874 247.621 22.8035 269.619 22.8035C288.937 22.8035 303.039 34.7683 306 51.9413H284.566C282.169 46.1701 276.669 42.5103 269.619 42.5103C260.03 42.5103 253.543 49.4076 253.543 59.4018C253.543 69.3959 260.03 76.2933 269.619 76.2933C276.669 76.2933 282.169 72.6334 284.566 66.8622H306C303.039 84.0352 288.937 96 269.619 96Z" />
+                    </svg>
+                </div>
+                <nav>
+                    <button class="add-talkroom">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path
-                                d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
-                        </svg></button>
-                </div>
-            </div>
-            <div class="modal_body">
-                <div class="profile_edit_field">
-                    <label>toocIDで検索</label>
-                    <div class="toocid_row">
-                        <input type="text" id="search_toocid_input" placeholder="相手のtoocIDを入力">
-                        <button id="btn_search_toocid">検索</button>
+                                d="M12.007 19.98a9.869 9.869 0 0 1 -4.307 -.98l-4.7 1l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c1.992 1.7 2.93 4.04 2.747 6.34" />
+                            <path d="M16 19h6" />
+                            <path d="M19 16v6" />
+                        </svg>
+                    </button>
+                    <button class="add-friends" id="btn_open_add_friend">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4c.96 0 1.84 .338 2.53 .901" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            <path d="M16 19h6" />
+                            <path d="M19 16v6" />
+                        </svg>
+                    </button>
+                    <button class="settings" id="btn_open_profile_edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
+                            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                        </svg>
+                    </button>
+                </nav>
+            </header>
+
+            <!-- ホームタブ -->
+            <section class="tab_top active" id="tab_top">
+
+                <div class="top_user">
+                    <div class="user_flexwrap">
+                        <div class="usericon">
+                            <img id="my_icon" src="img/default_icon.png" alt="自分">
+                        </div>
+                        <div class="userinfo">
+                            <p class="username" id="my_name">読み込み中...</p>
+                            <p class="userbio" id="my_bio">...</p>
+                        </div>
+                    </div>
+                    <div class="user_actions_wrap">
+                        <p class="toocid_display" id="btn_open_toocid_edit">@...</p>
+                        <button id="btn_open_profile_edit" class="editprofile btn_profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                <path d="M13.5 6.5l4 4" />
+                                <path d="M16 19h6" />
+                            </svg>
+                            <p>プロフィールを編集</p>
+                        </button>
                     </div>
                 </div>
-                <div id="search_result" class="search_result">
-                    <!-- 検索結果がここに表示されます -->
+                <div class="top_friends">
+                    <header class="topsecs friends_header">
+                        <p class="ttl">友だちリスト</p>
+                    </header>
+                    <div class="friends_container" id="friends_container">
+                        <!-- 友だちリストがここに動的に追加されます -->
+                    </div>
+                </div>
+                <div class="top_add-friend">
+                    <header class="topsecs add-friend_header">
+                        <p class="ttl">友だちを追加</p>
+                        <div class="more">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M9 6l6 6l-6 6" />
+                            </svg>
+                        </div>
+                    </header>
+                    <div class="container">
+                        <div class="boxitem" id="btn_add_by_toocid">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" />
+                            </svg>
+                            <p>toocID</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top_shop">
+                    <header class="topsecs add-shop">
+                        <p class="ttl">ショップ</p>
+                    </header>
+                    <div class="container">
+                        <div class="boxitem">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M9 10l.01 0" />
+                                <path d="M15 10l.01 0" />
+                                <path d="M9.5 15a3.5 3.5 0 0 0 5 0" />
+                            </svg>
+                            <p>スタンプ</p>
+                        </div>
+                        <div class="boxitem">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M14 6a2 2 0 1 0 -4 0c0 1.667 .67 3 2 4h-.008l7.971 4.428a2 2 0 0 1 1.029 1.749v.823a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-.823a2 2 0 0 1 1.029 -1.749l7.971 -4.428" />
+                            </svg>
+                            <p>きせかえ</p>
+                        </div>
+                        <div class="boxitem">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M3 9a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -2" />
+                                <path d="M12 8l0 13" />
+                                <path d="M19 12v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-7" />
+                                <path
+                                    d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" />
+                            </svg>
+                            <p>ギフト</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- トークタブ -->
+            <section class="tab_talk" id="tab_talk">
+
+                <label for="talk_searchbox" class="talk_searchbox">
+                    <div class="searchbox_vec">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                            <path d="M21 21l-6 -6" />
+                        </svg>
+                    </div>
+                    <input type="text" id="talk_searchbox" placeholder="toocを検索">
+                </label>
+
+                <div class="talk_container" id="talk_container">
+                    <!-- トーク一覧がここに動的に追加されます -->
+                </div>
+
+            </section>
+
+
+            <aside class="navbar">
+                <div class="nav active" id="nav_home">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                    </svg>
+                    <p>ホーム</p>
+                </div>
+                <div class="nav" id="nav_talk">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M3 20l1.3 -3.9c-2.324 -3.437 -1.426 -7.872 2.1 -10.374c3.526 -2.501 8.59 -2.296 11.845 .48c3.255 2.777 3.695 7.266 1.029 10.501c-2.666 3.235 -7.615 4.215 -11.574 2.293l-4.7 1" />
+                    </svg>
+                    <p>トーク</p>
+                </div>
+            </aside>
+        </div> <!-- /main_app -->
+
+        <!-- ===== モーダル: プロフィール編集 ===== -->
+        <div class="modal_overlay" id="modal_profile" style="display: none;">
+            <div class="modal_box">
+                <div class="modal_header">
+                    <div class="modal_header_top">
+                        <p class="modal_title">設定</p>
+                        <button class="modal_close" id="modal_profile_close"><svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                            </svg></button>
+                    </div>
+                    <div class="modal_tabs">
+                        <button id="tab_btn_toocid">toocID</button>
+                        <button id="tab_btn_profile">プロフィール</button>
+                    </div>
+                </div>
+                <div class="modal_body no_padding" id="modal_body_swipe_area">
+                    <div class="modal_body_scroll">
+                        <!-- toocIDタブ (左) -->
+                        <div class="modal_tab_panel" id="tab_content_toocid">
+                            <div class="profile_edit_field">
+                                <label>新しいtoocID</label>
+                                <div class="toocid_row">
+                                    <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
+                                    <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
+                                </div>
+                                <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">
+                                    3〜20文字で入力してください</p>
+                                <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
+                            </div>
+                        </div>
+
+                        <!-- プロフィールタブ (右) -->
+                        <div class="modal_tab_panel" id="tab_content_profile">
+                            <p id="profile_error_msg"
+                                style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;">
+                            </p>
+                            <div class="profile_edit_icon">
+                                <img id="edit_icon_preview" src="" alt="" style="cursor:pointer;">
+                                <label for="edit_icon_input" class="edit_icon_label">変更</label>
+                                <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
+                            </div>
+                            <div class="profile_edit_field">
+                                <label>名前</label>
+                                <input type="text" id="edit_name_input" placeholder="名前を入力">
+                            </div>
+                            <div class="profile_edit_field">
+                                <label>Bio</label>
+                                <input type="text" id="edit_bio_input" placeholder="Bioを入力">
+                            </div>
+                            <button class="modal_save_btn" id="btn_save_profile">保存</button>
+                            <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
+                            <button class="modal_delete_account_btn" id="delete_account_btn">アカウントを削除する</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 動的に生成するためのテンプレート（非表示） -->
-    <template id="template_friend">
-        <div class="friends_friend">
-            <img src="" alt="" class="friend_icon_img">
-            <div class="friend_info">
-                <p class="friend_name"></p>
-                <p class="friend_bio">ステータスメッセージ</p>
+        <!-- ===== モーダル: toocIDで友だち追加 ===== -->
+        <div class="modal_overlay" id="modal_add_friend" style="display: none;">
+            <div class="modal_box">
+                <div class="modal_header">
+                    <div class="modal_header_top">
+                        <p class="modal_title">友だちを追加</p>
+                        <button class="modal_close" id="modal_add_friend_close"><svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" />
+                            </svg></button>
+                    </div>
+                </div>
+                <div class="modal_body">
+                    <div class="profile_edit_field">
+                        <label>toocIDで検索</label>
+                        <div class="toocid_row">
+                            <input type="text" id="search_toocid_input" placeholder="相手のtoocIDを入力">
+                            <button id="btn_search_toocid">検索</button>
+                        </div>
+                    </div>
+                    <div id="search_result" class="search_result">
+                        <!-- 検索結果がここに表示されます -->
+                    </div>
+                </div>
             </div>
         </div>
-    </template>
 
-    <template id="template_talkroom">
-        <div class="talk_talkroom">
-            <div class="talkroom_icon">
-                <img class="room_icon_img" src="" alt="">
-            </div>
-            <div class="talkroom_info">
-                <p class="talkroom_infoname"></p>
-                <p class="talkroom_infomessage"></p>
-            </div>
-            <div class="talkroom_noti">
-                <p class="talkroom_notitime"></p>
-                <p class="talkroom_noticount" style="display: none;"></p>
+        <!-- ===== モーダル: アカウント削除確認 ===== -->
+        <div class="modal_overlay" id="modal_delete_account" style="display: none;">
+            <div class="modal_box">
+                <div class="modal_header">
+                    <div class="modal_header_top">
+                        <p class="modal_title" style="color: #ef4444;">アカウントを削除</p>
+                        <button class="modal_close" id="modal_delete_account_close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg></button>
+                    </div>
+                </div>
+                <div class="modal_body" id="delete_account_step1">
+                    <p style="margin-bottom: 16px; font-size: 0.95rem; line-height: 1.5; color: #333;">
+                        本当にアカウントを削除しますか？この操作は取り消せません。<br>
+                        すべてのトーク履歴やフレンド情報、プロフィールが完全に失われます。
+                    </p>
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button id="btn_delete_cancel" style="flex: 1; padding: 12px; border-radius: 24px; background: #f3f4f6; color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">キャンセル</button>
+                        <button id="btn_delete_next" style="flex: 1; padding: 12px; border-radius: 24px; background: #ef4444; color: #fff; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">次へ</button>
+                    </div>
+                </div>
+                <div class="modal_body" id="delete_account_step2" style="display: none;">
+                    <p style="margin-bottom: 16px; font-size: 0.95rem; line-height: 1.5; color: #333;">
+                        退会を確定するには、下の入力欄に「<strong>Delete</strong>」と入力してください。（大文字・小文字は問いません）
+                    </p>
+                    <input type="text" id="delete_confirm_input" placeholder="Delete" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; text-align: center; margin-bottom: 24px;">
+                    <div style="display: flex; gap: 12px;">
+                        <button id="btn_delete_cancel2" style="flex: 1; padding: 12px; border-radius: 24px; background: #f3f4f6; color: #000; font-weight: bold; border: none; cursor: pointer; font-size: 1rem;">戻る</button>
+                        <button id="btn_delete_execute" style="flex: 1; padding: 12px; border-radius: 24px; background: #ef4444; color: #fff; font-weight: bold; border: none; cursor: pointer; opacity: 0.5; pointer-events: none; font-size: 1rem; transition: opacity 0.2s;">完全に削除</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </template>
+
+        <!-- 動的に生成するためのテンプレート（非表示） -->
+        <template id="template_friend">
+            <div class="friends_friend">
+                <img src="" alt="" class="friend_icon_img">
+                <div class="friend_info">
+                    <p class="friend_name"></p>
+                    <p class="friend_bio">ステータスメッセージ</p>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_talkroom">
+            <div class="talk_talkroom">
+                <div class="talkroom_icon">
+                    <img class="room_icon_img" src="" alt="">
+                </div>
+                <div class="talkroom_info">
+                    <p class="talkroom_infoname"></p>
+                    <p class="talkroom_infomessage"></p>
+                </div>
+                <div class="talkroom_noti">
+                    <p class="talkroom_notitime"></p>
+                    <p class="talkroom_noticount" style="display: none;"></p>
+                </div>
+            </div>
+        </template>
 
     </div><!-- /home_page -->
 
     <!-- トークルーム画面（初期: 右に隠れる） -->
-    <div id="talkroom_page" class="page_overlay" style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none; overscroll-behavior: contain;">
+    <div id="talkroom_page" class="page_overlay"
+        style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none; overscroll-behavior: contain;">
         <main id="chat_main">
             <!-- メッセージがここに動的に追加されます -->
         </main>
@@ -338,26 +506,46 @@
 
     <header class="talkroom_header">
         <div class="header_backlist header_vec" id="header_back_btn" style="cursor: pointer;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M15 6l-6 6l6 6" />
+            </svg>
         </div>
         <div class="header_username" id="header_username">...</div>
         <div class="header_search header_vec wip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                <path d="M21 21l-6 -6" />
+            </svg>
         </div>
         <div class="header_calling header_vec wip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                    d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+            </svg>
         </div>
         <div class="header_more header_vec wip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M4 6l16 0" />
+                <path d="M4 12l16 0" />
+                <path d="M4 18l16 0" />
+            </svg>
         </div>
     </header>
 
     <section class="inputarea">
         <div class="area_more area_vec wip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 5l0 14" />
+                <path d="M5 12l14 0" />
+            </svg>
         </div>
         <label for="area_add-image" class="area_add-image area_vec">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 8h.01" /><path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /><path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M15 8h.01" />
+                <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" />
+                <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
+                <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
+            </svg>
             <input type="file" id="area_add-image" accept="image/*" style="display: none;">
         </label>
         <label for="area_input" class="area_input">
@@ -365,29 +553,67 @@
         </label>
         <div id="area_action_btn" class="area_voicemessage area_vec wip">
             <div class="icon_wrapper mic_icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 5a3 3 0 0 1 3 -3a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3a3 3 0 0 1 -3 -3l0 -5" /><path d="M5 10a7 7 0 0 0 14 0" /><path d="M8 21l8 0" /><path d="M12 17l0 4" stroke-linecap="square" stroke-linejoin="square"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M9 5a3 3 0 0 1 3 -3a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3a3 3 0 0 1 -3 -3l0 -5" />
+                    <path d="M5 10a7 7 0 0 0 14 0" />
+                    <path d="M8 21l8 0" />
+                    <path d="M12 17l0 4" stroke-linecap="square" stroke-linejoin="square" />
+                </svg>
             </div>
             <div class="icon_wrapper send_icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 14l11 -11" /><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 14l11 -11" />
+                    <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+                </svg>
             </div>
         </div>
 
         <div class="area_morecontainer">
             <label for="more_files" class="more_item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M11 14h1v4h1" /><path d="M12 11h.01" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
+                    <path d="M11 14h1v4h1" />
+                    <path d="M12 11h.01" />
+                </svg>
                 <p>ファイル</p>
                 <input type="file" id="more_files" style="display: none;">
             </label>
             <div class="more_item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                    <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
+                </svg>
                 <p>場所</p>
             </div>
             <div class="more_item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 12l2 2l4 -4" /><path d="M12 3c7.2 0 9 1.8 9 9c0 7.2 -1.8 9 -9 9c-7.2 0 -9 -1.8 -9 -9c0 -7.2 1.8 -9 9 -9" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2l4 -4" />
+                    <path d="M12 3c7.2 0 9 1.8 9 9c0 7.2 -1.8 9 -9 9c-7.2 0 -9 -1.8 -9 -9c0 -7.2 1.8 -9 9 -9" />
+                </svg>
                 <p>投票</p>
             </div>
             <div class="more_item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M10.586 10.586l-1.586 -1.586" /><path d="M13.414 10.586l1.586 -1.586" /><path d="M13.414 13.414l1.586 1.586" /><path d="M10.586 13.414l-1.586 1.586" /><path d="M14 12a2 2 0 1 1 -4 0a2 2 0 0 1 4 0" /><path d="M16.5 4.206l-.5 .866" /><path d="M7.5 19.794l.5 -.866" /><path d="M19.794 7.5l-.866 .5" /><path d="M4.206 16.5l.866 -.5" /><path d="M7.5 4.206l.5 .866" /><path d="M16.5 19.794l-.5 -.866" /><path d="M4.206 7.5l.866 .5" /><path d="M19.794 16.5l-.866 -.5" /><path d="M12 3v1" /><path d="M12 21v-1" /><path d="M21 12h-1" /><path d="M3 12h1" /><path d="M12 21a9 9 0 1 1 0 -18a9 9 0 0 1 0 18" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M10.586 10.586l-1.586 -1.586" />
+                    <path d="M13.414 10.586l1.586 -1.586" />
+                    <path d="M13.414 13.414l1.586 1.586" />
+                    <path d="M10.586 13.414l-1.586 1.586" />
+                    <path d="M14 12a2 2 0 1 1 -4 0a2 2 0 0 1 4 0" />
+                    <path d="M16.5 4.206l-.5 .866" />
+                    <path d="M7.5 19.794l.5 -.866" />
+                    <path d="M19.794 7.5l-.866 .5" />
+                    <path d="M4.206 16.5l.866 -.5" />
+                    <path d="M7.5 4.206l.5 .866" />
+                    <path d="M16.5 19.794l-.5 -.866" />
+                    <path d="M4.206 7.5l.866 .5" />
+                    <path d="M19.794 16.5l-.866 -.5" />
+                    <path d="M12 3v1" />
+                    <path d="M12 21v-1" />
+                    <path d="M21 12h-1" />
+                    <path d="M3 12h1" />
+                    <path d="M12 21a9 9 0 1 1 0 -18a9 9 0 0 1 0 18" />
+                </svg>
                 <p>ルーレット</p>
             </div>
         </div>
