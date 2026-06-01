@@ -54,7 +54,7 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
 
     // 前のリスナーを解除
     if (currentMessagesRef && currentOnChildAdded) {
-        off(currentMessagesRef, 'child_added', currentOnChildAdded);
+        currentOnChildAdded();
     }
 
     // キャッシュからアイコン等を更新
@@ -116,7 +116,7 @@ export const closeTalkRoom = () => {
     }, 300);
 
     if (currentMessagesRef && currentOnChildAdded) {
-        off(currentMessagesRef, 'child_added', currentOnChildAdded);
+        currentOnChildAdded();
         currentMessagesRef = null;
         currentOnChildAdded = null;
     }
@@ -375,6 +375,7 @@ const initializeUI = () => {
             if (el._wipRegistered) return;
             el._wipRegistered = true;
             el.addEventListener('click', (e) => {
+                if (!el.classList.contains('wip')) return;
                 e.stopPropagation();
                 if (wipContainer) {
                     wipContainer.classList.add('active');

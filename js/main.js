@@ -6,9 +6,9 @@ let currentUserInfo = null;
 const imgSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><path d="M15 8h.01" /><path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /><path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" /></svg> 画像`;
 
 // SVGアイコン定数
-const svgUnavailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20.042 16.045a9 9 0 0 0 -12.087 -12.087m-2.318 1.677a9 9 0 1 0 12.725 12.73" /><path d="M3 3l18 18" /></svg>`;
-const svgAvailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l5 5l10 -10" /></svg>`;
-const svgSuccess = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" /></svg>`;
+const svgUnavailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20.042 16.045a9 9 0 0 0 -12.087 -12.087m-2.318 1.677a9 9 0 1 0 12.725 12.73" /><path d="M3 3l18 18" /></svg>`;
+const svgAvailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l5 5l10 -10" /></svg>`;
+const svgSuccess = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" /></svg>`;
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('login_overlay');
@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profileErrorMsg.style.display = 'none';
         // スクロールアニメーションで右パネルへ
         if (modalBodyScroll) {
-            modalBodyScroll.scrollTo({ left: modalBodyScroll.scrollWidth / 2, behavior: 'smooth' });
+            modalBodyScroll.parentElement.scrollTo({ left: modalBodyScroll.parentElement.scrollWidth, behavior: 'smooth' });
         }
     };
 
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btn_set_toocid').style.background = '#ccc';
         // スクロールアニメーションで左パネルへ
         if (modalBodyScroll) {
-            modalBodyScroll.scrollTo({ left: 0, behavior: 'smooth' });
+            modalBodyScroll.parentElement.scrollTo({ left: 0, behavior: 'smooth' });
         }
     };
 
@@ -442,10 +442,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // スクロール位置リセット後にタブ切替
         requestAnimationFrame(() => {
             if (tab === 'toocid') {
-                if (modalBodyScroll) modalBodyScroll.scrollLeft = 0;
+                if (modalBodyScroll) modalBodyScroll.parentElement.scrollLeft = 0;
                 activateToocidTab();
             } else {
-                if (modalBodyScroll) modalBodyScroll.scrollLeft = modalBodyScroll.scrollWidth / 2;
+                if (modalBodyScroll) modalBodyScroll.parentElement.scrollLeft = modalBodyScroll.parentElement.scrollWidth;
                 activateProfileTab();
             }
         });

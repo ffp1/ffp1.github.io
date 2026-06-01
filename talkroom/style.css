@@ -201,7 +201,7 @@ section.inputarea .area_morecontainer .more_item p {
 @media (display-mode: standalone) {
   section.inputarea {
     --height: 44px;
-    padding-bottom: calc(var(--height) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--height) + 24px);
   }
   section.inputarea.moreactive {
     --height: 80px;
@@ -218,7 +218,8 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .date_separator {
   position: sticky;
-  top: 0;
+  top: 72px;
+  align-self: center;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -280,6 +281,9 @@ section.inputarea .area_morecontainer .more_item p {
 #talkroom_page main .content.other {
   justify-content: start;
 }
+#talkroom_page main .content.other .content_meta {
+  align-items: flex-start;
+}
 #talkroom_page main .content.other .content_icon {
   width: 36px;
   aspect-ratio: 1;
@@ -310,6 +314,9 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .content.me {
   justify-content: end;
+}
+#talkroom_page main .content.me .content_meta {
+  align-items: flex-end;
 }
 #talkroom_page main .content.me p.content_message {
   display: inline-flex;

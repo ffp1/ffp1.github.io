@@ -224,21 +224,20 @@ section.tab_top .top_user .toocid_display {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.4666666667);
   font-size: 0.85rem;
-  margin-left: 12px;
-  margin-top: 4px;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 24px);
   padding: 2px 0;
+  margin: 0;
 }
 section.tab_top .top_user .user_actions_wrap {
   display: flex;
-  justify-content: flex-start;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 24px);
   margin-left: 12px;
-  margin-top: 4px;
+  margin-top: 8px;
   position: relative;
   z-index: 1;
 }
@@ -1325,7 +1324,7 @@ section.inputarea .area_morecontainer .more_item p {
 @media (display-mode: standalone) {
   section.inputarea {
     --height: 44px;
-    padding-bottom: calc(var(--height) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--height) + 24px);
   }
   section.inputarea.moreactive {
     --height: 80px;
@@ -1342,7 +1341,8 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .date_separator {
   position: sticky;
-  top: 0;
+  top: 72px;
+  align-self: center;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -1404,6 +1404,9 @@ section.inputarea .area_morecontainer .more_item p {
 #talkroom_page main .content.other {
   justify-content: start;
 }
+#talkroom_page main .content.other .content_meta {
+  align-items: flex-start;
+}
 #talkroom_page main .content.other .content_icon {
   width: 36px;
   aspect-ratio: 1;
@@ -1434,6 +1437,9 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .content.me {
   justify-content: end;
+}
+#talkroom_page main .content.me .content_meta {
+  align-items: flex-end;
 }
 #talkroom_page main .content.me p.content_message {
   display: inline-flex;

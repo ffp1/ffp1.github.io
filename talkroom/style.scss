@@ -232,7 +232,7 @@ section.inputarea {
 @media (display-mode: standalone) {
     section.inputarea {
         --height: 44px;
-        padding-bottom: calc(var(--height) + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(var(--height) + 24px);
 
         &.moreactive {
             --height: 80px;
@@ -253,7 +253,8 @@ section.inputarea {
 
         .date_separator {
             position: sticky;
-            top: 0;
+            top: 72px;
+            align-self: center;
             z-index: 10;
             display: flex;
             align-items: center;
@@ -322,6 +323,10 @@ section.inputarea {
             &.other {
                 justify-content: start;
 
+                .content_meta {
+                    align-items: flex-start;
+                }
+
                 .content_icon {
                     width: 36px;
                     aspect-ratio: 1;
@@ -355,6 +360,10 @@ section.inputarea {
 
             &.me {
                 justify-content: end;
+
+                .content_meta {
+                    align-items: flex-end;
+                }
 
                 p.content_message {
                     display: inline-flex;
