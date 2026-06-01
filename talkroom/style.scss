@@ -13,6 +13,7 @@ body {
     width: 100vw;
     min-height: 100dvh;
     background-color: #fff;
+    overscroll-behavior: contain;
 
     * {
         margin: 0;
@@ -162,7 +163,6 @@ section.inputarea {
     label.area_input {
         display: block;
         width: calc(100% - 136px);
-        min-height: 44px;
         border: 1.5px solid #f0f0f0;
         background-color: #f5f5f5;
         padding-block: 8px;
@@ -232,6 +232,7 @@ section.inputarea {
 @media (display-mode: standalone) {
     section.inputarea {
         --height: 44px;
+        padding-bottom: calc(var(--height) + env(safe-area-inset-bottom, 0px));
 
         &.moreactive {
             --height: 80px;
@@ -250,11 +251,73 @@ section.inputarea {
         padding-block: 72px calc(var(--height) * 2 + 108px);
         box-sizing: border-box;
 
+        .date_separator {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            margin: 8px 0;
+
+            &::before {
+                content: attr(data-text);
+            }
+
+            font-family: 'LINE Seed JP',
+            sans-serif;
+            font-weight: 400;
+            color: #0007;
+            font-size: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+        }
+
         .content {
             display: flex;
-            align-items: start;
+            align-items: end;
             width: 100%;
             gap: 4px;
+
+            &.continuous {
+                margin-top: -4px;
+            }
+
+            .content_icon_spacer {
+                width: 36px;
+                flex-shrink: 0;
+            }
+
+            .content_meta {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 2px;
+                flex-shrink: 0;
+                padding-bottom: 2px;
+
+                .read_status {
+                    display: block;
+                    font-family: 'LINE Seed JP', sans-serif;
+                    font-weight: 400;
+                    color: #a855f7;
+                    font-size: 0.65rem;
+                    white-space: nowrap;
+                }
+
+                .msg_time {
+                    display: block;
+                    font-family: 'LINE Seed JP', sans-serif;
+                    font-weight: 400;
+                    color: #0005;
+                    font-size: 0.65rem;
+                    white-space: nowrap;
+                }
+            }
 
             &.other {
                 justify-content: start;
@@ -263,6 +326,7 @@ section.inputarea {
                     width: 36px;
                     aspect-ratio: 1;
                     border-radius: 50%;
+                    flex-shrink: 0;
 
                     img {
                         width: 100%;
@@ -274,7 +338,7 @@ section.inputarea {
 
                 p.content_message {
                     display: inline-flex;
-                    max-width: calc(80% - 40px);
+                    max-width: calc(70% - 40px);
                     align-items: center;
                     background-color: #f6ebff;
                     min-height: 36px;
@@ -294,7 +358,7 @@ section.inputarea {
 
                 p.content_message {
                     display: inline-flex;
-                    max-width: 80%;
+                    max-width: 70%;
                     align-items: center;
                     background-color: #a855f7;
                     min-height: 36px;
@@ -313,15 +377,15 @@ section.inputarea {
 
     .wip_container {
         position: fixed;
-        left: -8px;
-        top: -8px;
+        left: 0;
+        top: 0;
         display: grid;
         place-items: center;
-        width: calc(100% + 16px);
-        height: calc(100% + 16px);
+        width: 100%;
+        height: 100%;
         background-color: #0004;
         backdrop-filter: blur(8px);
-        z-index: 99;
+        z-index: 1099;
         opacity: 0;
         pointer-events: none;
         user-select: none;
@@ -410,5 +474,9 @@ header.talkroom_header {
         font-weight: 400;
         color: #000;
         margin-inline: 12px auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100vw - 220px);
     }
 }

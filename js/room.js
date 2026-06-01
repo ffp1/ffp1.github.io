@@ -1,4 +1,4 @@
-import { db, auth, onAuthStateChanged, ref, push, onChildAdded, off, serverTimestamp } from './firebase-config.js';
+import { db, auth, onAuthStateChanged, ref, push, onChildAdded, off, serverTimestamp, get, update } from './firebase-config.js';
 
 let currentMessagesRef = null;
 let currentOnChildAdded = null;
@@ -7,6 +7,12 @@ let currentTargetIcon = 'img/default_icon.png';
 let currentUserData = null;
 let currentRoomId = null;
 let isUiInitialized = false;
+let lastMessageTimestamp = 0;
+let lastMessageSenderId = null;
+let lastMessageDate = '';
+let swipeStartX = 0;
+let swipeStartY = 0;
+let isSwiping = false;
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -22,10 +28,13 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
     currentRoomId = roomId;
     currentTargetName = initialName;
     currentTargetIcon = 'img/default_icon.png';
+    lastMessageTimestamp = 0;
+    lastMessageSenderId = null;
+    lastMessageDate = '';
 
     const talkroomPage = document.getElementById('talkroom_page');
     talkroomPage.style.display = 'block';
-    
+
     // アニメーションを確実に発火させるため
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -74,8 +83,19 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
     currentMessagesRef = ref(db, `rooms/${roomId}/messages`);
     currentOnChildAdded = onChildAdded(currentMessagesRef, (snapshot) => {
         const data = snapshot.val();
-        appendMessage(data);
+        const msgKey = snapshot.key;
+        appendMessage(data, msgKey);
+
+        // 既読を付ける（相手のメッセージの場合）
+        if (currentUserData && data.senderId !== currentUserData.id && !data.readBy?.[currentUserData.id]) {
+            update(ref(db, `rooms/${roomId}/messages/${msgKey}/readBy`), {
+                [currentUserData.id]: true
+            }).catch(() => {});
+        }
     });
+
+    // スワイプバック登録
+    setupSwipeBack(talkroomPage);
 
     if (!isUiInitialized) {
         initializeUI();
@@ -102,22 +122,119 @@ export const closeTalkRoom = () => {
     }
 };
 
+// ===========================
+// スワイプバック（左→右で戻る）
+// ===========================
+const setupSwipeBack = (talkroomPage) => {
+    // 既にリスナーがある場合は二重登録しない
+    if (talkroomPage._swipeBackRegistered) return;
+    talkroomPage._swipeBackRegistered = true;
+
+    talkroomPage.addEventListener('touchstart', (e) => {
+        swipeStartX = e.touches[0].clientX;
+        swipeStartY = e.touches[0].clientY;
+        isSwiping = false;
+    }, { passive: true });
+
+    talkroomPage.addEventListener('touchmove', (e) => {
+        const dx = e.touches[0].clientX - swipeStartX;
+        const dy = e.touches[0].clientY - swipeStartY;
+
+        // 横移動が縦移動より大きく、右方向の場合のみ
+        if (Math.abs(dx) > Math.abs(dy) && dx > 10) {
+            isSwiping = true;
+            talkroomPage.style.transition = 'none';
+            talkroomPage.style.transform = `translateX(${Math.max(0, dx)}px)`;
+        }
+    }, { passive: true });
+
+    talkroomPage.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - swipeStartX;
+        talkroomPage.style.transition = 'transform 0.3s cubic-bezier(0.33, 1, 0.68, 1)';
+
+        if (isSwiping && dx > 100) {
+            closeTalkRoom();
+        } else {
+            talkroomPage.style.transform = 'translateX(0)';
+        }
+        isSwiping = false;
+    });
+};
+
 const scrollToBottom = () => {
     const talkroomPage = document.getElementById('talkroom_page');
     talkroomPage.scrollTo({ top: talkroomPage.scrollHeight, behavior: 'smooth' });
 };
 
-const appendMessage = (data) => {
+// ===========================
+// 曜日名
+// ===========================
+const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+
+const formatDateSeparator = (date) => {
+    const y = date.getFullYear();
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const d = date.getDate().toString().padStart(2, '0');
+    const day = dayNames[date.getDay()];
+    return `${y}/${m}/${d} (${day})`;
+};
+
+const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const d = new Date(timestamp);
+    return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+};
+
+const appendMessage = (data, msgKey) => {
     const isMe = currentUserData && data.senderId === currentUserData.id;
+    const mainContainer = document.getElementById('chat_main');
+
+    // ===========================
+    // 日付セパレータ（sticky）
+    // ===========================
+    if (data.timestamp) {
+        const msgDate = new Date(data.timestamp);
+        const dateStr = `${msgDate.getFullYear()}-${msgDate.getMonth()}-${msgDate.getDate()}`;
+        if (dateStr !== lastMessageDate) {
+            lastMessageDate = dateStr;
+            const sep = document.createElement('div');
+            sep.className = 'date_separator';
+            sep.textContent = formatDateSeparator(msgDate);
+            mainContainer.appendChild(sep);
+        }
+    }
+
+    // ===========================
+    // 1分以内の連続メッセージチェック
+    // ===========================
+    const currentTimestamp = data.timestamp || 0;
+    const timeDiff = currentTimestamp - lastMessageTimestamp;
+    const isContinuous = (timeDiff < 60000) && (data.senderId === lastMessageSenderId);
+
     const msgDiv = document.createElement('div');
     msgDiv.className = `content ${isMe ? 'me' : 'other'}`;
+    if (isContinuous) msgDiv.classList.add('continuous');
 
     let innerHTML = '';
+
+    // 相手のメッセージにアイコン表示（連続でない場合のみ）
     if (!isMe) {
-        innerHTML += `
-            <div class="content_icon">
-                <img src="${currentTargetIcon}" alt="${data.senderName}">
-            </div>`;
+        if (!isContinuous) {
+            innerHTML += `
+                <div class="content_icon">
+                    <img src="${currentTargetIcon}" alt="${data.senderName}">
+                </div>`;
+        } else {
+            innerHTML += `<div class="content_icon_spacer"></div>`;
+        }
+    }
+
+    // 自分のメッセージの場合、メタ情報を先に（左側に表示）
+    if (isMe) {
+        innerHTML += `<div class="content_meta">
+            <span class="read_status" data-msg-key="${msgKey || ''}">${data.readBy && Object.keys(data.readBy).some(k => k !== currentUserData.id) ? '既読' : ''}</span>
+            <span class="msg_time">${formatTime(data.timestamp)}</span>
+        </div>`;
     }
 
     if (data.type === 'image' && data.imageData) {
@@ -125,6 +242,13 @@ const appendMessage = (data) => {
     } else {
         const escapedText = (data.text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
         innerHTML += `<p class="content_message">${escapedText}</p>`;
+    }
+
+    // 相手のメッセージの場合、メタ情報を後に（右側に表示）
+    if (!isMe) {
+        innerHTML += `<div class="content_meta">
+            <span class="msg_time">${formatTime(data.timestamp)}</span>
+        </div>`;
     }
 
     msgDiv.innerHTML = innerHTML;
@@ -143,7 +267,12 @@ const appendMessage = (data) => {
         });
     }
 
-    document.getElementById('chat_main').appendChild(msgDiv);
+    mainContainer.appendChild(msgDiv);
+
+    // タイムスタンプ更新
+    lastMessageTimestamp = currentTimestamp;
+    lastMessageSenderId = data.senderId;
+
     scrollToBottom();
 };
 
@@ -156,7 +285,6 @@ const initializeUI = () => {
     const inputArea = document.getElementById('area_input');
     const actionBtn = document.getElementById('area_action_btn');
     const imageInput = document.getElementById('area_add-image');
-    const labelAreaInput = document.querySelector('label.area_input');
 
     const sendMessage = () => {
         if (!currentUserData || !currentRoomId) return;
@@ -238,5 +366,25 @@ const initializeUI = () => {
         }
     });
 
-
+    // ===========================
+    // WIPポップアップ復帰
+    // ===========================
+    const wipContainer = document.getElementById('wip_container');
+    const setupWipButtons = () => {
+        document.querySelectorAll('section.inputarea .wip, header.talkroom_header .wip').forEach(el => {
+            if (el._wipRegistered) return;
+            el._wipRegistered = true;
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (wipContainer) {
+                    wipContainer.classList.add('active');
+                    wipContainer.addEventListener('click', function handler() {
+                        wipContainer.classList.remove('active');
+                        wipContainer.removeEventListener('click', handler);
+                    });
+                }
+            });
+        });
+    };
+    setupWipButtons();
 };

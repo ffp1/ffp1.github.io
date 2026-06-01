@@ -216,7 +216,9 @@ section.tab_top {
                     font-weight: 700;
                     color: #000;
                     font-size: 1.6rem;
-                    overflow: visible;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
 
                 p.userbio {
@@ -233,11 +235,27 @@ section.tab_top {
             }
         }
 
+        .toocid_display {
+            display: block;
+            font-family: 'LINE Seed JP', sans-serif;
+            font-weight: 400;
+            color: #0007;
+            font-size: .85rem;
+            margin-left: 12px;
+            margin-top: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 24px);
+            padding: 2px 0;
+        }
+
         .user_actions_wrap {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             gap: 8px;
-            margin-right: 12px;
+            margin-left: 12px;
             margin-top: 4px;
             position: relative;
             z-index: 1;
@@ -275,18 +293,11 @@ section.tab_top {
                     font-weight: 400;
                     color: #fff;
                     font-size: .85rem;
+                    white-space: nowrap;
                 }
 
                 &:active {
                     scale: .96;
-                }
-
-                &.btn_toocid {
-                    background: rgba(0, 0, 0, 0.05);
-
-                    p {
-                        color: #333;
-                    }
                 }
             }
         }
@@ -393,7 +404,9 @@ section.tab_top {
                         font-weight: 700;
                         color: #000;
                         font-size: 1rem;
-                        overflow: visible;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
 
                         span {
                             color: #a855f7aa;
@@ -724,7 +737,9 @@ section.tab_talk {
                     font-weight: 700;
                     color: #000;
                     font-size: 1.1rem;
-                    overflow: visible;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
 
                 p.talkroom_infomessage {

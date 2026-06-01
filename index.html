@@ -91,10 +91,8 @@
                         <p class="userbio" id="my_bio">...</p>
                     </div>
                 </div>
+                <p class="toocid_display" id="btn_open_toocid_edit">@...</p>
                 <div class="user_actions_wrap">
-                    <button id="btn_open_toocid_edit" class="editprofile btn_toocid">
-                        <p>toocID設定</p>
-                    </button>
                     <button id="btn_open_profile_edit" class="editprofile btn_profile">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
@@ -221,44 +219,46 @@
                         </svg></button>
                 </div>
                 <div class="modal_tabs">
-                    <button id="tab_btn_profile">プロフィール</button>
                     <button id="tab_btn_toocid">toocID</button>
+                    <button id="tab_btn_profile">プロフィール</button>
                 </div>
             </div>
             <div class="modal_body" id="modal_body_swipe_area">
-                <!-- プロフィールタブ -->
-                <div id="tab_content_profile">
-                    <p id="profile_error_msg"
-                        style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;">
-                    </p>
-                    <div class="profile_edit_icon">
-                        <img id="edit_icon_preview" src="" alt="">
-                        <label for="edit_icon_input" class="edit_icon_label">変更</label>
-                        <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
-                    </div>
-                    <div class="profile_edit_field">
-                        <label>名前</label>
-                        <input type="text" id="edit_name_input" placeholder="名前を入力">
-                    </div>
-                    <div class="profile_edit_field">
-                        <label>Bio</label>
-                        <input type="text" id="edit_bio_input" placeholder="Bioを入力">
-                    </div>
-                    <button class="modal_save_btn" id="btn_save_profile">保存</button>
-                    <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
-                </div>
-
-                <!-- toocIDタブ -->
-                <div id="tab_content_toocid" style="display: none;">
-                    <div class="profile_edit_field">
-                        <label>新しいtoocID</label>
-                        <div class="toocid_row">
-                            <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
-                            <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
+                <div class="modal_body_scroll">
+                    <!-- toocIDタブ (左) -->
+                    <div class="modal_tab_panel" id="tab_content_toocid">
+                        <div class="profile_edit_field">
+                            <label>新しいtoocID</label>
+                            <div class="toocid_row">
+                                <input type="text" id="edit_toocid_input" placeholder="半角英数字と _ . -">
+                                <button id="btn_set_toocid" disabled style="background: #ccc;">設定</button>
+                            </div>
+                            <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">
+                                3〜20文字で入力してください</p>
+                            <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
                         </div>
-                        <p id="toocid_validation_msg" style="font-size: 0.8rem; color: #999; margin-top: 6px;">
-                            3〜20文字で入力してください</p>
-                        <p class="toocid_current" id="current_toocid" style="margin-top: 16px;">未設定</p>
+                    </div>
+
+                    <!-- プロフィールタブ (右) -->
+                    <div class="modal_tab_panel" id="tab_content_profile">
+                        <p id="profile_error_msg"
+                            style="color: #ef4444; font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;">
+                        </p>
+                        <div class="profile_edit_icon">
+                            <img id="edit_icon_preview" src="" alt="" style="cursor:pointer;">
+                            <label for="edit_icon_input" class="edit_icon_label">変更</label>
+                            <input type="file" id="edit_icon_input" accept="image/*" style="display:none;">
+                        </div>
+                        <div class="profile_edit_field">
+                            <label>名前</label>
+                            <input type="text" id="edit_name_input" placeholder="名前を入力">
+                        </div>
+                        <div class="profile_edit_field">
+                            <label>Bio</label>
+                            <input type="text" id="edit_bio_input" placeholder="Bioを入力">
+                        </div>
+                        <button class="modal_save_btn" id="btn_save_profile">保存</button>
+                        <button class="modal_logout_btn" id="logout_btn">ログアウト</button>
                     </div>
                 </div>
             </div>
@@ -323,10 +323,16 @@
     </div><!-- /home_page -->
 
     <!-- トークルーム画面（初期: 右に隠れる） -->
-    <div id="talkroom_page" class="page_overlay" style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none;">
+    <div id="talkroom_page" class="page_overlay" style="position: fixed; inset: 0; background: #fff; z-index: 1000; overflow-x: hidden; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1); display: none; overscroll-behavior: contain;">
         <main id="chat_main">
             <!-- メッセージがここに動的に追加されます -->
         </main>
+        <div class="wip_container" id="wip_container">
+            <div class="wip_box">
+                <p class="headline">WIP</p>
+                <p class="desc">この機能は今後実装予定です</p>
+            </div>
+        </div>
     </div>
 
     <header class="talkroom_header">

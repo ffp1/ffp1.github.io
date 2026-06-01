@@ -5,6 +5,11 @@ let currentUserInfo = null;
 
 const imgSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"><path d="M15 8h.01" /><path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /><path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" /></svg> 画像`;
 
+// SVGアイコン定数
+const svgUnavailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20.042 16.045a9 9 0 0 0 -12.087 -12.087m-2.318 1.677a9 9 0 1 0 12.725 12.73" /><path d="M3 3l18 18" /></svg>`;
+const svgAvailable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l5 5l10 -10" /></svg>`;
+const svgSuccess = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 5h2" /><path d="M5 4v2" /><path d="M11.5 4l-.5 2" /><path d="M18 5h2" /><path d="M19 4v2" /><path d="M15 9l-1 1" /><path d="M18 13l2 -.5" /><path d="M18 19h2" /><path d="M19 18v2" /><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1 1 0 0 0 1.329 1.329l9.579 -4.39" /></svg>`;
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginOverlay = document.getElementById('login_overlay');
     const mainApp = document.getElementById('main_app');
@@ -14,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const myName = document.getElementById('my_name');
     const myIcon = document.getElementById('my_icon');
     const myBio = document.getElementById('my_bio');
+    const toocidDisplay = document.getElementById('btn_open_toocid_edit');
 
     const friendsContainer = document.getElementById('friends_container');
     const talkContainer = document.getElementById('talk_container');
@@ -39,21 +45,36 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ===========================
+    // タブスクロール位置保持
+    // ===========================
+    let homeScrollY = 0;
+    let talkScrollY = 0;
+
+    // ===========================
     // ナビバー切替ロジック
     // ===========================
     const switchTab = (tab) => {
+        // 現在のスクロール位置を保存
+        if (tabTop.classList.contains('active')) {
+            homeScrollY = window.scrollY;
+        } else if (tabTalk.classList.contains('active')) {
+            talkScrollY = window.scrollY;
+        }
+
         if (tab === 'home') {
             tabTop.classList.add('active');
             tabTalk.classList.remove('active');
             navHome.classList.add('active');
             navTalk.classList.remove('active');
             navbar.className = 'navbar nav-home';
+            requestAnimationFrame(() => window.scrollTo(0, homeScrollY));
         } else {
             tabTop.classList.remove('active');
             tabTalk.classList.add('active');
             navHome.classList.remove('active');
             navTalk.classList.add('active');
             navbar.className = 'navbar nav-talk';
+            requestAnimationFrame(() => window.scrollTo(0, talkScrollY));
         }
         sessionStorage.setItem('activeTab', tab);
     };
@@ -71,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', () => {
         signInWithPopup(auth, provider).catch(error => {
             console.error("ログインエラー:", error);
-            // エラー表示は適宜処理
         });
     });
 
@@ -118,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 myName.textContent = currentUserInfo.displayName;
                 myIcon.src = currentUserInfo.photoURL;
                 myBio.textContent = currentUserInfo.bio || '...';
+                toocidDisplay.textContent = `@${currentUserInfo.toocId}`;
 
                 update(ref(db, `users/${user.uid}`), {
                     uid: user.uid,
@@ -195,8 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 node.querySelector('.friend_name').textContent = userData.displayName;
                 node.querySelector('.friend_icon_img').src = userData.photoURL || 'img/default_icon.png';
-                // ステータスメッセージを反映
-                node.querySelector('.friend_bio').textContent = userData.bio || 'ステータスメッセージはありません';
+                // 空bioの場合は空文字に
+                node.querySelector('.friend_bio').textContent = userData.bio || '';
 
                 const friendElement = node.querySelector('.friends_friend');
                 friendElement.style.cursor = 'pointer';
@@ -213,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ===========================
-    // トークルーム一覧の読み込み（重複防止のPromise.all制御）
+    // トークルーム一覧の読み込み
     // ===========================
     const formatNotiTime = (timestamp) => {
         if (!timestamp) return '';
@@ -252,10 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 新しいFragmentを作って最後に置き換える（重複描画防止）
             const fragment = document.createDocumentFragment();
-
-            // 先にKeepメモをフラグメントに追加
             await appendMemoRoom(fragment);
 
             const promises = [];
@@ -301,7 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         openTalkRoom(roomId, targetName);
                     });
 
-                    // 最新の投稿日時でソートするためのメタデータを持たせる
                     talkElement.dataset.timestamp = lastMessage.timestamp || 0;
                     return talkElement;
                 }).catch(err => {
@@ -312,12 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const elements = await Promise.all(promises);
-            // タイムスタンプ順（新しい順）にソート
             elements.filter(el => el !== null).sort((a, b) => b.dataset.timestamp - a.dataset.timestamp).forEach(el => {
                 fragment.appendChild(el);
             });
 
-            // 最後に一括でDOMを更新
             talkContainer.innerHTML = '';
             talkContainer.appendChild(fragment);
 
@@ -380,16 +395,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabBtnToocid = document.getElementById('tab_btn_toocid');
     const tabContentProfile = document.getElementById('tab_content_profile');
     const tabContentToocid = document.getElementById('tab_content_toocid');
-    const swipeArea = document.getElementById('modal_body_swipe_area');
+    const modalBodyScroll = document.querySelector('.modal_body_scroll');
 
     const activateProfileTab = () => {
         tabBtnProfile.style.color = '#A855F7';
         tabBtnProfile.style.borderBottomColor = '#A855F7';
         tabBtnToocid.style.color = '#999';
         tabBtnToocid.style.borderBottomColor = 'transparent';
-        tabContentProfile.style.display = 'block';
-        tabContentToocid.style.display = 'none';
         profileErrorMsg.style.display = 'none';
+        // スクロールアニメーションで右パネルへ
+        if (modalBodyScroll) {
+            modalBodyScroll.scrollTo({ left: modalBodyScroll.scrollWidth / 2, behavior: 'smooth' });
+        }
     };
 
     const activateToocidTab = () => {
@@ -397,25 +414,20 @@ document.addEventListener('DOMContentLoaded', () => {
         tabBtnProfile.style.borderBottomColor = 'transparent';
         tabBtnToocid.style.color = '#A855F7';
         tabBtnToocid.style.borderBottomColor = '#A855F7';
-        tabContentProfile.style.display = 'none';
-        tabContentToocid.style.display = 'block';
-        document.getElementById('toocid_validation_msg').textContent = '3〜20文字で入力してください';
+        document.getElementById('toocid_validation_msg').innerHTML = '3〜20文字で入力してください';
         document.getElementById('toocid_validation_msg').style.color = '#999';
         document.getElementById('btn_set_toocid').disabled = true;
         document.getElementById('btn_set_toocid').style.background = '#ccc';
+        // スクロールアニメーションで左パネルへ
+        if (modalBodyScroll) {
+            modalBodyScroll.scrollTo({ left: 0, behavior: 'smooth' });
+        }
     };
 
     tabBtnProfile.addEventListener('click', activateProfileTab);
     tabBtnToocid.addEventListener('click', activateToocidTab);
 
-    // スワイプ処理
-    let touchStartX = 0;
-    swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
-    swipeArea.addEventListener('touchend', e => {
-        const touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX < touchStartX - 50) activateToocidTab(); // 左スワイプ -> toocID
-        if (touchEndX > touchStartX + 50) activateProfileTab(); // 右スワイプ -> Profile
-    });
+    // 横スクロールでのタブ遷移は無効化（スワイプ処理を削除）
 
     const openProfileModal = (tab = 'profile') => {
         if (!currentUserInfo) return;
@@ -427,17 +439,74 @@ document.addEventListener('DOMContentLoaded', () => {
         pendingIconBase64 = null;
         modalProfile.style.display = 'flex';
 
-        if (tab === 'toocid') activateToocidTab();
-        else activateProfileTab();
+        // スクロール位置リセット後にタブ切替
+        requestAnimationFrame(() => {
+            if (tab === 'toocid') {
+                if (modalBodyScroll) modalBodyScroll.scrollLeft = 0;
+                activateToocidTab();
+            } else {
+                if (modalBodyScroll) modalBodyScroll.scrollLeft = modalBodyScroll.scrollWidth / 2;
+                activateProfileTab();
+            }
+        });
     };
 
     document.querySelectorAll('#btn_open_profile_edit').forEach(btn => {
         btn.addEventListener('click', () => openProfileModal('profile'));
     });
-    document.getElementById('btn_open_toocid_edit').addEventListener('click', () => openProfileModal('toocid'));
+    // toocIDテキストをタップでtoocID設定モーダルを開く
+    toocidDisplay.addEventListener('click', () => openProfileModal('toocid'));
     document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
 
-    // モーダル枠外タップで閉じる（スマホ対応のためtouchstart追加）
+    // ===========================
+    // モーダルスワイプで閉じる処理
+    // ===========================
+    const setupModalSwipeDismiss = (modal) => {
+        const modalBox = modal.querySelector('.modal_box');
+        const modalHeader = modal.querySelector('.modal_header');
+        if (!modalBox || !modalHeader) return;
+
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        modalHeader.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            modalBox.style.transition = 'none';
+        }, { passive: true });
+
+        modalHeader.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentY = e.touches[0].clientY - startY;
+            if (currentY < 0) currentY = 0;
+            modalBox.style.transform = `translateY(${currentY}px)`;
+        }, { passive: true });
+
+        modalHeader.addEventListener('touchend', () => {
+            isDragging = false;
+            modalBox.style.transition = 'transform 0.3s cubic-bezier(0.33, 1, 0.68, 1)';
+            if (currentY > 120) {
+                modalBox.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    modalBox.style.transform = '';
+                    modalBox.style.transition = '';
+                }, 300);
+            } else {
+                modalBox.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                    modalBox.style.transition = '';
+                }, 300);
+            }
+            currentY = 0;
+        });
+    };
+
+    setupModalSwipeDismiss(modalProfile);
+    setupModalSwipeDismiss(modalAddFriend);
+
+    // モーダル枠外タップで閉じる
     const closeModalIfOutside = (e, modal) => {
         if (e.target === modal) {
             e.preventDefault();
@@ -449,6 +518,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modalProfile.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalProfile), { passive: false });
 
     // アイコン画像変更 (MAX 300px, quality 0.8)
+    // アイコン画像クリックでも編集可能
+    editIconPreview.addEventListener('click', () => editIconInput.click());
+
     editIconInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -472,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsDataURL(file);
     });
 
-    // toocIDリアルタイムバリデーション
+    // toocIDリアルタイムバリデーション（SVGアイコン）
     let toocidCheckTimer = null;
     editToocidInput.addEventListener('input', () => {
         const newId = editToocidInput.value.trim();
@@ -482,7 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(toocidCheckTimer);
 
         if (!newId) {
-            msgEl.textContent = '3〜20文字で入力してください';
+            msgEl.innerHTML = '3〜20文字で入力してください';
             msgEl.style.color = '#999';
             btn.disabled = true;
             btn.style.background = '#ccc';
@@ -490,34 +562,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!/^[a-zA-Z0-9_.\-]{3,20}$/.test(newId)) {
-            msgEl.textContent = '❌ 半角英数字と _ . - のみ（3～20文字）';
+            msgEl.innerHTML = `${svgUnavailable} 半角英数字と _ . - のみ（3～20文字）`;
             msgEl.style.color = '#ef4444';
             btn.disabled = true;
             btn.style.background = '#ccc';
             return;
         }
 
-        msgEl.textContent = '確認中...';
+        msgEl.innerHTML = '確認中...';
         msgEl.style.color = '#999';
 
         toocidCheckTimer = setTimeout(() => {
             get(ref(db, `toocIds/${newId}`)).then((existing) => {
                 if (existing.exists() && existing.val() !== currentUserInfo.uid) {
-                    msgEl.textContent = '❌ このIDは既に使用されています';
+                    msgEl.innerHTML = `${svgUnavailable} このIDは既に使用されています`;
                     msgEl.style.color = '#ef4444';
                     btn.disabled = true;
                     btn.style.background = '#ccc';
                 } else {
-                    msgEl.textContent = '✅ 使用可能です！';
+                    msgEl.innerHTML = `${svgAvailable} 使用可能です！`;
                     msgEl.style.color = '#22c55e';
                     btn.disabled = false;
                     btn.style.background = '#A855F7';
                 }
             }).catch(() => {
-                msgEl.textContent = '❌ 確認エラー';
+                msgEl.innerHTML = `${svgUnavailable} 確認エラー`;
                 msgEl.style.color = '#ef4444';
             });
-        }, 500); // 500msのデバウンス
+        }, 500);
     });
 
     // toocID保存
@@ -527,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('btn_set_toocid');
 
         btn.disabled = true;
-        msgEl.textContent = '保存中...';
+        msgEl.innerHTML = '保存中...';
 
         const promises = [];
         if (currentUserInfo.toocId) {
@@ -539,11 +611,12 @@ document.addEventListener('DOMContentLoaded', () => {
         Promise.all(promises).then(() => {
             currentUserInfo.toocId = newId;
             currentToocid.textContent = `現在のtoocID: @${newId}`;
+            toocidDisplay.textContent = `@${newId}`;
             editToocidInput.value = '';
-            msgEl.textContent = '🎉 保存完了しました！';
+            msgEl.innerHTML = `${svgSuccess} 保存完了しました！`;
             msgEl.style.color = '#A855F7';
         }).catch((err) => {
-            msgEl.textContent = '❌ 保存エラー: ' + err.message;
+            msgEl.innerHTML = `${svgUnavailable} 保存エラー: ${err.message}`;
             msgEl.style.color = '#ef4444';
         });
     });
@@ -563,7 +636,6 @@ document.addEventListener('DOMContentLoaded', () => {
         profileErrorMsg.style.display = 'none';
 
         update(ref(db, `users/${currentUserInfo.uid}`), updates).then(() => {
-            // キャッシュもクリアしておく
             sessionStorage.removeItem(`tooc_user_${currentUserInfo.uid}`);
 
             currentUserInfo.displayName = newName;
@@ -656,5 +728,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(err => console.error(err));
             }).catch(err => console.error(err));
         }).catch(err => console.error(err));
+    });
+
+    // ===========================
+    // Pull-to-Refresh
+    // ===========================
+    let ptrStartY = 0;
+    let ptrDelta = 0;
+    let ptrIndicator = null;
+
+    const createPtrIndicator = () => {
+        if (ptrIndicator) return;
+        ptrIndicator = document.createElement('div');
+        ptrIndicator.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:4px;background:linear-gradient(to right,#a855f7,#c084fc);transform:scaleX(0);transform-origin:left;transition:transform 0.1s;z-index:9999;';
+        document.body.appendChild(ptrIndicator);
+    };
+
+    const homePage = document.getElementById('home_page');
+    homePage.addEventListener('touchstart', (e) => {
+        if (window.scrollY <= 0) {
+            ptrStartY = e.touches[0].clientY;
+            createPtrIndicator();
+        }
+    }, { passive: true });
+
+    homePage.addEventListener('touchmove', (e) => {
+        if (ptrStartY === 0) return;
+        ptrDelta = e.touches[0].clientY - ptrStartY;
+        if (ptrDelta > 0 && ptrIndicator) {
+            const progress = Math.min(ptrDelta / 150, 1);
+            ptrIndicator.style.transform = `scaleX(${progress})`;
+        }
+    }, { passive: true });
+
+    homePage.addEventListener('touchend', () => {
+        if (ptrDelta > 150 && currentUserInfo) {
+            loadFriends();
+            loadTalkRooms();
+        }
+        ptrDelta = 0;
+        ptrStartY = 0;
+        if (ptrIndicator) {
+            ptrIndicator.style.transform = 'scaleX(0)';
+            setTimeout(() => {
+                if (ptrIndicator) { ptrIndicator.remove(); ptrIndicator = null; }
+            }, 200);
+        }
     });
 });

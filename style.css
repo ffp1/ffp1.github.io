@@ -203,7 +203,9 @@ section.tab_top .top_user .user_flexwrap .userinfo p.username {
   font-weight: 700;
   color: #000;
   font-size: 1.6rem;
-  overflow: visible;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 section.tab_top .top_user .user_flexwrap .userinfo p.userbio {
   display: -webkit-box;
@@ -216,11 +218,26 @@ section.tab_top .top_user .user_flexwrap .userinfo p.userbio {
   color: rgba(0, 0, 0, 0.4);
   font-size: 0.85rem;
 }
+section.tab_top .top_user .toocid_display {
+  display: block;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4666666667);
+  font-size: 0.85rem;
+  margin-left: 12px;
+  margin-top: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 24px);
+  padding: 2px 0;
+}
 section.tab_top .top_user .user_actions_wrap {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
-  margin-right: 12px;
+  margin-left: 12px;
   margin-top: 4px;
   position: relative;
   z-index: 1;
@@ -257,15 +274,10 @@ section.tab_top .top_user .user_actions_wrap .editprofile p {
   font-weight: 400;
   color: #fff;
   font-size: 0.85rem;
+  white-space: nowrap;
 }
 section.tab_top .top_user .user_actions_wrap .editprofile:active {
   scale: 0.96;
-}
-section.tab_top .top_user .user_actions_wrap .editprofile.btn_toocid {
-  background: rgba(0, 0, 0, 0.05);
-}
-section.tab_top .top_user .user_actions_wrap .editprofile.btn_toocid p {
-  color: #333;
 }
 section.tab_top .top_friends {
   display: block;
@@ -379,7 +391,9 @@ section.tab_top .top_friends .friends_container .friends_group .group_info p.fri
   font-weight: 700;
   color: #000;
   font-size: 1rem;
-  overflow: visible;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.ttl span,
 section.tab_top .top_friends .friends_container .friends_friend .friend_info p.friend_name span,
@@ -696,7 +710,9 @@ section.tab_talk .talk_container .talk_talkroom .talkroom_info p.talkroom_infona
   font-weight: 700;
   color: #000;
   font-size: 1.1rem;
-  overflow: visible;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 section.tab_talk .talk_container .talk_talkroom .talkroom_info p.talkroom_infomessage {
   display: -webkit-box;
@@ -915,10 +931,26 @@ aside.navbar.nav-talk::after {
 }
 
 .modal_body {
-  padding: 20px;
-  overflow-y: auto;
+  padding: 0;
+  overflow: hidden;
   min-height: 440px;
   /* 固定高にしてタブ切替で高さが変わらないように */
+}
+
+.modal_body_scroll {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+.modal_tab_panel {
+  width: 50%;
+  flex-shrink: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .profile_edit_icon {
@@ -934,6 +966,7 @@ aside.navbar.nav-talk::after {
   border-radius: 50%;
   -o-object-fit: cover;
      object-fit: cover;
+  cursor: pointer;
 }
 
 .edit_icon_label {
@@ -1102,6 +1135,7 @@ body:has(section.inputarea.moreactive) {
   width: 100vw;
   min-height: 100dvh;
   background-color: #fff;
+  overscroll-behavior: contain;
 }
 #talkroom_page * {
   margin: 0;
@@ -1226,7 +1260,6 @@ section.inputarea .area_send .send_icon svg {
 section.inputarea label.area_input {
   display: block;
   width: calc(100% - 136px);
-  min-height: 44px;
   border: 1.5px solid #f0f0f0;
   background-color: #f5f5f5;
   padding-block: 8px;
@@ -1292,6 +1325,7 @@ section.inputarea .area_morecontainer .more_item p {
 @media (display-mode: standalone) {
   section.inputarea {
     --height: 44px;
+    padding-bottom: calc(var(--height) + env(safe-area-inset-bottom, 0px));
   }
   section.inputarea.moreactive {
     --height: 80px;
@@ -1306,11 +1340,66 @@ section.inputarea .area_morecontainer .more_item p {
   padding-block: 72px calc(var(--height) * 2 + 108px);
   box-sizing: border-box;
 }
+#talkroom_page main .date_separator {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 0;
+  margin: 8px 0;
+}
+#talkroom_page main .date_separator::before {
+  content: attr(data-text);
+}
+#talkroom_page main .date_separator {
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4666666667);
+  font-size: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+}
 #talkroom_page main .content {
   display: flex;
-  align-items: start;
+  align-items: end;
   width: 100%;
   gap: 4px;
+}
+#talkroom_page main .content.continuous {
+  margin-top: -4px;
+}
+#talkroom_page main .content .content_icon_spacer {
+  width: 36px;
+  flex-shrink: 0;
+}
+#talkroom_page main .content .content_meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  padding-bottom: 2px;
+}
+#talkroom_page main .content .content_meta .read_status {
+  display: block;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: #a855f7;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+#talkroom_page main .content .content_meta .msg_time {
+  display: block;
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.3333333333);
+  font-size: 0.65rem;
+  white-space: nowrap;
 }
 #talkroom_page main .content.other {
   justify-content: start;
@@ -1319,6 +1408,7 @@ section.inputarea .area_morecontainer .more_item p {
   width: 36px;
   aspect-ratio: 1;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 #talkroom_page main .content.other .content_icon img {
   width: 100%;
@@ -1329,7 +1419,7 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .content.other p.content_message {
   display: inline-flex;
-  max-width: calc(80% - 40px);
+  max-width: calc(70% - 40px);
   align-items: center;
   background-color: #f6ebff;
   min-height: 36px;
@@ -1347,7 +1437,7 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page main .content.me p.content_message {
   display: inline-flex;
-  max-width: 80%;
+  max-width: 70%;
   align-items: center;
   background-color: #a855f7;
   min-height: 36px;
@@ -1362,15 +1452,15 @@ section.inputarea .area_morecontainer .more_item p {
 }
 #talkroom_page .wip_container {
   position: fixed;
-  left: -8px;
-  top: -8px;
+  left: 0;
+  top: 0;
   display: grid;
   place-items: center;
-  width: calc(100% + 16px);
-  height: calc(100% + 16px);
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.2666666667);
   backdrop-filter: blur(8px);
-  z-index: 99;
+  z-index: 1099;
   opacity: 0;
   pointer-events: none;
   -webkit-user-select: none;
@@ -1452,4 +1542,8 @@ header.talkroom_header .header_username {
   font-weight: 400;
   color: #000;
   margin-inline: 12px auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100vw - 220px);
 }
