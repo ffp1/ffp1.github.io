@@ -1203,10 +1203,17 @@ aside.navbar.nav-talk::after {
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #ccc;
+  color: #000;
   font-size: 1rem;
   box-sizing: border-box;
   text-align: center;
   margin-bottom: 24px;
+}
+.modal_body #delete_confirm_input::-moz-placeholder {
+  color: #fcc;
+}
+.modal_body #delete_confirm_input::placeholder {
+  color: #fcc;
 }
 
 .modal_body_scroll {
