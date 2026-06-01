@@ -1141,6 +1141,7 @@ aside.navbar.nav-talk::after {
   min-height: 440px;
   padding-inline: 1rem;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 .modal_body .modal_desc {
   margin-bottom: 16px;
