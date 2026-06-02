@@ -1,6 +1,6 @@
 body {
   --height: 0px;
-  --translate: 88px;
+  --translate: 0px;
 }
 body:has(section.inputarea.moreactive) {
   --height: 72px;
@@ -55,6 +55,9 @@ section.inputarea {
   box-sizing: border-box;
   translate: 0 100%;
   transition: translate 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+}
+section.inputarea.room-open {
+  translate: 0 var(--translate);
 }
 section.inputarea #area_add-image,
 section.inputarea #more_files {
