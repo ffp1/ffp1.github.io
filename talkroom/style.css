@@ -169,7 +169,7 @@ section.inputarea label.area_input textarea::placeholder {
   color: #ccc;
 }
 section.inputarea .area_morecontainer {
-  display: flex;
+  display: none;
   align-items: center;
   flex-wrap: wrap;
   width: 100vw;
@@ -205,7 +205,7 @@ section.inputarea .area_morecontainer .more_item p {
 @media (display-mode: standalone) {
   section.inputarea {
     --height: 44px;
-    padding-bottom: calc(var(--height) + 24px);
+    padding-bottom: 24px;
   }
   section.inputarea.moreactive {
     --height: 80px;
@@ -217,7 +217,7 @@ section.inputarea .area_morecontainer .more_item p {
   gap: 6px;
   width: 100vw;
   padding-inline: 12px;
-  padding-block: 72px calc(var(--height) * 2 + 108px);
+  padding-block: 72px calc(var(--height) * 2 + 108px + 24px);
   box-sizing: border-box;
 }
 #talkroom_page main .date_separator {
@@ -267,7 +267,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: block;
   font-family: "LINE Seed JP", sans-serif;
   font-weight: 400;
-  color: #FF6F3C;
+  color: rgba(0, 0, 0, 0.3333333333);
   font-size: 0.65rem;
   white-space: nowrap;
 }
@@ -302,7 +302,7 @@ section.inputarea .area_morecontainer .more_item p {
   display: inline-flex;
   max-width: calc(70% - 40px);
   align-items: center;
-  background-color: #FF6F3C;
+  background-color: rgba(255, 111, 60, 0.2);
   min-height: 36px;
   padding: 8px 16px;
   border-radius: 18px;

@@ -61,26 +61,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPrivacy = document.querySelector('.modal_privacyPolicy');
 
     const handleModalOutsideClick = (e, modal) => {
-        if (e.target === modal) modal.classList.remove('active');
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
     };
 
     document.getElementById('show_termsOfService')?.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (modalTerms) modalTerms.classList.add('active');
+        if (modalTerms) {
+            modalTerms.classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
     });
     modalTerms?.querySelector('.header_close')?.addEventListener('click', () => {
         modalTerms.classList.remove('active');
+        document.body.classList.remove('no-scroll');
     });
     modalTerms?.addEventListener('click', (e) => handleModalOutsideClick(e, modalTerms));
 
     document.getElementById('show_privacyPolicy')?.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (modalPrivacy) modalPrivacy.classList.add('active');
+        if (modalPrivacy) {
+            modalPrivacy.classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
     });
     modalPrivacy?.querySelector('.header_close')?.addEventListener('click', () => {
         modalPrivacy.classList.remove('active');
+        document.body.classList.remove('no-scroll');
     });
     modalPrivacy?.addEventListener('click', (e) => handleModalOutsideClick(e, modalPrivacy));
 
@@ -88,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeAllModals = () => {
         modalProfile.style.display = 'none';
         modalAddFriend.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     };
 
     // ===========================
@@ -213,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteAccountBtn?.addEventListener('click', () => {
         closeAllModals(); // プロフィール編集を閉じる
         modalDeleteAccount.style.display = 'flex';
+        document.body.classList.add('no-scroll');
         step1.style.display = 'block';
         step2.style.display = 'none';
         deleteConfirmInput.value = '';
@@ -222,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeDeleteModal = () => {
         modalDeleteAccount.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     };
 
     modalDeleteAccountClose?.addEventListener('click', closeDeleteModal);
@@ -632,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentToocid.textContent = currentUserInfo.toocId ? `現在のtoocID: @${currentUserInfo.toocId}` : '未設定';
         pendingIconBase64 = null;
         modalProfile.style.display = 'flex';
+        document.body.classList.add('no-scroll');
 
         // スクロール位置リセット後にタブ切替
         requestAnimationFrame(() => {
@@ -650,7 +665,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // toocIDテキストをタップでtoocID設定モーダルを開く
     toocidDisplay.addEventListener('click', () => openProfileModal('toocid'));
-    document.getElementById('modal_profile_close').addEventListener('click', () => { modalProfile.style.display = 'none'; });
+    document.getElementById('modal_profile_close').addEventListener('click', () => { 
+        modalProfile.style.display = 'none'; 
+        document.body.classList.remove('no-scroll');
+    });
 
     // ===========================
     // モーダルスワイプで閉じる処理
@@ -684,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalBox.style.transform = 'translateY(100%)';
                 setTimeout(() => {
                     modal.style.display = 'none';
+                    document.body.classList.remove('no-scroll');
                     modalBox.style.transform = '';
                     modalBox.style.transition = '';
                 }, 300);
@@ -706,6 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             modal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
         }
     };
     modalProfile.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalProfile));
@@ -730,8 +750,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 canvas.width = w;
                 canvas.height = h;
                 canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                pendingIconBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                editIconPreview.src = pendingIconBase64;
+                canvas.toBlob(async (blob) => {
+                    editIconPreview.style.opacity = '0.5';
+                    const formData = new FormData();
+                    formData.append('image', blob);
+                    try {
+                        const res = await fetch('https://api.imgbb.com/1/upload?key=d94a4d56d3bda834a861087ae8210b21', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const json = await res.json();
+                        if (json.success) {
+                            pendingIconBase64 = json.data.url; // Use URL
+                            editIconPreview.src = pendingIconBase64;
+                        } else {
+                            alert('画像のアップロードに失敗しました');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('画像のアップロードに失敗しました');
+                    } finally {
+                        editIconPreview.style.opacity = '1';
+                    }
+                }, 'image/jpeg', 0.8);
             };
             img.src = ev.target.result;
         };
@@ -843,6 +884,7 @@ document.addEventListener('DOMContentLoaded', () => {
             myIcon.src = currentUserInfo.photoURL;
 
             modalProfile.style.display = 'none';
+            document.body.classList.remove('no-scroll');
         }).catch((err) => {
             profileErrorMsg.textContent = '保存に失敗しました: ' + err.message;
             profileErrorMsg.style.display = 'block';
@@ -854,6 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===========================
     const openAddFriendModal = () => {
         modalAddFriend.style.display = 'flex';
+        document.body.classList.add('no-scroll');
         document.getElementById('search_result').innerHTML = '';
         document.getElementById('search_toocid_input').value = '';
     };
@@ -862,6 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn_open_add_friend').addEventListener('click', openAddFriendModal);
     document.getElementById('modal_add_friend_close').addEventListener('click', () => {
         modalAddFriend.style.display = 'none';
+        document.body.classList.remove('no-scroll');
     });
     modalAddFriend.addEventListener('mousedown', (e) => closeModalIfOutside(e, modalAddFriend));
     modalAddFriend.addEventListener('touchstart', (e) => closeModalIfOutside(e, modalAddFriend), { passive: false });

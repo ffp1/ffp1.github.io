@@ -22,6 +22,14 @@ body {
     min-height: 100lvh;
     background-color: #fff;
     padding-top: 68px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    /* Ensure PTR works natively */
+
+    &.no-scroll {
+        overflow: hidden !important;
+    }
 
     #home_page {
         width: 100vw;

@@ -1,7 +1,8 @@
-import { db, auth, onAuthStateChanged, ref, push, onChildAdded, off, serverTimestamp, get, update } from './firebase-config.js';
+import { db, auth, onAuthStateChanged, ref, push, onChildAdded, onChildChanged, off, serverTimestamp, get, update } from './firebase-config.js';
 
 let currentMessagesRef = null;
 let currentOnChildAdded = null;
+let currentOnChildChanged = null;
 let currentTargetName = 'トーク';
 let currentTargetIcon = 'img/default_icon.png';
 let currentUserData = null;
@@ -34,6 +35,7 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
 
     const talkroomPage = document.getElementById('talkroom_page');
     talkroomPage.style.display = 'block';
+    document.body.classList.add('no-scroll');
 
     // アニメーションを確実に発火させるため
     requestAnimationFrame(() => {
@@ -52,9 +54,9 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
     const headerUsername = document.getElementById('header_username');
     if (headerUsername) headerUsername.textContent = currentTargetName;
 
-    // 前のリスナーを解除
-    if (currentMessagesRef && currentOnChildAdded) {
-        currentOnChildAdded();
+    if (currentMessagesRef) {
+        if (currentOnChildAdded) currentOnChildAdded();
+        if (currentOnChildChanged) currentOnChildChanged();
     }
 
     // キャッシュからアイコン等を更新
@@ -91,6 +93,14 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
             update(ref(db, `rooms/${roomId}/messages/${msgKey}/readBy`), {
                 [currentUserData.id]: true
             }).catch(() => {});
+    });
+
+    currentOnChildChanged = onChildChanged(currentMessagesRef, (snapshot) => {
+        const data = snapshot.val();
+        const msgKey = snapshot.key;
+        if (data.readBy && Object.keys(data.readBy).some(k => k !== currentUserData.id)) {
+            const span = document.querySelector(`.read_status[data-msg-key="${msgKey}"]`);
+            if (span) span.textContent = '既読';
         }
     });
 
@@ -112,13 +122,16 @@ export const closeTalkRoom = () => {
     if (header) header.classList.remove('room-open');
     setTimeout(() => {
         talkroomPage.style.display = 'none';
+        document.body.classList.remove('no-scroll');
         document.getElementById('chat_main').innerHTML = '';
     }, 300);
 
-    if (currentMessagesRef && currentOnChildAdded) {
-        currentOnChildAdded();
+    if (currentMessagesRef) {
+        if (currentOnChildAdded) currentOnChildAdded();
+        if (currentOnChildChanged) currentOnChildChanged();
         currentMessagesRef = null;
         currentOnChildAdded = null;
+        currentOnChildChanged = null;
     }
 };
 
@@ -326,19 +339,35 @@ const initializeUI = () => {
                     canvas.width = w;
                     canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    const base64 = canvas.toDataURL('image/jpeg', 0.8);
-
-                    push(currentMessagesRef, {
-                        type: 'image',
-                        imageData: base64,
-                        text: '',
-                        senderId: currentUserData.id,
-                        senderName: currentUserData.name,
-                        timestamp: serverTimestamp()
-                    }).catch((error) => {
-                        console.error("画像送信エラー:", error);
-                        alert("画像の送信に失敗しました。");
-                    });
+                    canvas.toBlob(async (blob) => {
+                        const formData = new FormData();
+                        formData.append('image', blob);
+                        try {
+                            const res = await fetch('https://api.imgbb.com/1/upload?key=d94a4d56d3bda834a861087ae8210b21', {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const json = await res.json();
+                            if (json.success) {
+                                push(currentMessagesRef, {
+                                    type: 'image',
+                                    imageData: json.data.url,
+                                    text: '',
+                                    senderId: currentUserData.id,
+                                    senderName: currentUserData.name,
+                                    timestamp: serverTimestamp()
+                                }).catch((error) => {
+                                    console.error("画像送信エラー:", error);
+                                    alert("画像の送信に失敗しました。");
+                                });
+                            } else {
+                                alert("画像のアップロードに失敗しました");
+                            }
+                        } catch(e) {
+                            console.error(e);
+                            alert("画像の送信に失敗しました。");
+                        }
+                    }, 'image/jpeg', 0.8);
                 };
                 img.src = ev.target.result;
             };

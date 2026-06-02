@@ -197,7 +197,7 @@ section.inputarea {
     }
 
     .area_morecontainer {
-        display: flex;
+        display: none;
         align-items: center;
         flex-wrap: wrap;
         width: 100vw;
@@ -237,7 +237,7 @@ section.inputarea {
 @media (display-mode: standalone) {
     section.inputarea {
         --height: 44px;
-        padding-bottom: calc(var(--height) + 24px);
+        padding-bottom: 24px;
 
         &.moreactive {
             --height: 80px;
@@ -253,7 +253,7 @@ section.inputarea {
         gap: 6px;
         width: 100vw;
         padding-inline: 12px;
-        padding-block: 72px calc(var(--height) * 2 + 108px);
+        padding-block: 72px calc(var(--height) * 2 + 108px + 24px);
         box-sizing: border-box;
 
         .date_separator {
@@ -307,7 +307,7 @@ section.inputarea {
                     display: block;
                     font-family: 'LINE Seed JP', sans-serif;
                     font-weight: 400;
-                    color: #FF6F3C;
+                    color: #0005;
                     font-size: 0.65rem;
                     white-space: nowrap;
                 }
@@ -347,7 +347,7 @@ section.inputarea {
                     display: inline-flex;
                     max-width: calc(70% - 40px);
                     align-items: center;
-                    background-color: #FF6F3C;
+                    background-color: #FF6F3C33;
                     min-height: 36px;
                     padding: 8px 16px;
                     border-radius: 18px;
