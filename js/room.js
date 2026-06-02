@@ -93,6 +93,7 @@ export const openTalkRoom = (roomId, initialName = 'トーク') => {
             update(ref(db, `rooms/${roomId}/messages/${msgKey}/readBy`), {
                 [currentUserData.id]: true
             }).catch(() => {});
+        }
     });
 
     currentOnChildChanged = onChildChanged(currentMessagesRef, (snapshot) => {
