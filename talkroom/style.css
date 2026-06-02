@@ -46,12 +46,11 @@ section.inputarea {
   flex-wrap: wrap;
   width: 100vw;
   min-height: calc(72px + var(--height));
-  padding-bottom: var(--height);
   background-color: #fafafa;
   box-shadow: 0 0 36px -16px rgba(0, 0, 0, 0.4666666667);
   border-radius: 32px 32px 0 0;
   padding-inline: 8px;
-  padding-top: 12px;
+  padding-block: 12px 28px;
   box-sizing: border-box;
   translate: 0 100%;
   transition: translate 0.3s cubic-bezier(0.33, 1, 0.68, 1);
